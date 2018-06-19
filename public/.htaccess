@@ -1,0 +1,18 @@
+# https://gist.github.com/joellongie/e6f4a3b5fa98c521782619e487aca15a 
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /go/index.html [L]
+</IfModule>
+
+# https://github.com/w3c/ServiceWorker/issues/893
+<FilesMatch "^(service-worker)\.js$">
+  FileETag None
+  <IfModule mod_headers.c>
+     Header unset ETag
+     Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+     Header set Pragma "no-cache"
+     Header set Expires "Thu, 29 Jun 1995 05:00:00 GMT"
+  </IfModule>
+</FilesMatch>
