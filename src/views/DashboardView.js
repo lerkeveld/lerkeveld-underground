@@ -16,7 +16,7 @@ class DashboardView extends React.Component {
           <Typography variant="headline" className={classes.mainTitle}>
             Evenementen
           </Typography>
-          <Typography variant="subheading" paragraph className={classes.mainSubHeader}>
+          <Typography variant="body1" paragraph className={classes.mainSubHeader}>
             Deze evenementen staan ons te wachten!
           </Typography>
           <Grid container spacing={16}>

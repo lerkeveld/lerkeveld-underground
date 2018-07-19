@@ -9,12 +9,12 @@ const viewStyle = theme => ({
       marginRight: 'auto',
     },
     [theme.breakpoints.up("md")]: {
-      padding: theme.spacing.unit * 4,
-      paddingTop: theme.spacing.unit * 3
+      padding: theme.spacing.unit * 3,
+      paddingTop: theme.spacing.unit * 2
     },
     [theme.breakpoints.down("sm")]: {
       padding: theme.spacing.unit * 2,
-      paddingTop: theme.spacing.unit * 3
+      paddingTop: theme.spacing.unit * 2
     },
   },
   mainTitle: {

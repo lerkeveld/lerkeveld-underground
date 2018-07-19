@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { Card, CardHeader, CardMedia, IconButton } from '@material-ui/core';
+import { Card, CardHeader, CardMedia } from '@material-ui/core';
 
 import { FacebookBox } from '../assets/icons';
 import eventCardStyle from '../assets/jss/eventCardStyle';
@@ -16,20 +16,22 @@ function EventCard(props) {
       <Card className={classes.card}>
         <CardHeader
           classes={{
-              content: classes.cardHeaderContent
+              root: classes.cardHeaderRoot,
+              content: classes.cardHeaderContent,
+              title: classes.cardHeaderTitle,
+              subheader: classes.cardHeaderSubTitle
           }}
           avatar={
-              <IconButton title="View on Facebook!" href={link} target="_blank" rel="noopener noreferrer">
-                <FacebookBox className={classes.icon}/>
-              </IconButton>
+              <FacebookBox className={classes.icon}/>
           }
-          title={<div title={title} className={classes.cardHeaderTitle}>{title}</div>}
-          subheader={<div className={classes.cardHeaderTitle}>{date}</div>}
+          title={title}
+          subheader={date}
         />
         <CardMedia
           className={classes.media}
           image={img}
           component={FacebookLink}
+          title={title}
         />
       </Card>
   );

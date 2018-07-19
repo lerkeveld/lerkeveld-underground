@@ -3,10 +3,19 @@ const eventCardStyle = theme => ({
     maxWidth: 400,
     margin: 'auto'
   },
+  cardHeaderRoot: {
+    padding: '12px 16px 12px 16px'
+  },
   cardHeaderTitle: {
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis'
+  },
+  cardHeaderSubTitle: {
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      fontWeight: theme.typography.fontWeightRegular
   },
   cardHeaderContent: {
       overflow: 'hidden',
@@ -19,9 +28,8 @@ const eventCardStyle = theme => ({
     }
   },
   icon: {
-    height: '30px',
-    width: '30px',
-    color: '#000'
+    height: '28px',
+    width: '28px',
   }
 });
 
