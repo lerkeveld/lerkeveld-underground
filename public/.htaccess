@@ -3,7 +3,7 @@
     RewriteEngine On
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule . /go/index.html [L]
+    RewriteRule . /underground/index.html [L]
 </IfModule>
 
 # https://github.com/w3c/ServiceWorker/issues/893
