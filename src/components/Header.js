@@ -30,7 +30,7 @@ function Header(props) {
             Lerkeveld
           </Typography>
           <Hidden xsDown implementation="css">
-            <IconButton title="Github repository" color="inherit" target="_blank" rel="noopener noreferrer" href="https://github.com">
+            <IconButton title="Github repository" color="inherit" target="_blank" rel="noopener noreferrer" href="https://github.com/lerkeveld/lerkeveld-underground">
               <GithubCircle className={classes.actionButton}/>
             </IconButton>
           </Hidden>
