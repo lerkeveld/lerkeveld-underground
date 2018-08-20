@@ -1,7 +1,9 @@
 const eventCardStyle = theme => ({
   card: {
-    maxWidth: 400,
-    margin: 'auto'
+    maxWidth: 'auto',
+    [theme.breakpoints.up('sm')]: {
+      maxWidth: '350px'
+    },
   },
   cardHeaderRoot: {
     padding: '12px 16px 12px 16px'

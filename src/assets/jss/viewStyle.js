@@ -3,17 +3,17 @@ import { drawerWidth } from './commonStyle.js';
 const viewStyle = theme => ({
   mainContent: {
     backgroundColor: theme.palette.background.default,
-    maxWidth: '100%',
+    maxWidth: '1200px',
     [theme.breakpoints.up("lg")]: {
       marginLeft: drawerWidth,
       marginRight: 'auto',
     },
-    [theme.breakpoints.up("md")]: {
-      padding: theme.spacing.unit * 3,
+    [theme.breakpoints.up("sm")]: {
+      padding: theme.spacing.unit * 2,
       paddingTop: theme.spacing.unit * 2
     },
-    [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing.unit * 2,
+    [theme.breakpoints.only("xs")]: {
+      padding: theme.spacing.unit * 1,
       paddingTop: theme.spacing.unit * 2
     },
   },
