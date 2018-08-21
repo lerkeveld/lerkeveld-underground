@@ -3,14 +3,16 @@ import {
     Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
     TextField, Button
 } from '@material-ui/core';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
 
 import PasswordField from '../PasswordField';
 
 function EmailFormDialog(props) {
-  const { dialogOpen, handleDialogClose } = props;
+  const { dialogOpen, handleDialogClose, fullScreen } = props;
 
   return (
       <Dialog
+        fullScreen={fullScreen}
         open={dialogOpen}
         onClose={handleDialogClose}
         aria-labelledby='emailform-dialog-title'
@@ -49,4 +51,4 @@ function EmailFormDialog(props) {
   );
 }
 
-export default EmailFormDialog;
+export default withMobileDialog()(EmailFormDialog);

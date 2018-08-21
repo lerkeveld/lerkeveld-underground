@@ -3,14 +3,16 @@ import {
     Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
     TextField, Button
 } from '@material-ui/core';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
 
 import PasswordField from '../PasswordField';
 
 function PasswordFormDialog(props) {
-  const { dialogOpen, handleDialogClose } = props;
+  const { dialogOpen, handleDialogClose, fullScreen } = props;
 
   return (
       <Dialog
+        fullScreen={fullScreen}
         open={dialogOpen}
         onClose={handleDialogClose}
         aria-labelledby='passwordform-dialog-title'
@@ -54,4 +56,4 @@ function PasswordFormDialog(props) {
   );
 }
 
-export default PasswordFormDialog;
+export default withMobileDialog()(PasswordFormDialog);

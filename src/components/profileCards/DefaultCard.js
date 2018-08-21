@@ -18,25 +18,18 @@ function DefaultCard(props) {
       <Card>
         <CardHeader
           classes={{
-              content: classes.cardHeaderContent
+              root: classes.cardHeaderRoot,
+              content: classes.cardHeaderContent,
+              title: classes.cardHeaderTitle,
+              subheader: classes.cardHeaderSubTitle
           }}
           avatar={
             <Avatar style={{"backgroundColor": avatarColor}}>
               {avatarIcon}
             </Avatar>
           }
-          title={
-            <Typography variant="subheading" noWrap>
-              {name}
-            </Typography>
-          }
-          subheader={
-            <Typography variant="subheading" color="textSecondary" noWrap>
-              <span className={classes.subheader}>
-                {textValue}
-              </span>
-            </Typography>
-          }
+          title={name}
+          subheader={textValue}
           action={disabled ? blockIcon: editIcon}
           disabled={disabled}
         />

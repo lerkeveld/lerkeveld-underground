@@ -3,12 +3,14 @@ import {
     Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
     Button, FormControlLabel, Checkbox
 } from '@material-ui/core';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
 
 function PrivacyFormDialog(props) {
-  const { dialogOpen, handleDialogClose } = props;
+  const { dialogOpen, handleDialogClose, fullScreen } = props;
 
   return (
       <Dialog
+        fullScreen={fullScreen}
         open={dialogOpen}
         onClose={handleDialogClose}
         aria-labelledby='passwordform-dialog-title'
@@ -39,4 +41,4 @@ function PrivacyFormDialog(props) {
   );
 }
 
-export default PrivacyFormDialog;
+export default withMobileDialog()(PrivacyFormDialog);

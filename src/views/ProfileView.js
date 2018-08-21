@@ -25,8 +25,8 @@ class ProfileView extends React.Component {
           <Typography variant="headline" className={classes.mainTitle}>
             Profiel
           </Typography>
-          <Typography variant="subheading" paragraph className={classes.mainSubHeader}>
-            Gegevens die je niet expliciet hebt ingevoerd, werden gehaald uit de papieren ledenlijst die alle Lerkies krijgen in het begin van het jaar.
+          <Typography variant="body1" paragraph className={classes.mainSubHeader}>
+            Contacteer Lerkeveld IT voor niet-aanpasbare velden.
           </Typography>
           <Grid container spacing={16}>
             <Grid item xs={12} md={4}><NameCard /></Grid>
