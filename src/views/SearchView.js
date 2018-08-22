@@ -43,7 +43,7 @@ class SearchView extends React.Component {
   }
 
   onCancelSearch() {
-    this.setState({users: this.state.initialUsers});
+    this.setState({displayLimit: 30, users: this.state.initialUsers});
   }
 
   onSearch(query) {
@@ -58,7 +58,7 @@ class SearchView extends React.Component {
             });
         });
     });
-    this.setState({users: users, displayLimit: 30});
+    this.setState({displayLimit: 30, users: users});
   }
 
   render() {
