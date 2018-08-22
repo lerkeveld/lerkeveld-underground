@@ -7,6 +7,7 @@ import SearchBar from 'material-ui-search-bar';
 
 import viewStyle from '../assets/jss/viewStyle';
 import SearchCard from '../components/SearchCard';
+import SearchDialog from '../components/SearchDialog';
 import data from '../data.js';
 
 class SearchView extends React.Component {
@@ -15,14 +16,29 @@ class SearchView extends React.Component {
     super(props);
     this.state = {
       initialUsers: 'searches' in data ? data['searches'] : [],
-      displayLimit: 30
+      displayLimit: 30,
+      dialogOpen: false,
+      selectedUser: {}
     }
     this.state.users = this.state.initialUsers;
   }
 
+  onSelectUser(user) {
+    this.setState({
+        selectedUser: user,
+        dialogOpen: true
+    })
+  }
+
+  onDialogClose() {
+    this.setState({
+        dialogOpen: false,
+    });
+  }
+
   onLoadMore() {
     this.setState({
-        displayLimit: this.state.displayLimit + 30
+        displayLimit: this.state.displayLimit + 30,
     });
   }
 
@@ -70,7 +86,10 @@ class SearchView extends React.Component {
               this.state.users.slice(0, this.state.displayLimit).map(user => {
                 const key = JSON.stringify(user);
                 return <Grid key={key} item xs={12} sm={6} md={4}>
-                         <SearchCard user={user} />
+                         <SearchCard
+                           user={user}
+                           onClick={this.onSelectUser.bind(this, user)}
+                         />
                        </Grid>;
               })
             }
@@ -83,6 +102,11 @@ class SearchView extends React.Component {
               </IconButton>
             </div>
           }
+          <SearchDialog
+            open={this.state.dialogOpen}
+            user={this.state.selectedUser}
+            onClose={this.onDialogClose.bind(this)}
+          />
         </main>
     );
   }

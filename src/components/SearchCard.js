@@ -4,16 +4,16 @@ import { withStyles } from '@material-ui/core/styles';
 import { Card, CardHeader, Avatar } from '@material-ui/core';
 import amber from '@material-ui/core/colors/amber';
 
-import profileCardStyle from '../assets/jss/profileCardStyle';
+import searchCardStyle from '../assets/jss/searchCardStyle';
 
 function SearchCard(props) {
-  const { classes, user } = props;
+  const { classes, user, ...rest } = props;
   const firstName = 'firstName' in user ? user['firstName']: '';
   const lastName = 'lastName' in user ? user['lastName']: '';
   const corridor = 'corridor' in user ? user['corridor']: '';
   const room = 'room' in user ? user['room']: '';
   return (
-      <Card>
+      <Card {...rest}>
         <CardHeader
           classes={{
               root: classes.cardHeaderRoot,
@@ -36,4 +36,4 @@ SearchCard.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(profileCardStyle)(SearchCard);
+export default withStyles(searchCardStyle)(SearchCard);
