@@ -20,6 +20,10 @@ class SearchView extends React.Component {
     this.state.users = this.state.initialUsers;
   }
 
+  cancelSearch() {
+    this.setState({users: this.state.initialUsers});
+  }
+
   filterUsers(query) {
     const keywords = query.split(' ').map(keyword => keyword.toLowerCase());
     const fields = ['firstName', 'lastName'];
@@ -48,7 +52,11 @@ class SearchView extends React.Component {
           </Typography>
           <Grid container spacing={16} style={{paddingBottom: '16px'}}>
             <Grid item xs={12} md={4}>
-              <SearchBar onChange={this.filterUsers.bind(this)} />
+              <SearchBar
+                onChange={this.filterUsers.bind(this)}
+                onCancelSearch={this.cancelSearch.bind(this)}
+                cancelOnEscape={true}
+              />
             </Grid>
           </Grid>
           <Grid container spacing={16}>
@@ -56,12 +64,7 @@ class SearchView extends React.Component {
               this.state.users.map(user => {
                 const key = JSON.stringify(user);
                 return <Grid key={key} item xs={12} sm={6} md={4}>
-                         <SearchCard
-                           firstName={user['firstName']}
-                           lastName={user['lastName']}
-                           room={user['room']}
-                           corridor={user['corridor']}
-                         />
+                         <SearchCard user={user} />
                        </Grid>;
               })
             }
