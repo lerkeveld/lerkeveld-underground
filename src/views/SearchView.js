@@ -78,7 +78,7 @@ class SearchView extends React.Component {
           {
             this.state.displayLimit < this.state.users.length &&
             <div style={{textAlign: "center", marginTop: "16px"}}>
-              <IconButton onClick={this.onLoadMore.bind(this)}>
+              <IconButton onClick={this.onLoadMore.bind(this)} title="Load More">
                 <ExpandMore />
               </IconButton>
             </div>
