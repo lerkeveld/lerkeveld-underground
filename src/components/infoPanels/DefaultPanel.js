@@ -11,16 +11,19 @@ const styles = theme => ({
   heading: {
     fontWeight: theme.typography.fontWeightMedium,
   },
+  disablePadding: {
+    padding: "0px"
+  }
 });
 
 function DefaultPanel(props) {
-  const { classes, title, details } = props;
+  const { classes, title, details, disablePadding } = props;
   return (
       <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           <Typography className={classes.heading} >{title}</Typography>
         </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
+        <ExpansionPanelDetails className={disablePadding ? classes.disablePadding : null}>
           {details}
         </ExpansionPanelDetails>
       </ExpansionPanel>
