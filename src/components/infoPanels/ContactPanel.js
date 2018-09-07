@@ -86,7 +86,7 @@ function ContactPanel(props) {
   );
 }
 
-DefaultPanel.propTypes = {
+ContactPanel.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
