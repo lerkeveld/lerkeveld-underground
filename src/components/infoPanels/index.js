@@ -8,12 +8,36 @@ import Calendar from './Calendar';
 import Drive from './Drive';
 
 export default [
-    ContactPanel,
-    Calendar,
-    Drive,
-    ReceptionHours,
-    Defects,
-    LostKey,
-    Subrent,
-    Cantusses
+    {
+        key: "contact",
+        panel: ContactPanel
+    },
+    {
+        key: "calendar",
+        panel: Calendar
+    },
+    {
+        key: "drive",
+        panel: Drive
+    },
+    {
+        key: "reception",
+        panel: ReceptionHours
+    },
+    {
+        key: "defects",
+        panel: Defects
+    },
+    {
+        key: "lostkey",
+        panel: LostKey
+    },
+    {
+        key: "subrent",
+        panel: Subrent
+    },
+    {
+        key: "cantusses",
+        panel: Cantusses
+    }
 ];
