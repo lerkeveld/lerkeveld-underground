@@ -31,29 +31,29 @@ class KotbarRulesDialog extends React.Component {
           <ul>
             <li>
               <Typography>
-                Houd ramen en deuren gesloten tijdens feestjes met luide muziek om geluidsoverlast te beperken.
+                Houd <span className={classes.bold}>ramen en deuren gesloten</span> tijdens feestjes met luide muziek om geluidsoverlast te beperken.
                 Houd er rekening mee dat er paters wonen boven de kotbar en in kamers die uitkijken op de kotbar, dus overdrijf niet met het volume.
               </Typography>
             </li>
             <li>
               <Typography>
-                Niet-praesidium activiteiten met luide muziek moeten stiller worden vanaf 1u ‘s nachts.
+                Niet-praesidium activiteiten met luide muziek moeten <span className={classes.bold}>stiller worden vanaf 1u ‘s nachts</span>.
                 De activiteit hoeft niet te stoppen, achtergrond- muziek mag nog wel, maar geen feestjes-muziekniveau meer.
               </Typography>
             </li>
             <li>
               <Typography>
-                Cantussen zijn niet toegelaten.
+                <span className={classes.bold}>Cantussen zijn niet toegelaten.</span>
               </Typography>
             </li>
             <li>
               <Typography>
-                Plaats meubilair terug na een activiteit.
+                <span className={classes.bold}>Plaats meubilair terug</span> na een activiteit.
               </Typography>
             </li>
             <li>
               <Typography>
-                Laat de kotbar en TV-zaal proper achter na een activiteit. Indien het niet goed is opgekuist, word je achteraf gecontacteerd.
+                <span className={classes.bold}>Laat de kotbar en TV-zaal proper achter na een activiteit.</span> Indien het niet goed is opgekuist, word je achteraf gecontacteerd.
               </Typography>
             </li>
           </ul>
@@ -61,22 +61,22 @@ class KotbarRulesDialog extends React.Component {
           <ul>
             <li>
               <Typography>
-                Trek de stekkers van de ijskasten en muziekinstallatie uit.
+                Trek de <span className={classes.bold}>stekkers</span> van de ijskasten en muziekinstallatie uit.
               </Typography>
             </li>
             <li>
               <Typography>
-                Zorg dat de ijskasten leeg zijn en laat de deuren open (anders beginnen ze te stinken).
+                Zorg dat de <span className={classes.bold}>ijskasten</span> leeg zijn en laat de deuren open (anders beginnen ze te stinken).
               </Typography>
             </li>
             <li>
               <Typography>
-                Zorg dat alle glazen uitgewassen zijn en dat de toog proper is.
+                Zorg dat alle <span className={classes.bold}>glazen uitgewassen</span> zijn en dat de <span className={classes.bold}>toog proper</span> is.
               </Typography>
             </li>
             <li>
               <Typography>
-                Kuis de vloer indien nodig: kuisgerief vind je in het was-sorteerkot op Noord:
+                <span className={classes.bold}>Kuis de vloer</span> indien nodig: kuisgerief vind je in het was-sorteerkot op Noord:
               </Typography>
               <ul>
                 <li><Typography>Loop via de gang van de kotbar naar de Noord.</Typography></li>
