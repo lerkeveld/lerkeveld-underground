@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { CssBaseline, MuiThemeProvider } from '@material-ui/core';
+import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
+import DateFnsUtils from 'material-ui-pickers/utils/date-fns-utils';
 
 import { Header, Sidebar } from './components';
 import routes from './routes';
@@ -19,6 +21,7 @@ class App extends React.Component {
     const { mobileOpen } = this.state;
 
     return (
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <MuiThemeProvider theme={theme}>
           <CssBaseline />
           <Router basename={process.env.PUBLIC_URL}>
@@ -40,6 +43,7 @@ class App extends React.Component {
             </div>
           </Router>
         </MuiThemeProvider>
+      </MuiPickersUtilsProvider>
     );
   }
 }
