@@ -20,7 +20,7 @@ function LostKey(props) {
             <Typography>
               Als het <span className={classes.bold}>onthaal</span> open is, kan je daar een tijdelijke reservesleutel halen.
               Het onthaal is open tot 16u30 op weekdagen en tot 18u in het weekend.
-              Anders kan je pater <span className={classes.bold}>Walter Ceyssens</span> bellen, hij brengt dan jouw reservesleutel. 
+              Anders kan je broeder <span className={classes.bold}>Theo Brebels</span> bellen (016 39 84 81), of vinden op zijn kamer (Z1/048), hij brengt dan jouw reservesleutel.
             </Typography>
         }
       />
