@@ -21,8 +21,8 @@ function InfoView(props) {
         </Typography>
         <div>
         {
-          Array.from(infoPanels).map((Panel) => {
-            return <Panel />;
+          Array.from(infoPanels).map((obj) => {
+            return <obj.panel key={obj.key} />;
           })
         }
         </div>
