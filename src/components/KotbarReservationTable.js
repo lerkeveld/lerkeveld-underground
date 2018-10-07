@@ -37,7 +37,7 @@ function KotbarReservationTable(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {reservations.map(row => {
+            {reservations.sort((r1, r2) => {return r1.date > r2.date}).map(row => {
               return (
                 <TableRow key={row.id}>
                   <TableCell className={classes.tableCell} style={{ minWidth: "100px" }}>
