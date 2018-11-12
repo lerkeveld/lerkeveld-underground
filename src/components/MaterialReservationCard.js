@@ -8,6 +8,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import ListItemText from '@material-ui/core/ListItemText';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import Event from '@material-ui/icons/Event';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
@@ -103,10 +105,15 @@ class MaterialReservationCard extends React.Component {
                       value={this.state.items}
                       onChange={this.handleChange('items')}
                       input={<Input id="select-multiple" />}
+                      renderValue={selected => selected.join(', ')}
                     >
+                      <MenuItem disabled value="">
+                        Kies Materialen:
+                      </MenuItem>
                       {names.map(name => (
-                        <MenuItem key={name} value={name}>
-                          {name}
+                        <MenuItem key={name} value={name} style={{paddingLeft: 0}}>
+                          <Checkbox color="primary" checked={this.state.items.includes(name)} />
+                          <ListItemText primary={name} style={{paddingLeft: 0}}/>
                         </MenuItem>
                       ))}
                     </Select>
