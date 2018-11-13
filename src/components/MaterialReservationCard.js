@@ -58,14 +58,27 @@ class MaterialReservationCard extends React.Component {
     let maxDate = new Date();
     maxDate.setMonth(maxDate.getMonth() + 4);
 
-    const dates = reservations.map(x => x.date);
-    const shouldDisableDate = (date) => {
-        return dates.some(taken => {
-            return date.getDate()  === taken.getDate() &&
-                   date.getMonth() === taken.getMonth() &&
-                   date.getYear()  === taken.getYear();
-        });
-    }
+    const formatDate = (date) => {
+        return date.toLocaleDateString(
+            'nl-be',
+            {'day': '2-digit', 'month': '2-digit', 'year': 'numeric'}
+        );
+    };
+
+    const dateToMaterial = {};
+    reservations.forEach(reservation => {
+        const dateFormatted = formatDate(reservation["date"]);
+        dateToMaterial[dateFormatted] = reservation;
+    });
+
+    const shouldDisableMaterial = (date, material) => {
+        const dateFormatted = formatDate(date);
+        if (dateFormatted in dateToMaterial) {
+            const reservation = dateToMaterial[dateFormatted];
+            return reservation["items"].includes(material);
+        }
+        return false;
+    };
 
     return (
         <React.Fragment>
@@ -85,7 +98,6 @@ class MaterialReservationCard extends React.Component {
                 value={this.state.date}
                 disablePast
                 maxDate={maxDate}
-                shouldDisableDate={shouldDisableDate}
                 format='dd/MM/yyyy'
                 InputProps={{
                   endAdornment: <InputAdornment position="end">
@@ -111,8 +123,17 @@ class MaterialReservationCard extends React.Component {
                         Kies Materialen:
                       </MenuItem>
                       {names.map(name => (
-                        <MenuItem key={name} value={name} style={{paddingLeft: 0}}>
-                          <Checkbox color="primary" checked={this.state.items.includes(name)} />
+                        <MenuItem
+                          key={name}
+                          value={name}
+                          style={{paddingLeft: 0}}
+                          disabled={shouldDisableMaterial(this.state.date, name)}
+                        >
+                          <Checkbox
+                            color="primary"
+                            checked={this.state.items.includes(name)}
+                            indeterminate={shouldDisableMaterial(this.state.date, name)}
+                          />
                           <ListItemText primary={name} style={{paddingLeft: 0}}/>
                         </MenuItem>
                       ))}
