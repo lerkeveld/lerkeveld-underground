@@ -48,5 +48,54 @@ export default {
             "description": "Evenement 5",
             "id": 5
         }
+    ],
+    "material-reservations": [
+        {
+            "date": new Date(new Date().setDate(new Date().getDate() + 1)),
+            "user": "Test Test 1",
+            "items": [
+                "BBQ (15p)",
+                "Beamer"
+            ],
+            "id": 1
+        },
+        {
+            "date": new Date(new Date().setDate(new Date().getDate() + 3)),
+            "user": "Test Test 2",
+            "items": [
+                "BBQ (25p)",
+                "Beamer"
+            ],
+            "id": 2
+        },
+        {
+            "date": new Date(new Date().setDate(new Date().getDate() + 5)),
+            "user": "Test Test 3",
+            "items": [
+                "Beamer"
+            ],
+            "id": 3
+        },
+        {
+            "date": new Date(new Date().setDate(new Date().getDate() + 7)),
+            "user": "Test Test 4",
+            "items": [
+                "Beamer"
+            ],
+            "id": 4
+        },
+        {
+            "date": new Date(new Date().setDate(new Date().getDate() + 9)),
+            "user": "Test Test 5",
+            "items": [
+                "Beamer"
+            ],
+            "id": 5
+        }
+    ],
+    "material-items": [
+        "Beamer",
+        "BBQ (15p)",
+        "BBQ (25p)"
     ]
 }
