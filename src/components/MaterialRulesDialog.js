@@ -54,7 +54,12 @@ class KotbarRulesDialog extends React.Component {
           <ul>
             <li>
               <Typography>
-                Bewaar steeds op een <span className={classes.bold}>veilige plaats</span>.
+                De materiaalverantwoordelijken houden de beamer bij op hun kamer. Haal de beamer op bij één van hen en geef hem na gebruik weer af. Het is dus <span className={classes.bold}>niet de bedoeling dat de beamer onderling wordt doorgegeven.</span>
+              </Typography>
+            </li>
+            <li>
+              <Typography>
+                Bewaar tijdens de reservatie steeds op een <span className={classes.bold}>veilige plaats</span>.
               </Typography>
             </li>
             <li>
@@ -77,7 +82,7 @@ class KotbarRulesDialog extends React.Component {
             </li>
             <li>
               <Typography>
-                Plaats de BBQ <span className={classes.bold}>binnen</span> na gebruik.
+                Plaats de BBQ <span className={classes.bold}>proper in het materiaalkot</span> na gebruik.
               </Typography>
             </li>
           </ul>
