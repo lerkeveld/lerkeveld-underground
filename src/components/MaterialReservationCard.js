@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import DatePicker from 'material-ui-pickers/DatePicker/DatePicker';
+import DatePicker from 'material-ui-pickers/DatePicker';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControl from '@material-ui/core/FormControl';
