@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
 
 import DefaultPanel from './DefaultPanel';
@@ -11,7 +11,7 @@ const styles = theme => ({
   },
 });
 
-function Cantusses(props) {
+function Calendar(props) {
   const { classes } = props;
   return (
       <DefaultPanel
@@ -34,8 +34,8 @@ function Cantusses(props) {
   );
 }
 
-Cantusses.propTypes = {
+Calendar.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Cantusses);
+export default withStyles(styles)(Calendar);

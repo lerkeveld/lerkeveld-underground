@@ -1,5 +1,5 @@
 import React from 'react';
-import { SvgIcon } from '@material-ui/core';
+import SvgIcon from '@material-ui/core/SvgIcon';
 
 function Lerkeveld(props) {
     return <SvgIcon viewBox="0 0 250 250" {...props}> 

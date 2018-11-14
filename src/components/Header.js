@@ -1,10 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import { AppBar, Toolbar, Typography, IconButton, Hidden } from '@material-ui/core';
-import { Menu } from '@material-ui/icons';
+import withStyles from '@material-ui/core/styles/withStyles';
+import AppBar from '@material-ui/core/AppBar';
+import Hidden from '@material-ui/core/Hidden';
+import IconButton from '@material-ui/core/IconButton';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 
-import { GithubCircle, Lerkeveld } from '../assets/icons';
+import Menu from '@material-ui/icons/Menu';
+
+import GithubCircle from '../assets/icons/GithubCircle';
+import Lerkeveld from '../assets/icons/Lerkeveld';
 import headerStyle from '../assets/jss/headerStyle';
 
 function Header(props) {

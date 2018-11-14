@@ -1,6 +1,6 @@
 import React from 'react';
-import { Settings } from '@material-ui/icons';
 import amber from '@material-ui/core/colors/amber';
+import Settings from '@material-ui/icons/Settings';
 
 import DefaultCard from './DefaultCard';
 import PrivacyFormDialog from './PrivacyFormDialog';

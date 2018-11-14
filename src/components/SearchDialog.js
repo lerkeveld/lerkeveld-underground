@@ -1,10 +1,19 @@
 import React from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText,
-    DialogTitle, List, ListItem, ListItemIcon, ListItemText, withMobileDialog
-} from '@material-ui/core';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 
-import { LocationOn, Email, Smartphone } from '@material-ui/icons';
-
+import Email from '@material-ui/icons/Email';
+import LocationOn from '@material-ui/icons/LocationOn';
+import Smartphone from '@material-ui/icons/Smartphone';
 
 class SearchDialog extends React.Component {
 

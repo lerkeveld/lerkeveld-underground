@@ -1,6 +1,5 @@
 import grey from '@material-ui/core/colors/grey';
 
-
 const searchCardStyle = theme => ({
   subheader: {
     fontWeight: theme.typographyfontWeightMedium

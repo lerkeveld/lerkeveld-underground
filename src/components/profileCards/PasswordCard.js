@@ -1,6 +1,6 @@
 import React from 'react';
-import { VpnKey } from '@material-ui/icons';
 import green from '@material-ui/core/colors/green';
+import VpnKey from '@material-ui/icons/VpnKey';
 
 import DefaultCard from './DefaultCard';
 import PasswordFormDialog from './PasswordFormDialog';

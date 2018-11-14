@@ -1,5 +1,5 @@
 import React from 'react';
-import { SvgIcon } from '@material-ui/core';
+import SvgIcon from '@material-ui/core/SvgIcon';
 
 function GithubCircle(props) {
     return <SvgIcon viewBox="0 0 24 24" {...props} > 

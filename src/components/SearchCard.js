@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import { Card, CardHeader, Avatar } from '@material-ui/core';
 import amber from '@material-ui/core/colors/amber';
+import withStyles from '@material-ui/core/styles/withStyles';
+import Avatar from '@material-ui/core/Avatar';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
 
 import searchCardStyle from '../assets/jss/searchCardStyle';
 

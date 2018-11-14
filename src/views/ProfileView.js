@@ -1,19 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import { Grid, Typography } from '@material-ui/core';
+import withStyles from '@material-ui/core/styles/withStyles';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 
 import viewStyle from '../assets/jss/viewStyle';
-
-import {
-    NameCard,
-    EmailCard,
-    PasswordCard,
-    LocationCard,
-    PhoneCard,
-    HomeTelephoneCard,
-    PrivacyCard,
-} from '../components/profileCards';
+import EmailCard from '../components/profileCards/EmailCard';
+import HomeTelephoneCard from '../components/profileCards/HomeTelephoneCard';
+import LocationCard from '../components/profileCards/LocationCard';
+import NameCard from '../components/profileCards/NameCard';
+import PasswordCard from '../components/profileCards/PasswordCard';
+import PhoneCard from '../components/profileCards/PhoneCard';
+import PrivacyCard from '../components/profileCards/PrivacyCard';
 
 class ProfileView extends React.Component {
 

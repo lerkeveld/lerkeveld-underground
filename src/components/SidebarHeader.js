@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import {
-    ListItem, ListItemIcon, ListItemText, Typography, IconButton
-} from '@material-ui/core';
-import { Menu } from '@material-ui/icons';
+import withStyles from '@material-ui/core/styles/withStyles';
+import IconButton from '@material-ui/core/IconButton';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Typography from '@material-ui/core/Typography';
+
+import Menu from '@material-ui/icons/Menu';
 
 import sidebarHeaderStyle from '../assets/jss/sidebarHeaderStyle';
 

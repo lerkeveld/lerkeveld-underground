@@ -1,6 +1,6 @@
 import React from 'react';
-import { orange } from '@material-ui/core/colors';
-import { LocationOn } from '@material-ui/icons';
+import orange from '@material-ui/core/colors/orange';
+import LocationOn from '@material-ui/icons/LocationOn';
 
 import DefaultCard from './DefaultCard';
 
