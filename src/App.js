@@ -1,10 +1,15 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { CssBaseline, MuiThemeProvider } from '@material-ui/core';
-import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
+import BrowserRouter from 'react-router-dom/BrowserRouter';
+import Route from 'react-router-dom/Route';
+import Switch from 'react-router-dom/Switch';
 import DateFnsUtils from 'material-ui-pickers/utils/date-fns-utils';
+import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
-import { Header, Sidebar } from './components';
+import Header from './components/Header';
+import Sidebar from './components/Sidebar';
+
 import routes from './routes';
 import theme from './theme';
 
@@ -24,7 +29,7 @@ class App extends React.Component {
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <MuiThemeProvider theme={theme}>
           <CssBaseline />
-          <Router basename={process.env.PUBLIC_URL}>
+          <BrowserRouter basename={process.env.PUBLIC_URL}>
             <div> 
               <Header setDrawerOpen={this.setDrawerOpen} />
               <Sidebar
@@ -41,7 +46,7 @@ class App extends React.Component {
                 <Route exact path='/index.html' component={routes.dashboard.component} />;
               </Switch>
             </div>
-          </Router>
+          </BrowserRouter>
         </MuiThemeProvider>
       </MuiPickersUtilsProvider>
     );

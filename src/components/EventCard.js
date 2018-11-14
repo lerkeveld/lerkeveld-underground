@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import { Card, CardHeader, CardMedia } from '@material-ui/core';
+import withStyles from '@material-ui/core/styles/withStyles';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
 
-import { FacebookBox } from '../assets/icons';
+import FacebookBox from '../assets/icons/FacebookBox';
 import eventCardStyle from '../assets/jss/eventCardStyle';
 
 function EventCard(props) {

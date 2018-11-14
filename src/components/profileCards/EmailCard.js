@@ -1,6 +1,6 @@
 import React from 'react';
-import { blue } from '@material-ui/core/colors';
-import { Email } from '@material-ui/icons';
+import blue from '@material-ui/core/colors/blue';
+import Email from '@material-ui/icons/Email';
 
 import DefaultCard from './DefaultCard';
 import EmailFormDialog from './EmailFormDialog';

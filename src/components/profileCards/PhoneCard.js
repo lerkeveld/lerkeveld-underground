@@ -1,6 +1,6 @@
 import React from 'react';
-import { Smartphone } from '@material-ui/icons';
 import indigo from '@material-ui/core/colors/indigo';
+import Smartphone from '@material-ui/icons/Smartphone';
 
 import DefaultCard from './DefaultCard';
 

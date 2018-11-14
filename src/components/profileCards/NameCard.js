@@ -1,6 +1,6 @@
 import React from 'react';
-import { AccountCircle } from '@material-ui/icons';
 import red from '@material-ui/core/colors/red';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import DefaultCard from './DefaultCard';
 

@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import { Typography, Grid, IconButton } from '@material-ui/core';
-import ExpandMore from '@material-ui/icons/ExpandMore';
 import SearchBar from 'material-ui-search-bar';
+import withStyles from '@material-ui/core/styles/withStyles';
+import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+
+import ExpandMore from '@material-ui/icons/ExpandMore';
 
 import viewStyle from '../assets/jss/viewStyle';
 import SearchCard from '../components/SearchCard';
