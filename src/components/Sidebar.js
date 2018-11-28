@@ -19,15 +19,14 @@ function Sidebar(props) {
 
   const links = (
       <List className={classes.list}>
-        <SidebarItem closeDrawer={closeDrawer} route={routes.dashboard} />
-        <SidebarItem closeDrawer={closeDrawer} route={routes.info} />
-        <Divider />
         <SidebarItem closeDrawer={closeDrawer} route={routes.profile} />
         <SidebarItem closeDrawer={closeDrawer} route={routes.search} />
         <Divider />
         <SidebarItem closeDrawer={closeDrawer} route={routes.bread} />
         <SidebarItem closeDrawer={closeDrawer} route={routes.kotbar} />
         <SidebarItem closeDrawer={closeDrawer} route={routes.material} />
+        <Divider />
+        <SidebarItem closeDrawer={closeDrawer} route={routes.info} />
         <Divider />
         <SidebarLogout closeDrawer={closeDrawer} />
         <Divider />
