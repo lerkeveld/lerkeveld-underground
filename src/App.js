@@ -43,7 +43,7 @@ class App extends React.Component {
                     return <Route exact path={prop.path} component={prop.component} key={key} />;
                   })
                 }
-                <Route exact path={['/', '/index.html']} component={routes.profile.component} />;
+                <Route exact path="/(|index.html)" component={routes.profile.component} />;
               </Switch>
             </div>
           </BrowserRouter>
