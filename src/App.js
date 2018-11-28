@@ -22,6 +22,21 @@ class App extends React.Component {
       this.setState({ mobileOpen: open });
   }
 
+  // fake refreshToken Promise
+  refreshToken(){
+    return new Promise(resolve => setTimeout(resolve, 2000))
+  }
+
+  componentDidMount(){
+    this.refreshToken().then(() => {
+      const node = document.getElementById('progress')
+      if (node) {
+        node.classList.add('available');
+        setTimeout(() => {node.remove();}, 2000);
+      }
+    });
+  }
+
   render() {
     const { mobileOpen } = this.state;
 
