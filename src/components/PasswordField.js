@@ -5,6 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import VpnKey from '@material-ui/icons/VpnKey';
 
 class PasswordField extends React.Component {
 
@@ -17,11 +18,18 @@ class PasswordField extends React.Component {
   }
 
   render() {
-    const { showPassword } = this.state;
+    const { showStartAdornment } = this.props;
+
+    const startAdornment = showStartAdornment 
+          ? <InputAdornment position="start">
+              <VpnKey />
+            </InputAdornment>
+          : null;
     return (
         <TextField
-          type={showPassword ? "text" : "password"}
+          type={this.state.showPassword ? "text" : "password"}
           InputProps={{
+            startAdornment: startAdornment,
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton
