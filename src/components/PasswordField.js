@@ -18,11 +18,21 @@ class PasswordField extends React.Component {
   }
 
   render() {
-    const { showStartAdornment } = this.props;
+    const { showStartAdornment, showEndAdornment } = this.props;
 
     const startAdornment = showStartAdornment 
           ? <InputAdornment position="start">
               <VpnKey />
+            </InputAdornment>
+          : null;
+    const endAdornment = showEndAdornment
+          ? <InputAdornment position="end">
+              <IconButton
+                onClick={this.handleClickShowPassword}
+                onMouseDown={this.handleMouseDownPassword}
+              >
+                {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
             </InputAdornment>
           : null;
     return (
@@ -30,16 +40,7 @@ class PasswordField extends React.Component {
           type={this.state.showPassword ? "text" : "password"}
           InputProps={{
             startAdornment: startAdornment,
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  onClick={this.handleClickShowPassword}
-                  onMouseDown={this.handleMouseDownPassword}
-                >
-                  {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            )
+            endAdornment: endAdornment
           }}
           {...this.props}
         />

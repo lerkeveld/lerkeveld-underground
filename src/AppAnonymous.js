@@ -1,10 +1,15 @@
 import React from 'react';
+import Route from 'react-router-dom/Route';
+import Switch from 'react-router-dom/Switch';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
+import ActivateForm from './components/ActivateForm';
 import LoginForm from './components/LoginForm';
+import ResetForm from './components/ResetForm';
+
 import Lerkeveld from './assets/icons/Lerkeveld';
 
 
@@ -46,7 +51,11 @@ class AppAnonymous extends React.Component {
                 <Typography variant="h5" align="center" paragraph>
                   Lerkeveld Underground
                 </Typography>
-                <LoginForm setAuthenticated={setAuthenticated} />
+                <Switch>
+                  <Route exact path="/login" component={() => <LoginForm setAuthenticated={setAuthenticated} />} />
+                  <Route exact path="/activate" component={() => <ActivateForm />} />
+                  <Route exact path="/reset" component={() => <ResetForm />} />
+                </Switch>
               </Paper>
           </div>
       )
