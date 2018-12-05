@@ -1,4 +1,5 @@
 import React from 'react';
+import withRouter from 'react-router-dom/withRouter';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -7,11 +8,9 @@ import ExitToApp from '@material-ui/icons/ExitToApp';
 class SidebarLogout extends React.Component {
 
   handleLogoutClick = () => {
-    const { closeDrawer } = this.props;
-    closeDrawer();
     // TODO: send POST request
-    // TODO: redirect to main /
-    console.log('Logout');
+    this.props.closeDrawer();
+    this.props.history.push('/auth/login');
   }
 
   render() {
@@ -26,4 +25,4 @@ class SidebarLogout extends React.Component {
   }
 }
 
-export default SidebarLogout;
+export default withRouter(SidebarLogout);

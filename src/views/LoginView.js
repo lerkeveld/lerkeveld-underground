@@ -48,20 +48,20 @@ class LoginForm extends React.Component {
     this.setState({[prop]: event.target.value});
   }
 
-  render() {
-    const { history, classes } = this.props;
+  handleSubmit = event => {
     const { referrer } = this.props.location.state || { referrer: { pathname: '/' } }
+    this.props.history.push(referrer);
+    event.preventDefault();
+  };
 
-    const handleSubmit = event => {
-      history.push(referrer);
-      event.preventDefault();
-    };
+  render() {
+    const { classes } = this.props;
 
     const ActivateLink = props => <Link to="/auth/activate" {...props} />;
     const ResetLink = props => <Link to="/auth/reset" {...props} />;
 
     return <React.Fragment>
-             <form noValidate onSubmit={handleSubmit}>
+             <form noValidate onSubmit={this.handleSubmit}>
                <TextField
                  label="E-mail"
                  fullWidth
@@ -70,7 +70,7 @@ class LoginForm extends React.Component {
                  InputLabelProps={{
                    shrink: true,
                  }}
-                 onChange={this.handleChange('email').bind(this)}
+                 onChange={this.handleChange('email')}
                  value={this.state.email}
                />
                <PasswordField
@@ -82,7 +82,7 @@ class LoginForm extends React.Component {
                  InputLabelProps={{
                    shrink: true,
                  }}
-                 onChange={this.handleChange('password').bind(this)}
+                 onChange={this.handleChange('password')}
                  value={this.state.password}
                />
                <Button
