@@ -1,47 +1,126 @@
 import React from 'react';
+import Link from 'react-router-dom/Link'
+import withRouter from 'react-router-dom/withRouter'
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
-import viewStyle from '../assets/jss/viewStyle';
-import EmailCard from '../components/profileCards/EmailCard';
-import HomeTelephoneCard from '../components/profileCards/HomeTelephoneCard';
-import LocationCard from '../components/profileCards/LocationCard';
-import NameCard from '../components/profileCards/NameCard';
-import PasswordCard from '../components/profileCards/PasswordCard';
-import PhoneCard from '../components/profileCards/PhoneCard';
-import PrivacyCard from '../components/profileCards/PrivacyCard';
+import PasswordField from '../components/PasswordField.js';
 
-class ProfileView extends React.Component {
+
+const styles = theme => ({
+  actions: {
+    marginTop: '16px'
+  },
+  actionLeft: {
+    width: '50%',
+    float: 'left',
+    textAlign: 'center'
+  },
+  actionRight: {
+    width: '50%',
+    float: 'right',
+    textAlign: 'center'
+  },
+  button: {
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto'
+  },
+  submit: {
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: '16px'
+  }
+});
+
+
+class LoginForm extends React.Component {
+
+  state = {
+    email: '',
+    password: ''
+  }
+
+  handleChange = prop => event => {
+    this.setState({[prop]: event.target.value});
+  }
 
   render() {
-    const { classes } = this.props;
-    return (
-        <main className={classes.mainContent}>
-          <div className={classes.toolbar} />
-          <Typography variant="headline" className={classes.mainTitle}>
-            Profiel
-          </Typography>
-          <Typography variant="body1" paragraph className={classes.mainSubHeader}>
-            Contacteer Lerkeveld IT voor niet-aanpasbare velden.
-          </Typography>
-          <Grid container spacing={16}>
-            <Grid item xs={12} md={4}><NameCard /></Grid>
-            <Grid item xs={12} md={4}><EmailCard /></Grid>
-            <Grid item xs={12} md={4}><PasswordCard /></Grid>
-            <Grid item xs={12} md={4}><LocationCard /></Grid>
-            <Grid item xs={12} md={4}><PhoneCard /></Grid>
-            <Grid item xs={12} md={4}><HomeTelephoneCard /></Grid>
-            <Grid item xs={12} md={4}><PrivacyCard /></Grid>
-          </Grid>
-        </main>
-    );
+    const { history, classes } = this.props;
+    const { referrer } = this.props.location.state || { referrer: { pathname: '/' } }
+
+    const handleSubmit = event => {
+      history.push(referrer);
+      event.preventDefault();
+    };
+
+    const ActivateLink = props => <Link to="/auth/activate" {...props} />;
+    const ResetLink = props => <Link to="/auth/reset" {...props} />;
+
+    return <React.Fragment>
+             <form noValidate onSubmit={handleSubmit}>
+               <TextField
+                 label="E-mail"
+                 fullWidth
+                 required
+                 margin="normal"
+                 InputLabelProps={{
+                   shrink: true,
+                 }}
+                 onChange={this.handleChange('email').bind(this)}
+                 value={this.state.email}
+               />
+               <PasswordField
+                 label="Wachtwoord"
+                 fullWidth
+                 required
+                 margin="normal"
+                 showEndAdornment
+                 InputLabelProps={{
+                   shrink: true,
+                 }}
+                 onChange={this.handleChange('password').bind(this)}
+                 value={this.state.password}
+               />
+               <Button
+                 className={classes.submit}
+                 variant="contained"
+                 color="secondary"
+                 size="medium"
+                 type="submit"
+               >
+                 Login
+               </Button>
+             </form>
+             <div className={classes.actions}>
+                <div className={classes.actionLeft}>
+                  <Button
+                    color="primary"
+                    size="small"
+                    component={ActivateLink}
+                  >
+                    Activeer nu!
+                  </Button>
+                </div>
+                <div className={classes.actionRight}>
+                  <Button
+                    color="primary"
+                    size="small"
+                    component={ResetLink}
+                  >
+                    Wachtwoord vergeten?
+                  </Button>
+                </div>
+             </div>
+           </React.Fragment>
   }
 }
 
-ProfileView.propTypes = {
+LoginForm.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(viewStyle)(ProfileView);
+export default withRouter(withStyles(styles)(LoginForm));

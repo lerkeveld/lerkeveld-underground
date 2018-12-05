@@ -3,8 +3,8 @@ import withRouter from 'react-router-dom/withRouter';
 import Route from 'react-router-dom/Route';
 import Switch from 'react-router-dom/Switch';
 
-import AppAuthenticated from './AppAuthenticated';
-import AppAnonymous from './AppAnonymous';
+import MainLayout from './layouts/MainLayout';
+import AuthLayout from './layouts/AuthLayout';
 
 class App extends React.Component {
 
@@ -41,8 +41,8 @@ class App extends React.Component {
   render() {
     return (
         <Switch>
-          <Route path="/auth" component={AppAnonymous} />
-          <Route path="/" component={AppAuthenticated} />
+          <Route path="/auth" component={AuthLayout} />
+          <Route path="/" component={MainLayout} />
         </Switch>
     );
   }

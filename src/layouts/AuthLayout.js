@@ -7,11 +7,11 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
-import ActivateForm from './components/ActivateForm';
-import LoginForm from './components/LoginForm';
-import ResetForm from './components/ResetForm';
+import ActivateView from '../views/ActivateView';
+import LoginView from '../views/LoginView';
+import ResetView from '../views/ResetView';
 
-import Lerkeveld from './assets/icons/Lerkeveld';
+import Lerkeveld from '../assets/icons/Lerkeveld';
 
 
 const styles = theme => ({
@@ -41,7 +41,7 @@ const styles = theme => ({
 });
 
 
-class AppAnonymous extends React.Component {
+class AuthLayout extends React.Component {
 
     render() {
       const { classes } = this.props;
@@ -52,9 +52,9 @@ class AppAnonymous extends React.Component {
                    Lerkeveld Underground
                  </Typography>
                  <Switch>
-                   <Route exact path="/auth/login" component={LoginForm} />
-                   <Route exact path="/auth/activate" component={ActivateForm} />
-                   <Route exact path="/auth/reset" component={ResetForm} />
+                   <Route exact path="/auth/login" component={LoginView} />
+                   <Route exact path="/auth/activate" component={ActivateView} />
+                   <Route exact path="/auth/reset" component={ResetView} />
                    <Redirect to="/auth/login" />
                  </Switch>
                </Paper>
@@ -63,8 +63,8 @@ class AppAnonymous extends React.Component {
 
 }
 
-AppAnonymous.propTypes = {
+AuthLayout.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(AppAnonymous);
+export default withStyles(styles)(AuthLayout);

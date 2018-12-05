@@ -3,13 +3,13 @@ import Redirect from 'react-router-dom/Redirect';
 import Route from 'react-router-dom/Route';
 import Switch from 'react-router-dom/Switch';
 
-import Header from './components/Header';
-import Sidebar from './components/Sidebar';
+import Header from '../components/Header';
+import Sidebar from '../components/Sidebar';
 
-import routes from './routes';
+import routes from '../routes';
 
 
-class AppAuthenticated extends React.Component {
+class MainLayout extends React.Component {
 
     state = {
       mobileOpen: false
@@ -41,4 +41,4 @@ class AppAuthenticated extends React.Component {
 
 }
 
-export default AppAuthenticated;
+export default MainLayout;
