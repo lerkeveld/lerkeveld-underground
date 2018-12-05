@@ -1,4 +1,5 @@
 import React from 'react';
+import Redirect from 'react-router-dom/Redirect';
 import Route from 'react-router-dom/Route';
 import Switch from 'react-router-dom/Switch';
 
@@ -34,6 +35,7 @@ class AppAuthenticated extends React.Component {
               })
             }
             <Route exact path="/(|index.html)" component={routes.profile.component} />;
+            <Redirect to="/" />;
           </Switch>
         </React.Fragment>
       )

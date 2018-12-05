@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'react-router-dom/Link'
+import withRouter from 'react-router-dom/withRouter'
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import TextField from '@material-ui/core/TextField';
@@ -48,15 +49,16 @@ class LoginForm extends React.Component {
   }
 
   render() {
-    const { classes, setAuthenticated } = this.props;
+    const { history, classes, setAuthenticated } = this.props;
 
     const handleSubmit = event => {
+      history.push("/");
       setAuthenticated(true);
       event.preventDefault();
-    }
+    };
 
-    const ActivateLink = props => <Link to="/activate" {...props} />
-    const ResetLink = props => <Link to="/reset" {...props} />
+    const ActivateLink = props => <Link to="/activate" {...props} />;
+    const ResetLink = props => <Link to="/reset" {...props} />;
 
     return <React.Fragment>
              <form noValidate onSubmit={handleSubmit}>
@@ -121,4 +123,4 @@ LoginForm.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(LoginForm);
+export default withRouter(withStyles(styles)(LoginForm));

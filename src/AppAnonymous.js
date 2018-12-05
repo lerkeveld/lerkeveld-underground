@@ -1,4 +1,5 @@
 import React from 'react';
+import Redirect from 'react-router-dom/Redirect';
 import Route from 'react-router-dom/Route';
 import Switch from 'react-router-dom/Switch';
 import PropTypes from 'prop-types';
@@ -55,6 +56,7 @@ class AppAnonymous extends React.Component {
                   <Route exact path="/login" component={() => <LoginForm setAuthenticated={setAuthenticated} />} />
                   <Route exact path="/activate" component={() => <ActivateForm />} />
                   <Route exact path="/reset" component={() => <ResetForm />} />
+                  <Redirect to="/login" />
                 </Switch>
               </Paper>
           </div>
