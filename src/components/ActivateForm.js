@@ -46,7 +46,7 @@ class ActivateForm extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const LoginLink = props => <Link to="/login" {...props} />
+    const LoginLink = props => <Link to="/auth/login" {...props} />
 
     return <React.Fragment>
              { !this.state.submitted

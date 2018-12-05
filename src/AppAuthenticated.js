@@ -20,25 +20,23 @@ class AppAuthenticated extends React.Component {
     }
 
     render() {
-      return (
-        <React.Fragment>
-          <Header setDrawerOpen={this.setDrawerOpen} />
-          <Sidebar
-            mobileOpen={this.state.mobileOpen}
-            routes={routes}
-            setDrawerOpen={this.setDrawerOpen}
-          />
-          <Switch>
-            {
-              Object.values(routes).map((prop, key) => {
-                return <Route exact path={prop.path} component={prop.component} key={key} />;
-              })
-            }
-            <Route exact path="/(|index.html)" component={routes.profile.component} />;
-            <Redirect to="/" />;
-          </Switch>
-        </React.Fragment>
-      )
+      return <React.Fragment>
+               <Header setDrawerOpen={this.setDrawerOpen} />
+               <Sidebar
+                 mobileOpen={this.state.mobileOpen}
+                 routes={routes}
+                 setDrawerOpen={this.setDrawerOpen}
+               />
+               <Switch>
+                 {
+                   Object.values(routes).map((prop, key) => {
+                     return <Route exact path={prop.path} component={prop.component} key={key} />;
+                   })
+                 }
+                 <Route exact path="/(|index.html)" component={routes.profile.component} />;
+                 <Redirect to="/" />;
+               </Switch>
+             </React.Fragment>
     }
 
 }

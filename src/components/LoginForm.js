@@ -49,16 +49,16 @@ class LoginForm extends React.Component {
   }
 
   render() {
-    const { history, classes, setAuthenticated } = this.props;
+    const { history, classes } = this.props;
+    const { referrer } = this.props.location.state || { referrer: { pathname: '/' } }
 
     const handleSubmit = event => {
-      history.push("/");
-      setAuthenticated(true);
+      history.push(referrer);
       event.preventDefault();
     };
 
-    const ActivateLink = props => <Link to="/activate" {...props} />;
-    const ResetLink = props => <Link to="/reset" {...props} />;
+    const ActivateLink = props => <Link to="/auth/activate" {...props} />;
+    const ResetLink = props => <Link to="/auth/reset" {...props} />;
 
     return <React.Fragment>
              <form noValidate onSubmit={handleSubmit}>

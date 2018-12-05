@@ -1,56 +1,51 @@
 import React from 'react';
-import BrowserRouter from 'react-router-dom/BrowserRouter';
-import DateFnsUtils from '@date-io/date-fns';
-import MuiPickersUtilsProvider from 'material-ui-pickers/MuiPickersUtilsProvider';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import withRouter from 'react-router-dom/withRouter';
+import Route from 'react-router-dom/Route';
+import Switch from 'react-router-dom/Switch';
 
 import AppAuthenticated from './AppAuthenticated';
 import AppAnonymous from './AppAnonymous';
 
-import theme from './theme';
-
 class App extends React.Component {
-
-  state = {
-      isAuthenticated: true
-  }
-
-  setAuthenticated(value) {
-    this.setState({isAuthenticated: value});
-  }
 
   // fake refreshToken Promise
   refreshToken() {
-    return new Promise(resolve => setTimeout(resolve, 2000))
+    const authenticated = false;
+    return new Promise(resolve => setTimeout(() => resolve(authenticated), 2000))
   }
 
   componentDidMount() {
-    this.refreshToken().then(() => {
-      this.setState({isAuthenticated: false});
+    this.refreshToken().then((authenticated) => {
+      // redirect based on authenticated state of refreshToken
+      if (authenticated) {
+        if (this.props.location.pathname.startsWith('/auth'))
+          this.props.history.push('/');
+      } else {
+        if (!this.props.location.pathname.startsWith('/auth')) {
+          this.props.history.push({
+              pathname: '/auth/login',
+              state: {referrer: this.props.location}
+          });
+        }
+      }
+
+      // remove progress
       const node = document.getElementById('progress')
       if (node) {
         node.classList.add('available');
         setTimeout(() => {node.remove();}, 2000);
       }
-    });
+      });
   }
 
   render() {
     return (
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <MuiThemeProvider theme={theme}>
-          <CssBaseline />
-          <BrowserRouter basename={process.env.PUBLIC_URL}>
-            { this.state.isAuthenticated
-                ? <AppAuthenticated />
-                : <AppAnonymous setAuthenticated={this.setAuthenticated.bind(this)} />
-            }
-          </BrowserRouter>
-        </MuiThemeProvider>
-      </MuiPickersUtilsProvider>
+        <Switch>
+          <Route path="/auth" component={AppAnonymous} />
+          <Route path="/" component={AppAuthenticated} />
+        </Switch>
     );
   }
 }
 
-export default App;
+export default withRouter(App);

@@ -44,23 +44,21 @@ const styles = theme => ({
 class AppAnonymous extends React.Component {
 
     render() {
-      const { classes, setAuthenticated } = this.props;
-      return (
-          <div className={classes.root}>
-              <Paper className={classes.paper}>
-                <Lerkeveld className={classes.icon} />
-                <Typography variant="h5" align="center" paragraph>
-                  Lerkeveld Underground
-                </Typography>
-                <Switch>
-                  <Route exact path="/login" component={() => <LoginForm setAuthenticated={setAuthenticated} />} />
-                  <Route exact path="/activate" component={() => <ActivateForm />} />
-                  <Route exact path="/reset" component={() => <ResetForm />} />
-                  <Redirect to="/login" />
-                </Switch>
-              </Paper>
-          </div>
-      )
+      const { classes } = this.props;
+      return <div className={classes.root}>
+               <Paper className={classes.paper}>
+                 <Lerkeveld className={classes.icon} />
+                 <Typography variant="h5" align="center" paragraph>
+                   Lerkeveld Underground
+                 </Typography>
+                 <Switch>
+                   <Route exact path="/auth/login" component={LoginForm} />
+                   <Route exact path="/auth/activate" component={ActivateForm} />
+                   <Route exact path="/auth/reset" component={ResetForm} />
+                   <Redirect to="/auth/login" />
+                 </Switch>
+               </Paper>
+             </div>
     }
 
 }
