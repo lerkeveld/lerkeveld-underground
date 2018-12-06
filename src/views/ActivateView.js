@@ -99,7 +99,7 @@ class ActivateForm extends React.Component {
                      <span className={classes.bold}>Check je inbox</span> (en je spam folder) voor een e-mail met een link om je account te activeren.
                    </Typography>
                    <Typography>
-                     Emails worden <span className={classes.bold}>om het kwartier</span> verzonden.
+                     E-mails worden <span className={classes.bold}>om het kwartier</span> verzonden.
                      (Dit is een voorzorgsmaatregel van KU Leuven tegen spam.)
                    </Typography>
                  </React.Fragment>
