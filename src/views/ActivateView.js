@@ -64,6 +64,7 @@ class ActivateForm extends React.Component {
                    />
                    <PasswordField
                      label="Nieuw wachtwoord"
+                     helperText="Vul hier minimaal 8 tekens in."
                      fullWidth
                      required
                      margin="normal"
