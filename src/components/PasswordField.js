@@ -18,7 +18,7 @@ class PasswordField extends React.Component {
   }
 
   render() {
-    const { showStartAdornment, showEndAdornment } = this.props;
+    const { showStartAdornment, showEndAdornment, ...rest } = this.props;
 
     const startAdornment = showStartAdornment 
           ? <InputAdornment position="start">
@@ -42,7 +42,7 @@ class PasswordField extends React.Component {
             startAdornment: startAdornment,
             endAdornment: endAdornment
           }}
-          {...this.props}
+          {...rest}
         />
     );
   }
