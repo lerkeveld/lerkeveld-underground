@@ -1,34 +1,35 @@
 import React from 'react';
-import BrowserRouter from 'react-router-dom/BrowserRouter';
+import withRouter from 'react-router-dom/withRouter';
 import Route from 'react-router-dom/Route';
 import Switch from 'react-router-dom/Switch';
-import DateFnsUtils from '@date-io/date-fns';
-import MuiPickersUtilsProvider from 'material-ui-pickers/MuiPickersUtilsProvider';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
-import CssBaseline from '@material-ui/core/CssBaseline';
 
-import Header from './components/Header';
-import Sidebar from './components/Sidebar';
-
-import routes from './routes';
-import theme from './theme';
+import AuthLayout from './layouts/AuthLayout';
+import MainLayout from './layouts/MainLayout';
 
 class App extends React.Component {
 
-  state = {
-      mobileOpen: false
-  }
-  setDrawerOpen = (open) => {
-      this.setState({ mobileOpen: open });
-  }
-
   // fake refreshToken Promise
-  refreshToken(){
-    return new Promise(resolve => setTimeout(resolve, 2000))
+  refreshToken() {
+    const authenticated = false;
+    return new Promise(resolve => setTimeout(() => resolve(authenticated), 2000))
   }
 
-  componentDidMount(){
-    this.refreshToken().then(() => {
+  componentDidMount() {
+    this.refreshToken().then((authenticated) => {
+      // redirect based on authenticated state of refreshToken
+      if (authenticated) {
+        if (this.props.location.pathname.startsWith('/auth'))
+          this.props.history.push('/');
+      } else {
+        if (!this.props.location.pathname.startsWith('/auth')) {
+          this.props.history.push({
+              pathname: '/auth/login',
+              state: {referrer: this.props.location}
+          });
+        }
+      }
+
+      // remove progress
       const node = document.getElementById('progress')
       if (node) {
         node.classList.add('available');
@@ -38,34 +39,13 @@ class App extends React.Component {
   }
 
   render() {
-    const { mobileOpen } = this.state;
-
     return (
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <MuiThemeProvider theme={theme}>
-          <CssBaseline />
-          <BrowserRouter basename={process.env.PUBLIC_URL}>
-            <div> 
-              <Header setDrawerOpen={this.setDrawerOpen} />
-              <Sidebar
-                mobileOpen={mobileOpen}
-                routes={routes}
-                setDrawerOpen={this.setDrawerOpen}
-              />
-              <Switch>
-                {
-                  Object.values(routes).map((prop, key) => {
-                    return <Route exact path={prop.path} component={prop.component} key={key} />;
-                  })
-                }
-                <Route exact path="/(|index.html)" component={routes.profile.component} />;
-              </Switch>
-            </div>
-          </BrowserRouter>
-        </MuiThemeProvider>
-      </MuiPickersUtilsProvider>
+        <Switch>
+          <Route path="/auth" component={AuthLayout} />
+          <Route path="/" component={MainLayout} />
+        </Switch>
     );
   }
 }
 
-export default App;
+export default withRouter(App);

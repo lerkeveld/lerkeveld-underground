@@ -40,6 +40,7 @@ function EmailFormDialog(props) {
             label="Huidig wachtwoord"
             fullWidth
             required
+            showEndAdornment
           />
         </DialogContent>
         <DialogActions>
