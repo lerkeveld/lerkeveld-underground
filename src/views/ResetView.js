@@ -69,10 +69,10 @@ class ResetForm extends React.Component {
                    </Button>
                  </form>
                : <React.Fragment>
-                   <Typography paragraph>
+                   <Typography variant="body2" paragraph>
                      <span className={classes.bold}>Check je inbox</span> (en je spam folder) voor een e-mail met een link om je wachtwoord te resetten.
                    </Typography>
-                   <Typography>
+                   <Typography variant="body2">
                      E-mails worden <span className={classes.bold}>om het kwartier</span> verzonden.
                      (Dit is een voorzorgsmaatregel van KU Leuven tegen spam.)
                    </Typography>

@@ -13,10 +13,10 @@ function InfoView(props) {
   return (
       <main className={classes.mainContent}>
         <div className={classes.toolbar} />
-        <Typography variant="headline" className={classes.mainTitle}>
+        <Typography variant="h5" className={classes.mainTitle}>
           FAQ
         </Typography>
-        <Typography variant="body1" paragraph className={classes.mainSubHeader}>
+        <Typography variant="body2" paragraph className={classes.mainSubHeader}>
           Stuur jouw vaak gestelde vraag naar Lerkeveld IT!
         </Typography>
         <div>

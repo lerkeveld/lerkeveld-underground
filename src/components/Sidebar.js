@@ -18,7 +18,7 @@ function Sidebar(props) {
   const closeDrawer = () => setDrawerOpen(false);
 
   const links = (
-      <List className={classes.list}>
+      <List>
         <SidebarItem closeDrawer={closeDrawer} route={routes.profile} />
         <SidebarItem closeDrawer={closeDrawer} route={routes.search} />
         <Divider />

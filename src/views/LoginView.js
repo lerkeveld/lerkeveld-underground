@@ -99,6 +99,7 @@ class LoginForm extends React.Component {
                 <div className={classes.actionLeft}>
                   <Button
                     color="primary"
+                    mini
                     size="small"
                     component={ActivateLink}
                   >

@@ -24,7 +24,7 @@ function KotbarReservationTable(props) {
 
   return (
     <React.Fragment>
-      <Typography variant="body2">
+      <Typography variant="subtitle2">
         Reservaties
       </Typography>
       <div className={classes.root}>

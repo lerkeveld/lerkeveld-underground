@@ -11,14 +11,11 @@ function BreadView(props) {
   return (
       <main className={classes.mainContent}>
         <div className={classes.toolbar} />
-        <Typography variant="headline" className={classes.mainTitle}>
+        <Typography variant="h5" className={classes.mainTitle}>
           Brood
         </Typography>
-        <Typography variant="subheading" paragraph className={classes.mainSubHeader}>
+        <Typography variant="body2" paragraph className={classes.mainSubHeader}>
           Bestel hier wekelijks jouw brood!
-        </Typography>
-        <Typography variant="subheading" paragraph className={classes.mainTitle}>
-          Zelfde layout als <a href='http://lerkies.studentenweb.org/bem/' target='_blank' rel='noopener noreferrer'>http://lerkies.studentenweb.org/bem</a>?
         </Typography>
       </main>
   );
