@@ -7,7 +7,7 @@ import MaterialSelect from './MaterialSelect';
 import MaterialDatePicker from './MaterialDatePicker';
 
 
-class MaterialReservationCard extends React.Component {
+class MaterialReservationForm extends React.Component {
 
   state = {
     date: new Date(),
@@ -109,14 +109,14 @@ class MaterialReservationCard extends React.Component {
   }
 }
 
-MaterialReservationCard.propTypes = {
+MaterialReservationForm.propTypes = {
   reservations: PropTypes.array.isRequired,
   material: PropTypes.array.isRequired
 };
 
-MaterialReservationCard.defaultProps = {
+MaterialReservationForm.defaultProps = {
   reservations: [],
   material: []
 }
 
-export default MaterialReservationCard;
+export default MaterialReservationForm;
