@@ -3,15 +3,12 @@ import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
 
-import DefaultPanel from './DefaultPanel';
+import DefaultPanel from '../DefaultPanel';
 
-const styles = theme => ({
-  bold: {
-    fontWeight: theme.typography.fontWeightMedium,
-  },
-});
+import infoPanelStyle from '../../../assets/jss/infoPanelStyle';
 
-function LostKey(props) {
+
+function LostKeyPanel(props) {
   const { classes } = props;
   return (
       <DefaultPanel
@@ -27,8 +24,8 @@ function LostKey(props) {
   );
 }
 
-LostKey.propTypes = {
+LostKeyPanel.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(LostKey);
+export default withStyles(infoPanelStyle)(LostKeyPanel);

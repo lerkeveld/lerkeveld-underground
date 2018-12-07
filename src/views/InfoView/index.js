@@ -3,9 +3,16 @@ import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
 
-import viewStyle from '../assets/jss/viewStyle';
+import viewStyle from '../../assets/jss/viewStyle';
 
-import infoPanels from '../components/infoPanels';
+import CalendarPanel from './panels/CalendarPanel';
+import CantusPanel from './panels/CantusPanel';
+import ContactPanel from './panels/ContactPanel';
+import DefectsPanel from './panels/DefectsPanel';
+import DrivePanel from './panels/DrivePanel';
+import LostKeyPanel from './panels/LostKeyPanel';
+import ReceptionHoursPanel from './panels/ReceptionHoursPanel';
+import SubrentPanel from './panels/SubrentPanel';
 
 function InfoView(props) {
   const { classes } = props;
@@ -20,11 +27,14 @@ function InfoView(props) {
           Stuur jouw vaak gestelde vraag naar Lerkeveld IT!
         </Typography>
         <div>
-        {
-          Array.from(infoPanels).map((obj) => {
-            return <obj.panel key={obj.key} />;
-          })
-        }
+          <ContactPanel />
+          <ReceptionHoursPanel />
+          <LostKeyPanel />
+          <DefectsPanel />
+          <CantusPanel />
+          <SubrentPanel />
+          <CalendarPanel />
+          <DrivePanel />
         </div>
       </main>
   );

@@ -3,15 +3,12 @@ import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
 
-import DefaultPanel from './DefaultPanel';
+import DefaultPanel from '../DefaultPanel';
 
-const styles = theme => ({
-  bold: {
-    fontWeight: theme.typography.fontWeightMedium,
-  },
-});
+import infoPanelStyle from '../../../assets/jss/infoPanelStyle';
 
-function Defects(props) {
+
+function DefectsPanel(props) {
   const { classes } = props;
   return (
       <DefaultPanel
@@ -25,8 +22,8 @@ function Defects(props) {
   );
 }
 
-Defects.propTypes = {
+DefectsPanel.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Defects);
+export default withStyles(infoPanelStyle)(DefectsPanel);

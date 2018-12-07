@@ -20,9 +20,9 @@ import green from '@material-ui/core/colors/green';
 import purple from '@material-ui/core/colors/purple';
 import red from '@material-ui/core/colors/red';
 
-import DefaultPanel from './DefaultPanel';
+import DefaultPanel from '../DefaultPanel';
 
-const styles = theme => ({
+const contactPanelStyle = theme => ({
   root: {
     width: '100%',
     backgroundColor: theme.palette.background.paper,
@@ -31,6 +31,7 @@ const styles = theme => ({
     color: amber[500]
   }
 });
+
 
 function ContactPanel(props) {
   const { classes } = props;
@@ -90,4 +91,4 @@ ContactPanel.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ContactPanel);
+export default withStyles(contactPanelStyle)(ContactPanel);
