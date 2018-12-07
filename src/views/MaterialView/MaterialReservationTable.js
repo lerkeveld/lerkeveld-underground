@@ -6,42 +6,40 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
-  root: {
-    width: '100%',
-    overflowX: 'auto'
-  },
   tableCell : {
     paddingLeft: '18px',
     paddingRight: '0px'
   }
 });
 
+const formatDate = (date) => {
+  return date.toLocaleDateString(
+    'nl-be',
+    {'day': '2-digit', 'month': '2-digit', 'year': 'numeric'}
+  );
+};
+
+
 function MaterialReservationTable(props) {
   const { classes, reservations } = props;
 
   return (
-    <React.Fragment>
-      <Typography variant="subtitle2">
-        Reservaties
-      </Typography>
-      <div className={classes.root}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.tableCell}>Datum</TableCell>
-              <TableCell className={classes.tableCell}>Verantwoordelijke</TableCell>
-              <TableCell className={classes.tableCell}>Materiaal</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {reservations.sort((r1, r2) => {return r1.date > r2.date}).map(row => {
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell className={classes.tableCell}>Datum</TableCell>
+            <TableCell className={classes.tableCell}>Verantwoordelijke</TableCell>
+            <TableCell className={classes.tableCell}>Materiaal</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          { reservations.sort((r1, r2) => {return r1.date > r2.date}).map(row => {
               return (
                 <TableRow key={row.id}>
                   <TableCell className={classes.tableCell} style={{ minWidth: "100px" }}>
-                    {row.date.toLocaleDateString('nl-be', {'day': '2-digit', 'month': '2-digit', 'year': 'numeric'})}
+                    {formatDate(row.date)}
                   </TableCell>
                   <TableCell className={classes.tableCell} style={{ minWidth: "200px" }}>
                     {row.user}
@@ -51,11 +49,9 @@ function MaterialReservationTable(props) {
                   </TableCell>
                 </TableRow>
               );
-            })}
-          </TableBody>
-        </Table>
-      </div>
-    </React.Fragment>
+          })}
+        </TableBody>
+      </Table>
   );
 }
 
