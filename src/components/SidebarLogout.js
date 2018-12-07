@@ -19,7 +19,7 @@ class SidebarLogout extends React.Component {
           <ListItemIcon>
             <ExitToApp />
           </ListItemIcon>
-          <ListItemText primary="Logout" />
+          <ListItemText primary="Logout" primaryTypographyProps={{variant: "body1"}}/>
         </ListItem>
     );
   }

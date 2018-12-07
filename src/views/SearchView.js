@@ -69,10 +69,10 @@ class SearchView extends React.Component {
     return (
         <main className={classes.mainContent}>
           <div className={classes.toolbar} />
-          <Typography variant="headline" className={classes.mainTitle}>
+          <Typography variant="h5" className={classes.mainTitle}>
             Zoek Lerkie
           </Typography>
-          <Typography variant="body1" paragraph className={classes.mainSubHeader}>
+          <Typography variant="body2" paragraph className={classes.mainSubHeader}>
             Privacy settings zijn aanpasbaar in je profiel.
           </Typography>
           <Grid container spacing={16} style={{paddingBottom: '16px'}}>

@@ -20,10 +20,10 @@ class ProfileView extends React.Component {
     return (
         <main className={classes.mainContent}>
           <div className={classes.toolbar} />
-          <Typography variant="headline" className={classes.mainTitle}>
+          <Typography variant="h5" className={classes.mainTitle}>
             Profiel
           </Typography>
-          <Typography variant="body1" paragraph className={classes.mainSubHeader}>
+          <Typography variant="body2" paragraph className={classes.mainSubHeader}>
             Contacteer Lerkeveld IT voor niet-aanpasbare velden.
           </Typography>
           <Grid container spacing={16}>

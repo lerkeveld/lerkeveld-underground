@@ -3,12 +3,13 @@ const profileCardStyle = theme => ({
     fontWeight: theme.typographyfontWeightMedium
   },
   cardHeaderRoot: {
-    padding: '12px 16px 12px 16px'
+    padding: '14px 16px 14px 16px'
   },
   cardHeaderTitle: {
       whiteSpace: 'nowrap',
       overflow: 'hidden',
-      textOverflow: 'ellipsis'
+      textOverflow: 'ellipsis',
+      fontWeight: theme.typography.fontWeightMedium
   },
   cardHeaderSubTitle: {
       whiteSpace: 'nowrap',

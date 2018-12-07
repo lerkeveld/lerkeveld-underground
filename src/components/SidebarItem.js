@@ -17,7 +17,7 @@ function SidebarItem(props) {
           <ListItemIcon>
             <route.icon />
           </ListItemIcon>
-          <ListItemText primary={route.name} />
+          <ListItemText primary={route.name} primaryTypographyProps={{variant: "body1"}}/>
         </ListItem>
       </Link>
   );

@@ -25,7 +25,7 @@ function SidebarHeader(props) {
       </ListItemIcon>
       <ListItemText
           primary={
-            <Typography className={classes.title} variant="title">
+            <Typography variant="h6" className={classes.title}>
               Lerkeveld
             </Typography>
           }

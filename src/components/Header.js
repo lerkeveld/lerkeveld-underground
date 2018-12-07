@@ -32,7 +32,7 @@ function Header(props) {
               <Menu />
             </IconButton>
           </Hidden>
-          <Typography className={classes.title} variant="title">
+          <Typography variant="h6" className={classes.title}>
             Lerkeveld
           </Typography>
           <Hidden xsDown implementation="css">

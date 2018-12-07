@@ -85,7 +85,7 @@ class MaterialReservationCard extends React.Component {
 
     return (
         <React.Fragment>
-          <Typography variant="body2" gutterBottom>
+          <Typography variant="subtitle2" gutterBottom>
             Nieuwe reservatie
           </Typography>
           <Grid container spacing={16}>

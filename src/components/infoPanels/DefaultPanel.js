@@ -22,7 +22,7 @@ function DefaultPanel(props) {
   return (
       <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography className={classes.heading} >{title}</Typography>
+          <Typography variant="body2" className={classes.heading} >{title}</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={disablePadding ? classes.disablePadding : null}>
           {details}
