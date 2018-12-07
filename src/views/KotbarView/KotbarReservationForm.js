@@ -48,9 +48,8 @@ class KotbarReservationForm extends React.Component {
               fullWidth
               required
               margin="dense"
-              shrink
               InputLabelProps={{
-                shrink: true,
+                shrink: true
               }}
               onChange={this.handleChange('description')}
               value={this.state.description}
