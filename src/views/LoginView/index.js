@@ -3,38 +3,12 @@ import Link from 'react-router-dom/Link'
 import withRouter from 'react-router-dom/withRouter'
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
-import PasswordField from '../components/PasswordField.js';
+import PasswordField from '../../components/PasswordField';
 
-
-const styles = theme => ({
-  actions: {
-    marginTop: '16px'
-  },
-  actionLeft: {
-    width: '50%',
-    float: 'left',
-    textAlign: 'center'
-  },
-  actionRight: {
-    width: '50%',
-    float: 'right',
-    textAlign: 'center'
-  },
-  button: {
-    display: 'block',
-    marginLeft: 'auto',
-    marginRight: 'auto'
-  },
-  submit: {
-    display: 'block',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginTop: '16px'
-  }
-});
+import authStyle from '../../assets/jss/authStyle';
 
 
 class LoginForm extends React.Component {
@@ -123,4 +97,4 @@ LoginForm.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withRouter(withStyles(styles)(LoginForm));
+export default withRouter(withStyles(authStyle)(LoginForm));

@@ -6,24 +6,9 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import PasswordField from '../components/PasswordField.js';
+import PasswordField from '../../components/PasswordField';
 
-
-const styles = theme => ({
-  actions: {
-    marginTop: '16px',
-    textAlign: 'center'
-  },
-  bold: {
-    fontWeight: theme.typography.fontWeightMedium,
-  },
-  submit: {
-    display: 'block',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginTop: '16px'
-  }
-});
+import authStyle from '../../assets/jss/authStyle';
 
 
 class ActivateForm extends React.Component {
@@ -105,7 +90,7 @@ class ActivateForm extends React.Component {
                    </Typography>
                  </React.Fragment>
              }
-             <div className={classes.actions}>
+             <div className={classes.action}>
                <Button
                  color="primary"
                  size="small"
@@ -122,4 +107,4 @@ ActivateForm.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ActivateForm);
+export default withStyles(authStyle)(ActivateForm);
