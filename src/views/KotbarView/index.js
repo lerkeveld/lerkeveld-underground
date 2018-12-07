@@ -4,15 +4,16 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-import viewStyle from '../assets/jss/viewStyle';
-import KotbarReservationCard from '../components/KotbarReservationCard';
-import KotbarReservationTable from '../components/KotbarReservationTable';
+import KotbarReservationForm from './KotbarReservationForm';
+import KotbarReservationTable from './KotbarReservationTable';
 
-import data from '../data.js';
+import viewStyle from '../../assets/jss/viewStyle';
+
+import data from '../../data.js';
+const reservations = data['reservations'];
 
 function KotbarView(props) {
   const { classes } = props;
-  const reservations = data['reservations'];
 
   return (
       <main className={classes.mainContent}>
@@ -25,10 +26,18 @@ function KotbarView(props) {
         </Typography>
         <Grid container spacing={16}>
           <Grid item xs={12} sm={6} md={4}>
-            <KotbarReservationCard reservations={reservations} />
+            <Typography variant="subtitle2">
+              Nieuwe reservatie
+            </Typography>
+            <KotbarReservationForm reservations={reservations} />
           </Grid>
           <Grid item xs={12}>
-            <KotbarReservationTable reservations={reservations} />
+            <Typography variant="subtitle2">
+              Reservaties
+            </Typography>
+            <div style={{width: '100%', overflowX: 'auto'}}>
+              <KotbarReservationTable reservations={reservations} />
+            </div>
           </Grid>
         </Grid>
       </main>
