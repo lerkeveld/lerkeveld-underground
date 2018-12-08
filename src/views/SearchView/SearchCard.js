@@ -6,14 +6,19 @@ import Avatar from '@material-ui/core/Avatar';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 
-import searchCardStyle from '../assets/jss/searchCardStyle';
+import searchCardStyle from '../../assets/jss/searchCardStyle';
+
+function getField(user, field) {
+  return field in user ? user[field] : ''
+}
 
 function SearchCard(props) {
   const { classes, user, ...rest } = props;
-  const firstName = 'firstName' in user ? user['firstName']: '';
-  const lastName = 'lastName' in user ? user['lastName']: '';
-  const corridor = 'corridor' in user ? user['corridor']: '';
-  const room = 'room' in user ? user['room']: '';
+  const firstName = getField(user, 'firstName');
+  const lastName = getField(user, 'lastName');
+  const corridor = getField(user, 'corridor');
+  const room = getField(user, 'room');
+
   return (
       <Card {...rest}>
         <CardHeader

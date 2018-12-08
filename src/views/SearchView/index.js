@@ -8,22 +8,24 @@ import Typography from '@material-ui/core/Typography';
 
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
-import viewStyle from '../assets/jss/viewStyle';
-import SearchCard from '../components/SearchCard';
-import SearchDialog from '../components/SearchDialog';
-import data from '../data.js';
+import SearchCard from './SearchCard';
+import SearchDialog from './SearchDialog';
+
+import viewStyle from '../../assets/jss/viewStyle';
+import data from '../../data.js';
+
 
 class SearchView extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      initialUsers: 'searches' in data ? data['searches'] : [],
+      users: 'searches' in data ? data['searches'] : [],
       displayLimit: 30,
       dialogOpen: false,
       selectedUser: {}
     }
-    this.state.users = this.state.initialUsers;
+    this.state.filteredUsers = this.state.users;
   }
 
   onSelectUser(user) {
@@ -46,13 +48,13 @@ class SearchView extends React.Component {
   }
 
   onCancelSearch() {
-    this.setState({displayLimit: 30, users: this.state.initialUsers});
+    this.setState({displayLimit: 30, filteredUsers: this.state.users});
   }
 
-  onSearch(query) {
+  onSearchInput(query) {
     const keywords = query.split(' ').map(keyword => keyword.toLowerCase());
     const fields = ['firstName', 'lastName'];
-    const users = this.state.initialUsers.filter(user => {
+    const filteredUsers = this.state.users.filter(user => {
         return keywords.every(keyword => {
             return fields.some(field => {
                 return user[field].split(' ').some(part => {
@@ -61,7 +63,7 @@ class SearchView extends React.Component {
             });
         });
     });
-    this.setState({displayLimit: 30, users: users});
+    this.setState({displayLimit: 30, filteredUsers: filteredUsers});
   }
 
   render() {
@@ -78,7 +80,7 @@ class SearchView extends React.Component {
           <Grid container spacing={16} style={{paddingBottom: '16px'}}>
             <Grid item xs={12} md={4}>
               <SearchBar
-                onChange={this.onSearch.bind(this)}
+                onChange={this.onSearchInput.bind(this)}
                 onCancelSearch={this.onCancelSearch.bind(this)}
                 cancelOnEscape={true}
               />
@@ -86,7 +88,7 @@ class SearchView extends React.Component {
           </Grid>
           <Grid container spacing={16}>
             {
-              this.state.users.slice(0, this.state.displayLimit).map(user => {
+              this.state.filteredUsers.slice(0, this.state.displayLimit).map(user => {
                 const key = JSON.stringify(user);
                 return <Grid key={key} item xs={12} sm={6} md={4}>
                          <SearchCard
@@ -97,13 +99,13 @@ class SearchView extends React.Component {
               })
             }
           </Grid>
-          {
-            this.state.displayLimit < this.state.users.length &&
-            <div style={{textAlign: "center", marginTop: "16px"}}>
-              <IconButton onClick={this.onLoadMore.bind(this)} title="Load More">
-                <ExpandMore />
-              </IconButton>
-            </div>
+          { this.state.displayLimit < this.state.filteredUsers.length
+              ? <div style={{textAlign: "center", marginTop: "16px"}}>
+                  <IconButton onClick={this.onLoadMore.bind(this)} title="Load More">
+                    <ExpandMore />
+                  </IconButton>
+                </div>
+              : null
           }
           <SearchDialog
             open={this.state.dialogOpen}
