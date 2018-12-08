@@ -5,11 +5,12 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 
+
 class SidebarLogout extends React.Component {
 
   handleLogoutClick = () => {
     // TODO: send POST request
-    this.props.closeDrawer();
+    this.props.setDrawerOpen(false);
     this.props.history.push('/auth/login');
   }
 

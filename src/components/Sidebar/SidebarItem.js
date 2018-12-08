@@ -6,14 +6,15 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import sidebarItemStyle from '../assets/jss/sidebarItemStyle';
+import sidebarItemStyle from '../../assets/jss/sidebarItemStyle';
+
 
 function SidebarItem(props) {
-  const { classes, route, closeDrawer } = props;
+  const { classes, route, setDrawerOpen } = props;
 
   return (
       <Link to={route.path} className={classes.link}>
-        <ListItem button onClick={closeDrawer}>
+        <ListItem button onClick={setDrawerOpen(false)}>
           <ListItemIcon>
             <route.icon />
           </ListItemIcon>

@@ -9,9 +9,10 @@ import Typography from '@material-ui/core/Typography';
 
 import Menu from '@material-ui/icons/Menu';
 
-import GithubCircle from '../assets/icons/GithubCircle';
-import Lerkeveld from '../assets/icons/Lerkeveld';
-import headerStyle from '../assets/jss/headerStyle';
+import GithubCircle from '../../assets/icons/GithubCircle';
+import Lerkeveld from '../../assets/icons/Lerkeveld';
+import headerStyle from '../../assets/jss/headerStyle';
+
 
 function Header(props) {
   const { classes, setDrawerOpen } = props;
@@ -22,7 +23,7 @@ function Header(props) {
           <Hidden lgUp implementation="css">
             <IconButton
               className={classes.menuButton}
-              onClick={() => {setDrawerOpen(true)}}
+              onClick={setDrawerOpen(true)}
             >
               <Menu />
             </IconButton>

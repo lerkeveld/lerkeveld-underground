@@ -11,24 +11,24 @@ import SidebarHeader from './SidebarHeader'
 import SidebarItem from './SidebarItem'
 import SidebarLogout from './SidebarLogout'
 
-import sidebarStyle from '../assets/jss/sidebarStyle';
+import sidebarStyle from '../../assets/jss/sidebarStyle';
+
 
 function Sidebar(props) {
   const { classes, mobileOpen, routes, setDrawerOpen } = props;
-  const closeDrawer = () => setDrawerOpen(false);
 
   const links = (
       <List>
-        <SidebarItem closeDrawer={closeDrawer} route={routes.profile} />
-        <SidebarItem closeDrawer={closeDrawer} route={routes.search} />
+        <SidebarItem setDrawerOpen={setDrawerOpen} route={routes.profile} />
+        <SidebarItem setDrawerOpen={setDrawerOpen} route={routes.search} />
         <Divider />
-        <SidebarItem closeDrawer={closeDrawer} route={routes.bread} />
-        <SidebarItem closeDrawer={closeDrawer} route={routes.kotbar} />
-        <SidebarItem closeDrawer={closeDrawer} route={routes.material} />
+        <SidebarItem setDrawerOpen={setDrawerOpen} route={routes.bread} />
+        <SidebarItem setDrawerOpen={setDrawerOpen} route={routes.kotbar} />
+        <SidebarItem setDrawerOpen={setDrawerOpen} route={routes.material} />
         <Divider />
-        <SidebarItem closeDrawer={closeDrawer} route={routes.info} />
+        <SidebarItem setDrawerOpen={setDrawerOpen} route={routes.info} />
         <Divider />
-        <SidebarLogout closeDrawer={closeDrawer} />
+        <SidebarLogout setDrawerOpen={setDrawerOpen} />
         <Divider />
       </List>
   )
@@ -52,8 +52,8 @@ function Sidebar(props) {
           variant="temporary"
           disableBackdropTransition
           open={mobileOpen}
-          onOpen={() => setDrawerOpen(true)}
-          onClose={() => setDrawerOpen(false)}
+          onOpen={setDrawerOpen(true)}
+          onClose={setDrawerOpen(false)}
           classes={{
             paper: classes.drawerPaper,
           }}
