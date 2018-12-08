@@ -2,7 +2,8 @@ import React from 'react';
 import red from '@material-ui/core/colors/red';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
-import DefaultCard from './DefaultCard';
+import DefaultCard from '../DefaultCard';
+
 
 function NameCard(props) {
   return (

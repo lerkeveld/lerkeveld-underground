@@ -1,11 +1,12 @@
 import React from 'react';
-import amber from '@material-ui/core/colors/amber';
-import Settings from '@material-ui/icons/Settings';
+import green from '@material-ui/core/colors/green';
+import VpnKey from '@material-ui/icons/VpnKey';
 
-import DefaultCard from './DefaultCard';
-import PrivacyFormDialog from './PrivacyFormDialog';
+import DefaultCard from '../DefaultCard';
+import PasswordFormDialog from './PasswordFormDialog';
 
-class PrivacyCard extends React.Component {
+
+class PasswordCard extends React.Component {
 
   state = {
     dialogOpen: false,
@@ -21,17 +22,18 @@ class PrivacyCard extends React.Component {
 
   render() {
     const { dialogOpen } = this.state;
+    const bullet = "\u2022";
 
     return (
         <div>
           <DefaultCard
-            avatarIcon={<Settings />}
-            avatarColor={amber[500]}
-            name="Privacy Settings"
-            textValue="Deel mijn gegevens niet"
+            avatarIcon={<VpnKey />}
+            avatarColor={green[500]}
+            name="Wachtwoord"
+            textValue={bullet.repeat(16)}
             onClick={this.handleDialogOpen}
           />
-          <PrivacyFormDialog
+          <PasswordFormDialog
             dialogOpen={dialogOpen}
             handleDialogClose={this.handleDialogClose}
           />
@@ -40,4 +42,4 @@ class PrivacyCard extends React.Component {
   }
 }
 
-export default PrivacyCard;
+export default PasswordCard;

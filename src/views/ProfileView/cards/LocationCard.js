@@ -2,7 +2,8 @@ import React from 'react';
 import orange from '@material-ui/core/colors/orange';
 import LocationOn from '@material-ui/icons/LocationOn';
 
-import DefaultCard from './DefaultCard';
+import DefaultCard from '../DefaultCard';
+
 
 function LocationCard(props) {
   return (

@@ -8,9 +8,10 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 
-import PasswordField from '../PasswordField';
+import PasswordField from '../../../components/PasswordField';
 
-function PasswordFormDialog(props) {
+
+function EmailFormDialog(props) {
   const { dialogOpen, handleDialogClose, fullScreen } = props;
 
   return (
@@ -18,25 +19,18 @@ function PasswordFormDialog(props) {
         fullScreen={fullScreen}
         open={dialogOpen}
         onClose={handleDialogClose}
-        aria-labelledby='passwordform-dialog-title'
+        aria-labelledby='emailform-dialog-title'
         fullWidth
       >
-        <DialogTitle id='passwordform-dialog-title'>Update wachtwoord</DialogTitle>
+        <DialogTitle id='emailform-dialog-title'>Update e-mailadres</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Update het wachtwoord waarmee je inlogt op deze applicatie.
+            Update het e-mailadres waarmee je inlogt op deze applicatie.
+            Dit is niet gelinkt aan het e-mailadres waarop je Lerkeveld emails ontvangt.
           </DialogContentText>
           <TextField
             margin="dense"
-            label="Nieuw wachtwoord"
-            type="password"
-            fullWidth
-            required
-          />
-          <TextField
-            margin="dense"
-            label="Herhaal nieuw wachtwoord"
-            type="password"
+            label="E-mailadres"
             fullWidth
             required
           />
@@ -60,4 +54,4 @@ function PasswordFormDialog(props) {
   );
 }
 
-export default withMobileDialog()(PasswordFormDialog);
+export default withMobileDialog()(EmailFormDialog);

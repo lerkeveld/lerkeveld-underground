@@ -2,7 +2,8 @@ import React from 'react';
 import teal from '@material-ui/core/colors/teal';
 import PriorityHigh from '@material-ui/icons/PriorityHigh';
 
-import DefaultCard from './DefaultCard';
+import DefaultCard from '../DefaultCard';
+
 
 function HomeTelephoneCard(props) {
   return (

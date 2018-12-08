@@ -1,16 +1,16 @@
 import React from 'react';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-import PasswordField from '../PasswordField';
 
-function EmailFormDialog(props) {
+function PrivacyFormDialog(props) {
   const { dialogOpen, handleDialogClose, fullScreen } = props;
 
   return (
@@ -18,29 +18,20 @@ function EmailFormDialog(props) {
         fullScreen={fullScreen}
         open={dialogOpen}
         onClose={handleDialogClose}
-        aria-labelledby='emailform-dialog-title'
+        aria-labelledby='passwordform-dialog-title'
         fullWidth
       >
-        <DialogTitle id='emailform-dialog-title'>Update e-mailadres</DialogTitle>
+        <DialogTitle id='passwordform-dialog-title'>Update privacy settings</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Update het e-mailadres waarmee je inlogt op deze applicatie.
-            Dit is niet gelinkt aan het e-mailadres waarop je Lerkeveld emails ontvangt.
+            Als je ervoor kiest om jouw  gegevens te delen, kunnen Lerkies
+            via deze applicatie je gedeelde gegevens zien. Gegevens die
+            worden gedeeld zijn je naam, je kamer, je e-mailadres en je
+            telefoon.
           </DialogContentText>
-          <TextField
-            margin="dense"
-            id="emailaddress"
-            label="E-mailadres"
-            type="email"
-            fullWidth
-            required
-          />
-          <PasswordField
-            margin="dense"
-            label="Huidig wachtwoord"
-            fullWidth
-            required
-            showEndAdornment
+          <FormControlLabel
+            control={<Checkbox />}
+            label="Ik deel mijn gegevens met alle Lerkies."
           />
         </DialogContent>
         <DialogActions>
@@ -55,4 +46,4 @@ function EmailFormDialog(props) {
   );
 }
 
-export default withMobileDialog()(EmailFormDialog);
+export default withMobileDialog()(PrivacyFormDialog);

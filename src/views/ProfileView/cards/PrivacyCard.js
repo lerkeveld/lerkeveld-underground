@@ -1,11 +1,12 @@
 import React from 'react';
-import blue from '@material-ui/core/colors/blue';
-import Email from '@material-ui/icons/Email';
+import amber from '@material-ui/core/colors/amber';
+import Settings from '@material-ui/icons/Settings';
 
-import DefaultCard from './DefaultCard';
-import EmailFormDialog from './EmailFormDialog';
+import DefaultCard from '../DefaultCard';
+import PrivacyFormDialog from './PrivacyFormDialog';
 
-class EmailCard extends React.Component {
+
+class PrivacyCard extends React.Component {
 
   state = {
     dialogOpen: false,
@@ -25,13 +26,13 @@ class EmailCard extends React.Component {
     return (
         <div>
           <DefaultCard
-            avatarIcon={<Email />}
-            avatarColor={blue[500]}
-            name="E-mailadres"
-            textValue="test.test@domain.com"
+            avatarIcon={<Settings />}
+            avatarColor={amber[500]}
+            name="Privacy Settings"
+            textValue="Deel mijn gegevens niet"
             onClick={this.handleDialogOpen}
           />
-          <EmailFormDialog
+          <PrivacyFormDialog
             dialogOpen={dialogOpen}
             handleDialogClose={this.handleDialogClose}
           />
@@ -40,4 +41,4 @@ class EmailCard extends React.Component {
   }
 }
 
-export default EmailCard;
+export default PrivacyCard;

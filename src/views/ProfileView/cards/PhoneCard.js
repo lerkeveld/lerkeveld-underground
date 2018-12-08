@@ -2,7 +2,8 @@ import React from 'react';
 import indigo from '@material-ui/core/colors/indigo';
 import Smartphone from '@material-ui/icons/Smartphone';
 
-import DefaultCard from './DefaultCard';
+import DefaultCard from '../DefaultCard';
+
 
 function PhoneCard(props) {
   return (

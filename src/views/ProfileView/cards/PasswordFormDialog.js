@@ -1,15 +1,17 @@
 import React from 'react';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import TextField from '@material-ui/core/TextField';
 
-function PrivacyFormDialog(props) {
+import PasswordField from '../../../components/PasswordField';
+
+
+function PasswordFormDialog(props) {
   const { dialogOpen, handleDialogClose, fullScreen } = props;
 
   return (
@@ -20,17 +22,31 @@ function PrivacyFormDialog(props) {
         aria-labelledby='passwordform-dialog-title'
         fullWidth
       >
-        <DialogTitle id='passwordform-dialog-title'>Update privacy settings</DialogTitle>
+        <DialogTitle id='passwordform-dialog-title'>Update wachtwoord</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Als je ervoor kiest om jouw  gegevens te delen, kunnen Lerkies
-            via deze applicatie je gedeelde gegevens zien. Gegevens die
-            worden gedeeld zijn je naam, je kamer, je e-mailadres en je
-            telefoon.
+            Update het wachtwoord waarmee je inlogt op deze applicatie.
           </DialogContentText>
-          <FormControlLabel
-            control={<Checkbox />}
-            label="Ik deel mijn gegevens met alle Lerkies."
+          <TextField
+            margin="dense"
+            label="Nieuw wachtwoord"
+            type="password"
+            fullWidth
+            required
+          />
+          <TextField
+            margin="dense"
+            label="Herhaal nieuw wachtwoord"
+            type="password"
+            fullWidth
+            required
+          />
+          <PasswordField
+            margin="dense"
+            label="Huidig wachtwoord"
+            fullWidth
+            required
+            showEndAdornment
           />
         </DialogContent>
         <DialogActions>
@@ -45,4 +61,4 @@ function PrivacyFormDialog(props) {
   );
 }
 
-export default withMobileDialog()(PrivacyFormDialog);
+export default withMobileDialog()(PasswordFormDialog);
