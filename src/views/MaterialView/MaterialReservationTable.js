@@ -7,12 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-const styles = theme => ({
-  tableCell : {
-    paddingLeft: '18px',
-    paddingRight: '0px'
-  }
-});
+import tableStyle from '../../assets/jss/tableStyle';
 
 const formatDate = (date) => {
   return date.toLocaleDateString(
@@ -64,4 +59,4 @@ MaterialReservationTable.defaultProps = {
   reservations: []
 }
 
-export default withStyles(styles)(MaterialReservationTable);
+export default withStyles(tableStyle)(MaterialReservationTable);

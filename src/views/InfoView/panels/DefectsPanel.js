@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 
 import DefaultPanel from '../DefaultPanel';
 
-import infoPanelStyle from '../../../assets/jss/infoPanelStyle';
+import boldStyle from '../../../assets/jss/boldStyle';
 
 
 function DefectsPanel(props) {
@@ -26,4 +26,4 @@ DefectsPanel.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(infoPanelStyle)(DefectsPanel);
+export default withStyles(boldStyle)(DefectsPanel);

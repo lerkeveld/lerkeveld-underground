@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 
 import DefaultPanel from '../DefaultPanel';
 
-import infoPanelStyle from '../../../assets/jss/infoPanelStyle';
+import boldStyle from '../../../assets/jss/boldStyle';
 
 
 function ReceptionHoursPanel(props) {
@@ -27,4 +27,4 @@ ReceptionHoursPanel.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(infoPanelStyle)(ReceptionHoursPanel);
+export default withStyles(boldStyle)(ReceptionHoursPanel);

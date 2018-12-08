@@ -10,11 +10,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 
-const styles = theme => ({
-  bold: {
-    fontWeight: theme.typography.fontWeightMedium,
-  },
-});
+import boldStyle from '../../assets/jss/boldStyle';
+
 
 function KotbarRulesDialog(props) {
   const { classes, fullScreen, open, onAccept, onClose } = props;
@@ -106,4 +103,4 @@ KotbarRulesDialog.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withMobileDialog()(withStyles(styles)(KotbarRulesDialog));
+export default withMobileDialog()(withStyles(boldStyle)(KotbarRulesDialog));

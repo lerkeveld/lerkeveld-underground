@@ -7,12 +7,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-const styles = theme => ({
-  tableCell : {
-    paddingLeft: '18px',
-    paddingRight: '0px'
-  }
-});
+import tableStyle from '../../assets/jss/tableStyle';
+
 
 function KotbarReservationTable(props) {
   const { classes, reservations } = props;
@@ -56,4 +52,4 @@ KotbarReservationTable.defaultProps = {
   reservations: []
 }
 
-export default withStyles(styles)(KotbarReservationTable);
+export default withStyles(tableStyle)(KotbarReservationTable);

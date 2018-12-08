@@ -22,15 +22,7 @@ import red from '@material-ui/core/colors/red';
 
 import DefaultPanel from '../DefaultPanel';
 
-const contactPanelStyle = theme => ({
-  root: {
-    width: '100%',
-    backgroundColor: theme.palette.background.paper,
-  },
-  star: {
-    color: amber[500]
-  }
-});
+import contactPanelStyle from '../../../assets/jss/contactPanelStyle';
 
 
 function ContactPanel(props) {

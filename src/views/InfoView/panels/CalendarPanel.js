@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 
 import DefaultPanel from '../DefaultPanel';
 
-import infoPanelStyle from '../../../assets/jss/infoPanelStyle';
+import boldStyle from '../../../assets/jss/boldStyle';
 
 
 function CalendarPanel(props) {
@@ -35,4 +35,4 @@ CalendarPanel.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(infoPanelStyle)(CalendarPanel);
+export default withStyles(boldStyle)(CalendarPanel);

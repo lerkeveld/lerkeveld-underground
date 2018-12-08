@@ -8,14 +8,8 @@ import Typography from '@material-ui/core/Typography';
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-const styles = theme => ({
-  heading: {
-    fontWeight: theme.typography.fontWeightMedium,
-  },
-  disablePadding: {
-    padding: "0px"
-  }
-});
+import expansionPanelStyle from '../../assets/jss/expansionPanelStyle';
+
 
 function DefaultPanel(props) {
   const { classes, title, details, disablePadding } = props;
@@ -35,4 +29,4 @@ DefaultPanel.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(DefaultPanel);
+export default withStyles(expansionPanelStyle)(DefaultPanel);

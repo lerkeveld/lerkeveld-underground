@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 
 import DefaultPanel from '../DefaultPanel';
 
-import infoPanelStyle from '../../../assets/jss/infoPanelStyle';
+import boldStyle from '../../../assets/jss/boldStyle';
 
 
 function LostKeyPanel(props) {
@@ -28,4 +28,4 @@ LostKeyPanel.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(infoPanelStyle)(LostKeyPanel);
+export default withStyles(boldStyle)(LostKeyPanel);

@@ -1,7 +1,7 @@
-const infoPanelStyle = theme => ({
+const boldStyle = theme => ({
   bold: {
     fontWeight: theme.typography.fontWeightMedium,
   }
 });
 
-export default infoPanelStyle;
+export default boldStyle;

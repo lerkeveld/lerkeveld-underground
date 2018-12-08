@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 
 import DefaultPanel from '../DefaultPanel';
 
-import infoPanelStyle from '../../../assets/jss/infoPanelStyle';
+import boldStyle from '../../../assets/jss/boldStyle';
 
 
 function DrivePanel(props) {
@@ -28,4 +28,4 @@ DrivePanel.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(infoPanelStyle)(DrivePanel);
+export default withStyles(boldStyle)(DrivePanel);
