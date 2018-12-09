@@ -17,16 +17,64 @@ class ActivateForm extends React.Component {
     email: '',
     password: '',
     confirm: '',
+    errors: {
+        email: false,
+        password: false,
+        confirm: false
+    },
     submitted: false
   }
 
-  handleChange = prop => event => {
-    this.setState({[prop]: event.target.value});
+  handleRequiredChange = prop => event => {
+    const value = event.target.value;
+    const stateUpdate = {
+        [prop]: value,
+        errors: this.state.errors
+    };
+    stateUpdate.errors[prop] = value.length === 0;
+    this.setState(stateUpdate);
+  }
+
+  handlePasswordChange = event => {
+    const password = event.target.value;
+    const stateUpdate = {
+        password: password,
+        errors: this.state.errors
+    };
+    stateUpdate.errors.password = password.length < 8;
+    stateUpdate.errors.confirm = password !== this.state.confirm;
+    this.setState(stateUpdate);
+  }
+
+  handleConfirmChange = event => {
+    const confirm = event.target.value;
+    const stateUpdate = {
+        confirm: confirm,
+        errors: this.state.errors
+    };
+    stateUpdate.errors.confirm = confirm !== this.state.password;
+    this.setState(stateUpdate);
   }
 
   handleSubmit = event => {
-    this.setState({submitted: true});
     event.preventDefault();
+
+    // check errors
+    const errors = {};
+    if (this.state.email.length === 0)
+        errors.email = true;
+    if (this.state.password.length < 8)
+        errors.password = true;
+    if (this.state.confirm !== this.state.password)
+        errors.confirm = true;
+
+    if (Object.keys(errors).length !== 0) {
+        this.setState({errors: errors});
+        return false;
+    }
+
+    // TODO api:activate
+    this.setState({submitted: true});
   }
 
   render() {
@@ -39,36 +87,39 @@ class ActivateForm extends React.Component {
                    <TextField
                      label="E-mail"
                      fullWidth
-                     required
                      margin="normal"
                      InputLabelProps={{
                        shrink: true,
                      }}
-                     onChange={this.handleChange('email')}
+                     required
+                     onChange={this.handleRequiredChange('email')}
                      value={this.state.email}
+                     error={this.state.errors.email}
                    />
                    <PasswordField
                      label="Nieuw wachtwoord"
                      helperText="Vul hier minimaal 8 tekens in."
                      fullWidth
-                     required
                      margin="normal"
                      InputLabelProps={{
                        shrink: true,
                      }}
-                     onChange={this.handleChange('password')}
+                     required
+                     onChange={this.handlePasswordChange}
                      value={this.state.password}
+                     error={this.state.errors.password}
                    />
                    <PasswordField
                      label="Herhaal wachtwoord"
                      fullWidth
-                     required
                      margin="normal"
                      InputLabelProps={{
                        shrink: true,
                      }}
-                     onChange={this.handleChange('confirm')}
+                     required
+                     onChange={this.handleConfirmChange}
                      value={this.state.confirm}
+                     error={this.state.errors.confirm}
                    />
                    <Button
                      className={classes.submit}
