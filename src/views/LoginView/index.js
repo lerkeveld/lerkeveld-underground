@@ -15,18 +15,43 @@ class LoginForm extends React.Component {
 
   state = {
     email: '',
-    password: ''
+    password: '',
+    errors: {
+      email: false,
+      password: false
+    }
   }
 
-  handleChange = prop => event => {
-    this.setState({[prop]: event.target.value});
+  handleRequiredChange = prop => event => {
+    const value = event.target.value;
+    const stateUpdate = {
+        [prop]: value,
+        errors: this.state.errors
+    };
+    stateUpdate.errors[prop] = value.length === 0;
+    this.setState(stateUpdate);
   }
 
   handleSubmit = event => {
+    event.preventDefault();
+
+    // check errors
+    const errors = {};
+    if (this.state.email.length === 0)
+        errors.email = true;
+    if (this.state.password.length === 0)
+        errors.password = true;
+
+    if (Object.keys(errors).length !== 0) {
+        this.setState({errors: errors});
+        return false;
+    }
+
+    // TODO api:login
+    // redirect to referrer
     const { referrer } = this.props.location.state || { referrer: { pathname: '/' } }
     this.props.history.push(referrer);
-    event.preventDefault();
-  };
+  }
 
   render() {
     const { classes } = this.props;
@@ -39,25 +64,27 @@ class LoginForm extends React.Component {
                <TextField
                  label="E-mail"
                  fullWidth
-                 required
                  margin="normal"
                  InputLabelProps={{
                    shrink: true,
                  }}
-                 onChange={this.handleChange('email')}
+                 required
+                 onChange={this.handleRequiredChange('email')}
                  value={this.state.email}
+                 error={this.state.errors.email}
                />
                <PasswordField
                  label="Wachtwoord"
                  fullWidth
-                 required
                  margin="normal"
                  showEndAdornment
                  InputLabelProps={{
                    shrink: true,
                  }}
-                 onChange={this.handleChange('password')}
+                 required
+                 onChange={this.handleRequiredChange('password')}
                  value={this.state.password}
+                 error={this.state.errors.password}
                />
                <Button
                  className={classes.submit}
