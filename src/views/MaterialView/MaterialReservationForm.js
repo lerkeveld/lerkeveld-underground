@@ -34,7 +34,13 @@ class MaterialReservationForm extends React.Component {
   }
 
   handleBackButton = () => {
-    this.setState({dateChosen: false, items: []});
+    this.setState({
+        dateChosen: false,
+        items: [],
+        errors: {
+            items: false
+        }
+    });
   }
 
   handleSubmit = event => {
