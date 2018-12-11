@@ -13,16 +13,37 @@ class ResetForm extends React.Component {
 
   state = {
     email: '',
-    submitted: false
+    submitted: false,
+    errors: {
+      email: false
+    }
   }
 
-  handleChange = prop => event => {
-    this.setState({[prop]: event.target.value});
+  handleRequiredChange = prop => event => {
+    const value = event.target.value;
+    const stateUpdate = {
+        [prop]: value,
+        errors: this.state.errors
+    };
+    stateUpdate.errors[prop] = value.length === 0;
+    this.setState(stateUpdate);
   }
 
   handleSubmit = event => {
-    this.setState({submitted: true});
     event.preventDefault();
+
+    // check errors
+    const errors = {};
+    if (this.state.email.length === 0)
+        errors.email = true;
+
+    if (Object.keys(errors).length !== 0) {
+        this.setState({errors: errors});
+        return false;
+    }
+
+    // TODO api:reset
+    this.setState({submitted: true});
   }
 
   render() {
@@ -35,13 +56,14 @@ class ResetForm extends React.Component {
                    <TextField
                      label="E-mail"
                      fullWidth
-                     required
                      margin="normal"
                      InputLabelProps={{
                        shrink: true,
                      }}
-                     onChange={this.handleChange('email')}
+                     required
+                     onChange={this.handleRequiredChange('email')}
                      value={this.state.email}
+                     error={this.state.errors.email}
                    />
                    <Button
                      className={classes.submit}

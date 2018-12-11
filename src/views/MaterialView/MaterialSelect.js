@@ -17,7 +17,7 @@ const formatDate = (date) => {
 
 
 function MaterialSelect(props) {
-  const { reservations, material, items, date, ...rest } = props;
+  const { reservations, material, items, date, error, ...rest } = props;
 
   const reserved = new Set();
 
@@ -35,12 +35,13 @@ function MaterialSelect(props) {
         required
         margin="dense"
       >
-        <InputLabel shrink htmlFor="select-multiple">
+        <InputLabel error={error} shrink htmlFor="select-multiple">
           Materiaal
         </InputLabel>
         <Select
           multiple
           value={items}
+          error={error}
           input={<Input id="select-multiple" />}
           renderValue={selected => selected.join(', ')}
           {...rest}

@@ -88,10 +88,10 @@ function KotbarRulesDialog(props) {
         </ul>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onAccept} color="primary" autoFocus>
+        <Button onClick={onAccept} color="primary">
           Accept
         </Button>
-        <Button onClick={onClose} color="primary" autoFocus>
+        <Button onClick={onClose} color="primary">
           Cancel
         </Button>
       </DialogActions>

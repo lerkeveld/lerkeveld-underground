@@ -11,14 +11,22 @@ class MaterialReservationForm extends React.Component {
 
   state = {
     date: new Date(),
-    description: '',
     items: [],
+    errors: {
+      items: false
+    },
     dateChosen: false,
     dialogOpen: false,
   }
 
-  handleChange = prop => event => {
-    this.setState({[prop]: event.target.value});
+  handleRequiredChange = prop => event => {
+    const value = event.target.value;
+    const stateUpdate = {
+        [prop]: value,
+        errors: this.state.errors
+    };
+    stateUpdate.errors[prop] = value.length === 0;
+    this.setState(stateUpdate);
   }
 
   handleDateChange = value => {
@@ -26,19 +34,39 @@ class MaterialReservationForm extends React.Component {
   }
 
   handleBackButton = () => {
-    this.setState({dateChosen: false, items: []});
-  }
-
-  handleNextButton = () => {
-    this.setState({dateChosen: true})
+    this.setState({
+        dateChosen: false,
+        items: [],
+        errors: {
+            items: false
+        }
+    });
   }
 
   handleSubmit = event => {
-    this.setState({dialogOpen: true});
     event.preventDefault();
+
+    // next button
+    if (!this.state.dateChosen) {
+        this.setState({dateChosen: true});
+        return true;
+    }
+
+    // check errors
+    const errors = {};
+    if (this.state.items.length === 0)
+        errors.items = true;
+
+    if (Object.keys(errors).length !== 0) {
+        this.setState({errors: errors});
+        return false;
+    }
+
+    this.setState({dialogOpen: true});
   }
 
   handleDialogAccept = () => {
+    // TODO api:material:reserve
     console.log('accept');
     this.setState({dialogOpen: false});
   }
@@ -64,41 +92,41 @@ class MaterialReservationForm extends React.Component {
                      material={material}
                      items={this.state.items}
                      date={this.state.date}
-                     onChange={this.handleChange('items').bind(this)}
+                     onChange={this.handleRequiredChange('items').bind(this)}
+                     error={this.state.errors.items}
                   />
                 : null
             }
+            <div style={{marginTop: '8px'}}>
+              <Button
+                disabled={!this.state.dateChosen}
+                variant="contained"
+                size="small"
+                onClick={this.handleBackButton}
+                style={{marginRight: "8px"}}
+              >
+                Back
+              </Button>
+              { this.state.dateChosen
+                  ? <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      type="submit"
+                    >
+                      Submit
+                    </Button>
+                  : <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      type="submit"
+                    >
+                      Next
+                    </Button>
+              }
+            </div>
           </form>
-          <div style={{marginTop: '8px'}}>
-            <Button
-              disabled={!this.state.dateChosen}
-              variant="contained"
-              size="small"
-              onClick={this.handleBackButton}
-              style={{marginRight: "8px"}}
-            >
-              Back
-            </Button>
-            { this.state.dateChosen
-                ? <Button
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    onClick={this.handleSubmit}
-                  >
-                    Submit
-                  </Button>
-                : <Button
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    type="button"
-                    onClick={this.handleNextButton}
-                  >
-                    Next
-                  </Button>
-            }
-          </div>
           <MaterialRulesDialog
             open={this.state.dialogOpen}
             onAccept={this.handleDialogAccept.bind(this)}

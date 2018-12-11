@@ -12,19 +12,44 @@ class KotbarReservationForm extends React.Component {
   state = {
     date: new Date(),
     description: '',
+    errors: {
+      description: false
+    },
     dialogOpen: false
   }
 
-  handleChange = prop => event => {
-    this.setState({[prop]: event.target.value});
+  handleRequiredChange = prop => event => {
+    const value = event.target.value;
+    const stateUpdate = {
+        [prop]: value,
+        errors: this.state.errors
+    };
+    stateUpdate.errors[prop] = value.length === 0;
+    this.setState(stateUpdate);
   }
 
   handleDateChange = value => {
     this.setState({date: value});
   }
 
+  handleSubmit = event => {
+    event.preventDefault();
+
+    // check errors
+    const errors = {};
+    if (this.state.description.length === 0)
+        errors.description = true;
+
+    if (Object.keys(errors).length !== 0) {
+        this.setState({errors: errors});
+        return false;
+    }
+
+    this.setState({dialogOpen: true});
+  }
+
   handleDialogAccept = () => {
-    console.log('accept');
+    // TODO api:kotbar:reserve
     this.setState({dialogOpen: false});
   }
 
@@ -37,7 +62,7 @@ class KotbarReservationForm extends React.Component {
 
     return (
         <React.Fragment>
-          <form>
+          <form noValidate onSubmit={this.handleSubmit}>
             <KotbarDatePicker
               reservations={reservations}
               onChange={this.handleDateChange.bind(this)}
@@ -46,20 +71,21 @@ class KotbarReservationForm extends React.Component {
             <TextField
               label="Beschrijving"
               fullWidth
-              required
               margin="dense"
               InputLabelProps={{
                 shrink: true
               }}
-              onChange={this.handleChange('description')}
+              required
+              onChange={this.handleRequiredChange('description')}
               value={this.state.description}
+              error={this.state.errors.description}
             />
             <div style={{marginTop: '8px'}}>
               <Button
                 variant="contained"
                 color="primary"
                 size="small"
-                onClick={this.handleDialogChange(true)}
+                type="submit"
               >
                 Submit
               </Button>
