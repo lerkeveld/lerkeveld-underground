@@ -92,6 +92,19 @@ class PasswordFormDialog extends React.Component {
           <DialogContent>
             <DialogContentText variant="body2">
               Update het wachtwoord waarmee je inlogt op deze applicatie.
+            <PasswordField
+              margin="normal"
+              label="Huidig wachtwoord"
+              fullWidth
+              showEndAdornment
+              InputLabelProps={{
+                shrink: true
+              }}
+              required
+              value={this.state.old}
+              onChange={this.handleRequiredChange('old')}
+              error={this.state.errors.old}
+            />
             </DialogContentText>
             <TextField
               margin="normal"
@@ -119,19 +132,6 @@ class PasswordFormDialog extends React.Component {
               value={this.state.confirm}
               onChange={this.handleConfirmChange}
               error={this.state.errors.confirm}
-            />
-            <PasswordField
-              margin="normal"
-              label="Huidig wachtwoord"
-              fullWidth
-              showEndAdornment
-              InputLabelProps={{
-                shrink: true
-              }}
-              required
-              value={this.state.old}
-              onChange={this.handleRequiredChange('old')}
-              error={this.state.errors.old}
             />
           </DialogContent>
           <DialogActions>
