@@ -1,5 +1,5 @@
 export function post({url, data, onSuccess, onError}) {
-    fetch(`${process.env.REACT_APP_API_URL}/api${url}`, {
+    fetch(`${process.env.REACT_APP_API_URL || '/api'}${url}`, {
         method: 'POST',
         headers: new Headers({
             'Content-Type': 'application/json'
