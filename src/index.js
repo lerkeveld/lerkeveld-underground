@@ -8,7 +8,7 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import App from './App';
-import registerServiceWorker from './serviceWorker';
+import * as serviceWorker from './serviceWorker';
 
 import theme from './theme';
 
@@ -23,4 +23,5 @@ ReactDOM.render(
   </MuiPickersUtilsProvider>,
   document.getElementById('root')
 );
-registerServiceWorker();
+
+serviceWorker.register();
