@@ -1,5 +1,5 @@
-const API_URL = process.env.REACT_APP_API_URL || '/api';
-const CREDENTIALS = process.env.REACT_APP_CREDENTIALS || 'same-origin';
+const API_URL = process.env.REACT_APP_API_URL;
+const CREDENTIALS = process.env.REACT_APP_CREDENTIALS;
 
 export function get({path, refresh = false}) {
     return fetch(API_URL + path, {
