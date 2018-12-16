@@ -6,17 +6,26 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
+import CloseableSnackbar from '../../components/CloseableSnackbar';
+
 import authStyle from '../../assets/jss/authStyle';
+import * as api from '../../api';
 
 
 class ResetForm extends React.Component {
 
   state = {
     email: '',
-    submitted: false,
     errors: {
       email: false
-    }
+    },
+    submitted: false,
+    snackbarOpen: false,
+    snackbarMessage: ''
+  }
+
+  handleSnackbarClose = () => {
+      this.setState({snackbarOpen: false});
   }
 
   handleRequiredChange = prop => event => {
@@ -42,8 +51,16 @@ class ResetForm extends React.Component {
         return false;
     }
 
-    // TODO api:reset
-    this.setState({submitted: true});
+    api.post({
+        path: '/auth/reset',
+        data: {
+            email: this.state.email,
+        }
+    }).then(data => {
+        this.setState({submitted: true});
+    }).catch(error => {
+        this.setState({snackbarMessage: error.message, snackbarOpen: true});
+    })
   }
 
   render() {
@@ -94,6 +111,11 @@ class ResetForm extends React.Component {
                  Naar Login
                </Button>
              </div>
+             <CloseableSnackbar
+               open={this.state.snackbarOpen}
+               onClose={this.handleSnackbarClose}
+               message={this.state.snackbarMessage}
+             />
            </React.Fragment>
   }
 }
