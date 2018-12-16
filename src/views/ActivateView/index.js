@@ -6,9 +6,11 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
+import CloseableSnackbar from '../../components/CloseableSnackbar';
 import PasswordField from '../../components/PasswordField';
 
 import authStyle from '../../assets/jss/authStyle';
+import * as api from '../../api';
 
 
 class ActivateForm extends React.Component {
@@ -22,7 +24,13 @@ class ActivateForm extends React.Component {
         password: false,
         confirm: false
     },
-    submitted: false
+    submitted: false,
+    snackbarOpen: false,
+    snackbarMessage: ''
+  }
+
+  handleSnackbarClose = () => {
+      this.setState({snackbarOpen: false});
   }
 
   handleRequiredChange = prop => event => {
@@ -73,8 +81,17 @@ class ActivateForm extends React.Component {
         return false;
     }
 
-    // TODO api:activate
-    this.setState({submitted: true});
+    api.post({
+        path: '/auth/activate',
+        data: {
+            email: this.state.email,
+            password: this.state.password
+        }
+    }).then(data => {
+        this.setState({submitted: true});
+    }).catch(error => {
+        this.setState({snackbarMessage: error.message, snackbarOpen: true});
+    })
   }
 
   render() {
@@ -150,6 +167,11 @@ class ActivateForm extends React.Component {
                  Naar Login
                </Button>
              </div>
+             <CloseableSnackbar
+               open={this.state.snackbarOpen}
+               onClose={this.handleSnackbarClose}
+               message={this.state.snackbarMessage}
+             />
           </React.Fragment>
   }
 }
