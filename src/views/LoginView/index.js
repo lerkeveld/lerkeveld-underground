@@ -55,25 +55,20 @@ class LoginForm extends React.Component {
         return false;
     }
 
+    const { referrer } = this.props.location.state || { referrer: { pathname: '/' } };
     api.post({
-        url: '/auth/login',
+        path: '/auth/login',
         data: {
             email: this.state.email,
             password: this.state.password
-        },
-        onSuccess: this.onSubmitSucces.bind(this),
-        onError: this.onSubmitError.bind(this)
+        }
+    }).then(data => {
+        window.localStorage.setItem('a-csrf-token', data['a-csrf-token']);
+        window.localStorage.setItem('r-csrf-token', data['r-csrf-token']);
+        this.props.history.push(referrer);
+    }).catch(error => {
+        this.setState({snackbarMessage: error.message, snackbarOpen: true});
     })
-  }
-
-  onSubmitSucces = () => {
-    // redirect to referrer
-    const { referrer } = this.props.location.state || { referrer: { pathname: '/' } };
-    this.props.history.push(referrer);
-  }
-
-  onSubmitError = (error) => {
-    this.setState({snackbarMessage: error.message, snackbarOpen: true});
   }
 
   render() {

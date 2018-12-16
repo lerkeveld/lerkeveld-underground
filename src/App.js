@@ -6,13 +6,19 @@ import Switch from 'react-router-dom/Switch';
 import AuthLayout from './layouts/AuthLayout';
 import MainLayout from './layouts/MainLayout';
 
+import * as api from './api';
+
 
 class App extends React.Component {
 
-  // fake refreshToken Promise
   refreshToken() {
-    const authenticated = false;
-    return new Promise(resolve => setTimeout(() => resolve(authenticated), 2000))
+    return api.post({
+        path: '/auth/refresh',
+        refresh: true
+    }).then(data => {
+        window.localStorage.setItem('a-csrf-token', data['a-csrf-token']);
+        return Promise.resolve(true)
+    }).catch(() => Promise.resolve(false))
   }
 
   componentDidMount() {
