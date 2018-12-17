@@ -12,7 +12,7 @@ import SearchCard from './SearchCard';
 import SearchDialog from './SearchDialog';
 
 import viewStyle from '../../assets/jss/viewStyle';
-import data from '../../data.js';
+import * as api from '../../api';
 
 
 class SearchView extends React.Component {
@@ -20,12 +20,25 @@ class SearchView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      users: 'searches' in data ? data['searches'] : [],
+      users: [],
       displayLimit: 30,
       dialogOpen: false,
       selectedUser: {}
     }
     this.state.filteredUsers = this.state.users;
+  }
+
+  fetchUsers = () => {
+    return api.get({
+        path: '/user/all'
+    }).then(data => {
+        console.log(data.users);
+        this.setState({users: data.users, filteredUsers: data.users});
+    })
+  }
+
+  componentDidMount() {
+    this.fetchUsers();
   }
 
   onSelectUser(user) {
@@ -53,7 +66,7 @@ class SearchView extends React.Component {
 
   onSearchInput(query) {
     const keywords = query.split(' ').map(keyword => keyword.toLowerCase());
-    const fields = ['firstName', 'lastName'];
+    const fields = ['first_name', 'last_name'];
     const filteredUsers = this.state.users.filter(user => {
         return keywords.every(keyword => {
             return fields.some(field => {

@@ -15,18 +15,16 @@ import Email from '@material-ui/icons/Email';
 import LocationOn from '@material-ui/icons/LocationOn';
 import Smartphone from '@material-ui/icons/Smartphone';
 
-function getField(user, field, def) {
-  return field in user ? user[field] : def
-}
 
 function SearchDialog(props) {
   const { user, open, onClose, fullScreen, ...rest } = props;
-  const firstName = getField(user, 'firstName', '');
-  const lastName = getField(user, 'lastName', '');
-  const corridor = getField(user, 'corridor', '');
-  const room = getField(user, 'room', '');
-  const email = getField(user, 'email', 'Niet gedeeld');
-  const phone = getField(user, 'phone', 'Niet gedeeld');
+
+  const { first_name = "", last_name = "", corridor = "", room = 0 } = user;
+  let { email = "", phone = "" } = user;
+  if (email === null)
+    email = "Niet gedeeld"
+  if (phone === null)
+    phone = "Niet gedeeld"
 
   return (
     <Dialog
@@ -38,13 +36,13 @@ function SearchDialog(props) {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">{`${firstName} ${lastName}`}</DialogTitle>
+      <DialogTitle id="alert-dialog-title">{`${first_name} ${last_name}`}</DialogTitle>
       <DialogContent>
         <DialogContentText variant="body2">Contact details</DialogContentText>
         <List>
           <ListItem>
             <ListItemIcon><LocationOn /></ListItemIcon>
-            <ListItemText primary={`${corridor}/${room.padStart(4, '0')}`} />
+            <ListItemText primary={`${corridor}/${room.toString().padStart(4, '0')}`} />
           </ListItem>
           <ListItem>
             <ListItemIcon><Email /></ListItemIcon>

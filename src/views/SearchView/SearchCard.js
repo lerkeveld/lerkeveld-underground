@@ -8,16 +8,11 @@ import CardHeader from '@material-ui/core/CardHeader';
 
 import searchCardStyle from '../../assets/jss/searchCardStyle';
 
-function getField(user, field) {
-  return field in user ? user[field] : ''
-}
 
 function SearchCard(props) {
-  const { classes, user, ...rest } = props;
-  const firstName = getField(user, 'firstName');
-  const lastName = getField(user, 'lastName');
-  const corridor = getField(user, 'corridor');
-  const room = getField(user, 'room');
+  const { classes, user = {}, ...rest } = props;
+
+  const { first_name = "", last_name = "", corridor = "", room = 0 } = user;
 
   return (
       <Card {...rest}>
@@ -30,10 +25,10 @@ function SearchCard(props) {
           }}
           avatar={
               <Avatar style={{backgroundColor: amber[100], color: amber[600]}}>
-                {firstName.length === 0 ? '' : firstName[0]}
+                {first_name.length === 0 ? '' : first_name[0]}
               </Avatar>}
-          title={`${firstName} ${lastName}`}
-          subheader={`${corridor}/${room.padStart(4, '0')}`}
+          title={`${first_name} ${last_name}`}
+          subheader={`${corridor}/${room.toString().padStart(4, '0')}`}
         />
       </Card>
   );
