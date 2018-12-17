@@ -1,14 +1,14 @@
 import React from 'react';
-import withMobileDialog from '@material-ui/core/withMobileDialog';
+import Link from 'react-router-dom/Link';
+import withRouter from 'react-router-dom/withRouter'
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 
-import PasswordField from '../../../components/PasswordField';
+import PasswordField from '../../components/PasswordField';
+import CloseableSnackbar from '../../components/CloseableSnackbar';
+
+import * as api from '../../api';
 
 // https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
 // eslint-disable-next-line
@@ -18,7 +18,7 @@ function validateEmail(email) {
 }
 
 
-class EmailFormDialog extends React.Component {
+class EditEmailForm extends React.Component {
 
   state = {
     email: '',
@@ -26,7 +26,13 @@ class EmailFormDialog extends React.Component {
     errors: {
       email: false,
       password: false
-    }
+    },
+    snackbarMessage: '',
+    snackbarOpen: false
+  }
+
+  handleSnackbarClose = () => {
+      this.setState({snackbarOpen: false});
   }
 
   handleRequiredChange = prop => event => {
@@ -64,28 +70,28 @@ class EmailFormDialog extends React.Component {
         return false;
     }
 
-    // TODO api:user:edit:email
-    this.props.handleDialogClose();
+    api.post({
+        path: '/user/edit/secure',
+        data: {
+            check: this.state.password,
+            email: this.state.email
+        }
+    }).then(data => {
+        this.props.history.push('/profiel');
+    }).catch(error => {
+        this.setState({snackbarMessage: error.message, snackbarOpen: true});
+    })
   }
 
   render() {
-    const { dialogOpen, handleDialogClose, fullScreen, ...rest } = this.props;
+    const ProfileLink = props => <Link to="/profiel" {...props} />;
 
     return (
-        <Dialog
-          fullScreen={fullScreen}
-          open={dialogOpen}
-          onClose={handleDialogClose}
-          aria-labelledby='emailform-dialog-title'
-          fullWidth
-          {...rest}
-        >
-          <DialogTitle id='emailform-dialog-title'>Update e-mailadres</DialogTitle>
-          <DialogContent>
-            <DialogContentText variant="body2">
-              Update het e-mailadres waarmee je inlogt op deze applicatie.
-              Dit is niet gelinkt aan het e-mailadres waarop je Lerkeveld emails ontvangt.
-            </DialogContentText>
+        <React.Fragment>
+          <Typography variant="subtitle2">
+            Wijzig e-mailadres
+          </Typography>
+          <form noValidate onSubmit={this.handleSubmit}>
             <TextField
               margin="normal"
               label="E-mailadres"
@@ -115,18 +121,33 @@ class EmailFormDialog extends React.Component {
               onChange={this.handleRequiredChange('password')}
               error={this.state.errors.password}
             />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleDialogClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={this.handleSubmit} color="primary">
-              Submit
-            </Button>
-          </DialogActions>
-        </Dialog>
+            <div style={{marginTop: '8px'}}>
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                type="submit"
+                style={{marginRight: "8px"}}
+              >
+                Submit
+              </Button>
+              <Button
+                color="primary"
+                size="small"
+                component={ProfileLink}
+              >
+                Back
+              </Button>
+            </div>
+          </form>
+          <CloseableSnackbar
+            open={this.state.snackbarOpen}
+            onClose={this.handleSnackbarClose}
+            message={this.state.snackbarMessage}
+          />
+        </React.Fragment>
     );
   }
 }
 
-export default withMobileDialog()(EmailFormDialog);
+export default withRouter(EditEmailForm);

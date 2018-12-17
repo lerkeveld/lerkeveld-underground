@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'react-router-dom/Link';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Avatar from '@material-ui/core/Avatar';
@@ -12,9 +13,13 @@ import Edit from '@material-ui/icons/Edit';
 import profileCardStyle from '../../assets/jss/profileCardStyle';
 
 function DefaultCard(props) {
-  const { classes, disabled, name, onClick, avatarIcon, avatarColor } = props;
+  const { classes, disabled, name, link, avatarIcon, avatarColor } = props;
 
-  const editIcon = <IconButton title="Edit" onClick={onClick}><Edit /></IconButton>;
+  let MyLink = undefined;
+  if (link)
+    MyLink = props => <Link to={link} {...props} />;
+
+  const editIcon = <IconButton title="Edit" component={MyLink}><Edit /></IconButton>;
   const blockIcon = <IconButton title="Contacteer IT"><Block /></IconButton>;
 
   let { textValue } = props;

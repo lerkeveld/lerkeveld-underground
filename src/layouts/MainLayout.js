@@ -7,6 +7,7 @@ import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 
 import routes from '../routes';
+import EditView from '../views/EditView';
 
 
 class MainLayout extends React.Component {
@@ -33,6 +34,7 @@ class MainLayout extends React.Component {
                      return <Route exact path={prop.path} component={prop.component} key={key} />;
                    })
                  }
+                 <Route path="/edit" component={EditView} />
                  <Route exact path="/(|index.html)" component={routes.profile.component} />;
                  <Redirect to="/" />;
                </Switch>
