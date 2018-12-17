@@ -6,12 +6,14 @@ import DefaultCard from '../DefaultCard';
 
 
 function PhoneCard(props) {
+  const { phone } = props;
+
   return (
       <DefaultCard
         avatarIcon={<Smartphone />}
         avatarColor={indigo[500]}
         name="Telefoon"
-        textValue="0000 00 00 00"
+        textValue={phone}
         disabled
       />
   );

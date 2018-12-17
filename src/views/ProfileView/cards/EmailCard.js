@@ -21,6 +21,7 @@ class EmailCard extends React.Component {
   };
 
   render() {
+    const { email } = this.props;
     const { dialogOpen } = this.state;
 
     return (
@@ -29,7 +30,7 @@ class EmailCard extends React.Component {
             avatarIcon={<Email />}
             avatarColor={blue[500]}
             name="E-mailadres"
-            textValue="test.test@domain.com"
+            textValue={email}
             onClick={this.handleDialogOpen}
           />
           <EmailFormDialog

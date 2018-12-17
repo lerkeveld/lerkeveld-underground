@@ -22,6 +22,20 @@ class PrivacyCard extends React.Component {
 
   render() {
     const { dialogOpen } = this.state;
+    const { isSharing } = this.props;
+
+    let textValue = undefined;
+    switch (isSharing) {
+        case true:
+            textValue = 'Deel mijn gegevens';
+            break;
+        case false:
+            textValue = 'Deel mijn gegevens niet';
+            break;
+        default:
+            textValue = undefined;
+            break;
+    }
 
     return (
         <div>
@@ -29,7 +43,7 @@ class PrivacyCard extends React.Component {
             avatarIcon={<Settings />}
             avatarColor={amber[500]}
             name="Privacy Settings"
-            textValue="Deel mijn gegevens niet"
+            textValue={textValue}
             onClick={this.handleDialogOpen}
           />
           <PrivacyFormDialog

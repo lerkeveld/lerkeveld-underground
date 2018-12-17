@@ -6,12 +6,18 @@ import DefaultCard from '../DefaultCard';
 
 
 function NameCard(props) {
+  const { firstName, lastName } = props;
+
+  let textValue = undefined;
+  if (firstName !== undefined && lastName !== undefined)
+    textValue = `${firstName} ${lastName}`;
+
   return (
       <DefaultCard
         avatarIcon={<AccountCircle />}
         avatarColor={red[500]}
         name="Naam"
-        textValue="Test Test"
+        textValue={textValue}
         disabled
       />
   );
