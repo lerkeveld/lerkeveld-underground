@@ -30,7 +30,7 @@ function KotbarReservationTable(props) {
                   {row.date.toLocaleDateString('nl-be', {'day': '2-digit', 'month': '2-digit', 'year': 'numeric'})}
                 </TableCell>
                 <TableCell className={classes.tableCell} style={{ minWidth: "200px" }}>
-                  {row.user}
+                  {row.username}
                 </TableCell>
                 <TableCell className={classes.tableCell} style={{ minWidth: "400px" }}>
                   {row.description}

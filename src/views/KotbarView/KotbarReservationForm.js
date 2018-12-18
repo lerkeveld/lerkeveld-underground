@@ -3,19 +3,30 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
+import CloseableSnackbar from '../../components/CloseableSnackbar';
+
 import KotbarDatePicker from './KotbarDatePicker';
 import KotbarRulesDialog from './KotbarRulesDialog';
+
+import * as api from '../../api';
 
 
 class KotbarReservationForm extends React.Component {
 
   state = {
-    date: new Date(),
+    date: null,
     description: '',
     errors: {
+      date: false,
       description: false
     },
-    dialogOpen: false
+    dialogOpen: false,
+    snackbarOpen: false,
+    snackbarMessage: ''
+  }
+
+  handleSnackbarClose = () => {
+      this.setState({snackbarOpen: false});
   }
 
   handleRequiredChange = prop => event => {
@@ -29,7 +40,8 @@ class KotbarReservationForm extends React.Component {
   }
 
   handleDateChange = value => {
-    this.setState({date: value});
+    const errors = Object.assign({}, this.state.errors, {date: false});
+    this.setState({date: value, errors: errors});
   }
 
   handleSubmit = event => {
@@ -37,6 +49,8 @@ class KotbarReservationForm extends React.Component {
 
     // check errors
     const errors = {};
+    if (this.state.date === null)
+        errors.date = true;
     if (this.state.description.length === 0)
         errors.description = true;
 
@@ -49,8 +63,28 @@ class KotbarReservationForm extends React.Component {
   }
 
   handleDialogAccept = () => {
-    // TODO api:kotbar:reserve
-    this.setState({dialogOpen: false});
+    api.post({
+        path: '/kotbar/',
+        data: {
+            date: this.state.date,
+            description: this.state.description
+        }
+    }).then(data => {
+        const newState = {
+          date: null,
+          description: '',
+          errors: {
+            date: false,
+            description: false
+          },
+          dialogOpen: false,
+          snackbarMessage: 'Kotbar gereserveerd',
+          snackbarOpen: true
+        }
+        this.setState(newState, this.props.refresh);
+    }).catch(error => {
+        this.setState({snackbarMessage: error.message, snackbarOpen: true});
+    })
   }
 
   handleDialogChange = (dialogOpen) => () => {
@@ -58,15 +92,16 @@ class KotbarReservationForm extends React.Component {
   }
 
   render() {
-    const { reservations } = this.props;
+    const { reservations, refresh, ...rest } = this.props;
 
     return (
         <React.Fragment>
-          <form noValidate onSubmit={this.handleSubmit}>
+          <form noValidate onSubmit={this.handleSubmit} {...rest}>
             <KotbarDatePicker
               reservations={reservations}
               onChange={this.handleDateChange.bind(this)}
               value={this.state.date}
+              error={this.state.errors.date}
             />
             <TextField
               label="Beschrijving"
@@ -95,6 +130,11 @@ class KotbarReservationForm extends React.Component {
             open={this.state.dialogOpen}
             onAccept={this.handleDialogAccept.bind(this)}
             onClose={this.handleDialogChange(false).bind(this)}
+          />
+          <CloseableSnackbar
+            open={this.state.snackbarOpen}
+            onClose={this.handleSnackbarClose}
+            message={this.state.snackbarMessage}
           />
         </React.Fragment>
     );

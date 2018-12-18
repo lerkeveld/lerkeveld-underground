@@ -12,13 +12,17 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 function KotbarDatePicker(props) {
     const { reservations, ...rest } = props;
 
+    let minDate = new Date();
+    minDate.setDate(minDate.getDate() - 1);
     let maxDate = new Date();
-    maxDate.setMonth(maxDate.getMonth() + 4);
+    maxDate.setDate(minDate.getDate() + 100);
 
     const dates = reservations.map(x => x.date);
     const shouldDisableDate = (date) => {
+        if (date < minDate || date > maxDate)
+          return true;
         return dates.some(taken => {
-            return date.getDate()  === taken.getDate() &&
+            return date.getDate() === taken.getDate() &&
                    date.getMonth() === taken.getMonth() &&
                    date.getYear()  === taken.getYear();
         });
@@ -33,9 +37,9 @@ function KotbarDatePicker(props) {
           InputLabelProps={{
             shrink: true,
           }}
-          disablePast
-          maxDate={maxDate}
           shouldDisableDate={shouldDisableDate}
+          minDate={minDate}
+          maxDate={maxDate}
           format='dd/MM/yyyy'
           InputProps={{
             endAdornment: <InputAdornment position="end">
