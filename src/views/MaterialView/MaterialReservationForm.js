@@ -2,21 +2,32 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 
+import CloseableSnackbar from '../../components/CloseableSnackbar';
+
 import MaterialRulesDialog from './MaterialRulesDialog';
 import MaterialSelect from './MaterialSelect';
 import MaterialDatePicker from './MaterialDatePicker';
+
+import * as api from '../../api';
 
 
 class MaterialReservationForm extends React.Component {
 
   state = {
-    date: new Date(),
+    date: null,
     items: [],
     errors: {
+      date: false,
       items: false
     },
     dateChosen: false,
     dialogOpen: false,
+    snackbarOpen: false,
+    snackbarMessage: ''
+  }
+
+  handleSnackbarClose = () => {
+      this.setState({snackbarOpen: false});
   }
 
   handleRequiredChange = prop => event => {
@@ -30,7 +41,8 @@ class MaterialReservationForm extends React.Component {
   }
 
   handleDateChange = value => {
-    this.setState({date: value});
+    const errors = Object.assign({}, this.state.errors, {date: false});
+    this.setState({date: value, errors: errors});
   }
 
   handleBackButton = () => {
@@ -48,6 +60,16 @@ class MaterialReservationForm extends React.Component {
 
     // next button
     if (!this.state.dateChosen) {
+        const errors = {};
+        if (this.state.date === null)
+            errors.date = true;
+
+        if (Object.keys(errors).length !== 0) {
+            errors.items = false;
+            this.setState({errors: errors});
+            return false;
+        }
+
         this.setState({dateChosen: true});
         return true;
     }
@@ -58,6 +80,7 @@ class MaterialReservationForm extends React.Component {
         errors.items = true;
 
     if (Object.keys(errors).length !== 0) {
+        errors.date = false;
         this.setState({errors: errors});
         return false;
     }
@@ -66,9 +89,29 @@ class MaterialReservationForm extends React.Component {
   }
 
   handleDialogAccept = () => {
-    // TODO api:material:reserve
-    console.log('accept');
-    this.setState({dialogOpen: false});
+    api.post({
+        path: '/materiaal/',
+        data: {
+            date: this.state.date,
+            items: this.state.items
+        }
+    }).then(data => {
+        const newState = {
+          date: null,
+          items: [],
+          errors: {
+            date: false,
+            items: false
+          },
+          dateChosen: false,
+          dialogOpen: false,
+          snackbarMessage: 'Materiaal gereserveerd',
+          snackbarOpen: true
+        }
+        this.setState(newState, this.props.refresh);
+    }).catch(error => {
+        this.setState({snackbarMessage: error.message, snackbarOpen: true});
+    })
   }
 
   handleDialogChange = dialogOpen => () => {
@@ -76,20 +119,21 @@ class MaterialReservationForm extends React.Component {
   }
 
   render() {
-    const { reservations, material } = this.props;
+    const { reservations, items, refresh, ...rest } = this.props;
 
     return (
         <React.Fragment>
-          <form noValidate onSubmit={this.handleSubmit}>
+          <form noValidate onSubmit={this.handleSubmit} {...rest}>
             <MaterialDatePicker
               disabled={this.state.dateChosen}
               onChange={this.handleDateChange.bind(this)}
               value={this.state.date}
+              error={this.state.errors.date}
             />
             { this.state.dateChosen
                 ? <MaterialSelect
                      reservations={reservations}
-                     material={material}
+                     select={items}
                      items={this.state.items}
                      date={this.state.date}
                      onChange={this.handleRequiredChange('items').bind(this)}
@@ -132,6 +176,11 @@ class MaterialReservationForm extends React.Component {
             onAccept={this.handleDialogAccept.bind(this)}
             onClose={this.handleDialogChange(false).bind(this)}
           />
+          <CloseableSnackbar
+            open={this.state.snackbarOpen}
+            onClose={this.handleSnackbarClose}
+            message={this.state.snackbarMessage}
+          />
         </React.Fragment>
     );
   }
@@ -139,12 +188,12 @@ class MaterialReservationForm extends React.Component {
 
 MaterialReservationForm.propTypes = {
   reservations: PropTypes.array.isRequired,
-  material: PropTypes.array.isRequired
+  items: PropTypes.array.isRequired
 };
 
 MaterialReservationForm.defaultProps = {
   reservations: [],
-  material: []
+  items: []
 }
 
 export default MaterialReservationForm;

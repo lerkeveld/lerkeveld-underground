@@ -37,7 +37,7 @@ function MaterialReservationTable(props) {
                     {formatDate(row.date)}
                   </TableCell>
                   <TableCell className={classes.tableCell} style={{ minWidth: "200px" }}>
-                    {row.user}
+                    {row.username}
                   </TableCell>
                   <TableCell className={classes.tableCell} style={{ minWidth: "400px" }}>
                     {row.items.join(", ")}

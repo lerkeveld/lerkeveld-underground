@@ -17,7 +17,7 @@ const formatDate = (date) => {
 
 
 function MaterialSelect(props) {
-  const { reservations, material, items, date, error, ...rest } = props;
+  const { reservations, select, items, date, error, ...rest } = props;
 
   const reserved = new Set();
 
@@ -49,7 +49,7 @@ function MaterialSelect(props) {
           <MenuItem disabled value="">
             Kies Materialen:
           </MenuItem>
-          { material.map(name => (
+          { select.map(name => (
               <MenuItem
                 key={name}
                 value={name}
