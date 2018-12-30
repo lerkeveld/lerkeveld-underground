@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 import CloseableSnackbar from '../../components/CloseableSnackbar';
+import LoadingButton from '../../components/LoadingButton';
 import PasswordField from '../../components/PasswordField';
 
 import authStyle from '../../assets/jss/authStyle';
@@ -23,7 +24,8 @@ class LoginForm extends React.Component {
       password: false
     },
     snackbarOpen: false,
-    messageInfo: {}
+    messageInfo: {},
+    submitting: false
   }
 
   showMessage = (message) => {
@@ -63,7 +65,10 @@ class LoginForm extends React.Component {
         window.localStorage.setItem('r-csrf-token', data['r-csrf-token']);
         this.props.history.push(referrer);
     }).catch(error => {
-        this.showMessage(error.message)
+        this.setState(
+            {submitting: false},
+            () => this.showMessage(error.message)
+        );
     })
   }
 
@@ -82,7 +87,7 @@ class LoginForm extends React.Component {
         return false;
     }
 
-    this.setState({snackbarOpen: false}, this.doLogin);
+    this.setState({snackbarOpen: false, submitting: true}, this.doLogin);
   }
 
   render() {
@@ -118,15 +123,16 @@ class LoginForm extends React.Component {
                  value={this.state.password}
                  error={this.state.errors.password}
                />
-               <Button
+               <LoadingButton
                  className={classes.submit}
                  variant="contained"
                  color="secondary"
                  size="medium"
                  type="submit"
+                 loading={this.state.submitting}
                >
                  Login
-               </Button>
+               </LoadingButton>
              </form>
              <div className={classes.actions}>
                 <div className={classes.actionLeft}>

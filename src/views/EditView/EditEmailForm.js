@@ -5,8 +5,9 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import PasswordField from '../../components/PasswordField';
 import CloseableSnackbar from '../../components/CloseableSnackbar';
+import LoadingButton from '../../components/LoadingButton';
+import PasswordField from '../../components/PasswordField';
 
 import * as api from '../../api';
 
@@ -28,7 +29,8 @@ class EditEmailForm extends React.Component {
       password: false
     },
     snackbarOpen: false,
-    messageInfo: {}
+    messageInfo: {},
+    submitting: false
   }
 
   showMessage = (message) => {
@@ -75,7 +77,10 @@ class EditEmailForm extends React.Component {
     }).then(data => {
         this.props.history.push('/profiel');
     }).catch(error => {
-        this.showMessage(error.message);
+        this.setState(
+            {submitting: false},
+            () => this.showMessage(error.message)
+        );
     })
   }
 
@@ -94,7 +99,7 @@ class EditEmailForm extends React.Component {
         return false;
     }
 
-    this.setState({snackbarOpen: false}, this.doEdit);
+    this.setState({snackbarOpen: false, submitting: true}, this.doEdit);
   }
 
   render() {
@@ -135,16 +140,17 @@ class EditEmailForm extends React.Component {
               onChange={this.handleRequiredChange('password')}
               error={this.state.errors.password}
             />
-            <div style={{marginTop: '8px'}}>
-              <Button
+            <div style={{marginTop: '8px', display: 'flex'}}>
+              <LoadingButton
                 variant="contained"
                 color="primary"
                 size="small"
                 type="submit"
                 style={{marginRight: "8px"}}
+                loading={this.state.submitting}
               >
                 Submit
-              </Button>
+              </LoadingButton>
               <Button
                 color="primary"
                 size="small"

@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+
+import LoadingButton from '../../components/LoadingButton';
 
 import KotbarDatePicker from './KotbarDatePicker';
 import KotbarRulesDialog from './KotbarRulesDialog';
@@ -18,7 +19,8 @@ class KotbarReservationForm extends React.Component {
       date: false,
       description: false
     },
-    dialogOpen: false
+    dialogOpen: false,
+    submitting: false
   }
 
   handleRequiredChange = prop => event => {
@@ -69,19 +71,26 @@ class KotbarReservationForm extends React.Component {
             date: false,
             description: false
           },
-          dialogOpen: false
+          dialogOpen: false,
+          submitting: false
         };
         this.setState(
             resetState,
             this.props.showMessage('Kotbar gereserveerd', this.props.refresh)
         );
     }).catch(error => {
-        this.props.showMessage(error.message);
+        this.setState(
+            {submitting: false},
+            () => this.props.showMessage(error.message)
+        );
     })
   }
 
   handleDialogAccept = () => {
-    this.props.closeSnackbar(this.doReserve);
+    this.setState(
+        {dialogOpen: false, submitting: true},
+        () => this.props.closeSnackbar(this.doReserve)
+    );
   }
 
   handleDialogChange = (dialogOpen) => () => {
@@ -121,21 +130,24 @@ class KotbarReservationForm extends React.Component {
               error={this.state.errors.description}
               disabled={disabled}
             />
-            <div style={{marginTop: '8px'}}>
-              <Button
+            <div style={{marginTop: '8px', display: 'flex'}}>
+              <LoadingButton
                 variant="contained"
                 color="primary"
                 size="small"
                 type="submit"
+                style={{marginRight: "8px"}}
+                loading={this.state.submitting}
               >
                 Submit
-              </Button>
+              </LoadingButton>
             </div>
           </form>
           <KotbarRulesDialog
             open={this.state.dialogOpen}
             onAccept={this.handleDialogAccept.bind(this)}
             onClose={this.handleDialogChange(false).bind(this)}
+            submitting={this.state.submitting}
           />
         </React.Fragment>
     );

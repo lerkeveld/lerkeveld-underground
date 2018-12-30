@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import CloseableSnackbar from '../../components/CloseableSnackbar';
+import LoadingButton from '../../components/LoadingButton';
 import PasswordField from '../../components/PasswordField';
 
 import authStyle from '../../assets/jss/authStyle';
@@ -24,6 +25,7 @@ class ActivateForm extends React.Component {
         password: false,
         confirm: false
     },
+    submitting: false,
     submitted: false,
     snackbarOpen: false,
     messageInfo: {}
@@ -82,9 +84,12 @@ class ActivateForm extends React.Component {
             password: this.state.password
         }
     }).then(data => {
-        this.setState({submitted: true});
+        this.setState({submitted: true, submitting: false});
     }).catch(error => {
-        this.showMessage(error.message);
+        this.setState(
+            {submitting: false},
+            () => this.showMessage(error.message)
+        );
     })
   }
 
@@ -105,7 +110,7 @@ class ActivateForm extends React.Component {
         return false;
     }
 
-    this.setState({snackbarOpen: false}, this.doActivate)
+    this.setState({snackbarOpen: false, submitting: true}, this.doActivate)
   }
 
   render() {
@@ -152,15 +157,16 @@ class ActivateForm extends React.Component {
                      value={this.state.confirm}
                      error={this.state.errors.confirm}
                    />
-                   <Button
+                   <LoadingButton
                      className={classes.submit}
                      variant="contained"
                      color="secondary"
                      size="medium"
                      type="submit"
+                     loading={this.state.submitting}
                    >
                      Activeer
-                   </Button>
+                   </LoadingButton>
                  </form>
                : <React.Fragment>
                    <Typography variant="body2" paragraph>

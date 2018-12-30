@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 
+import LoadingButton from '../../components/LoadingButton';
+
 import MaterialRulesDialog from './MaterialRulesDialog';
 import MaterialSelect from './MaterialSelect';
 import MaterialDatePicker from './MaterialDatePicker';
@@ -19,7 +21,8 @@ class MaterialReservationForm extends React.Component {
       items: false
     },
     dateChosen: false,
-    dialogOpen: false
+    dialogOpen: false,
+    submitting: false
   }
 
   handleRequiredChange = prop => event => {
@@ -96,19 +99,26 @@ class MaterialReservationForm extends React.Component {
             items: false
           },
           dateChosen: false,
-          dialogOpen: false
+          dialogOpen: false,
+          submitting: false
         };
         this.setState(
             resetState,
             this.props.showMessage('Materiaal gereserveerd', this.props.refresh)
         );
     }).catch(error => {
-        this.props.showMessage(error.message);
+        this.setState(
+            {submitting: false},
+            () => this.props.showMessage(error.message)
+        );
     })
   }
 
   handleDialogAccept = () => {
-    this.props.closeSnackbar(this.doReserve);
+    this.setState(
+        {dialogOpen: false, submitting: true},
+        () => this.props.closeSnackbar(this.doReserve)
+    );
   }
 
   handleDialogChange = dialogOpen => () => {
@@ -147,7 +157,7 @@ class MaterialReservationForm extends React.Component {
                   />
                 : null
             }
-            <div style={{marginTop: '8px'}}>
+            <div style={{marginTop: '8px', display: 'flex'}}>
               <Button
                 disabled={!this.state.dateChosen}
                 variant="contained"
@@ -158,14 +168,15 @@ class MaterialReservationForm extends React.Component {
                 Back
               </Button>
               { this.state.dateChosen
-                  ? <Button
+                  ? <LoadingButton
                       variant="contained"
                       color="primary"
                       size="small"
                       type="submit"
+                      loading={this.state.submitting}
                     >
                       Submit
-                    </Button>
+                    </LoadingButton>
                   : <Button
                       variant="contained"
                       color="primary"

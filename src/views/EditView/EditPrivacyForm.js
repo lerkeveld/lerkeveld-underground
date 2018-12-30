@@ -8,6 +8,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import Typography from '@material-ui/core/Typography';
 
 import CloseableSnackbar from '../../components/CloseableSnackbar';
+import LoadingButton from '../../components/LoadingButton';
 
 import * as api from '../../api';
 
@@ -17,7 +18,8 @@ class EditPrivacyForm extends React.Component {
   state = {
     checked: false,
     snackbarOpen: false,
-    messageInfo: {}
+    messageInfo: {},
+    submitting: false
   }
 
   showMessage = (message) => {
@@ -47,13 +49,16 @@ class EditPrivacyForm extends React.Component {
     }).then(data => {
         this.props.history.push('/profiel');
     }).catch(error => {
-        this.showMessage(error.message);
+        this.setState(
+            {submitting: false},
+            () => this.showMessage(error.message)
+        );
     })
   }
 
   handleSubmit = event => {
     event.preventDefault();
-    this.setState({snackbarOpen: false}, this.doEdit);
+    this.setState({snackbarOpen: false, submitting: true}, this.doEdit);
   }
 
   render() {
@@ -82,16 +87,17 @@ class EditPrivacyForm extends React.Component {
                 label="Ik deel mijn contactgegevens met alle Lerkies"
               />
             </FormGroup>
-            <div style={{marginTop: '8px'}}>
-              <Button
+            <div style={{marginTop: '8px', display: 'flex'}}>
+              <LoadingButton
                 variant="contained"
                 color="primary"
                 size="small"
                 type="submit"
                 style={{marginRight: "8px"}}
+                loading={this.state.submitting}
               >
                 Submit
-              </Button>
+              </LoadingButton>
               <Button
                 color="primary"
                 size="small"

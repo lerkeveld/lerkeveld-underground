@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import CloseableSnackbar from '../../components/CloseableSnackbar';
+import LoadingButton from '../../components/LoadingButton';
 
 import authStyle from '../../assets/jss/authStyle';
 import * as api from '../../api';
@@ -19,6 +20,7 @@ class ResetForm extends React.Component {
     errors: {
       email: false
     },
+    submitting: false,
     submitted: false,
     snackbarOpen: false,
     messageInfo: {}
@@ -55,9 +57,12 @@ class ResetForm extends React.Component {
             email: this.state.email,
         }
     }).then(data => {
-        this.setState({submitted: true});
+        this.setState({submitted: true, submitting: false});
     }).catch(error => {
-        this.showMessage(error.message);
+        this.setState(
+            {submitting: false},
+            () => this.showMessage(error.message)
+        );
     })
   }
 
@@ -74,7 +79,7 @@ class ResetForm extends React.Component {
         return false;
     }
 
-    this.setState({snackbarOpen: false}, this.doReset);
+    this.setState({snackbarOpen: false, submitting: true}, this.doReset);
   }
 
   render() {
@@ -96,15 +101,16 @@ class ResetForm extends React.Component {
                      value={this.state.email}
                      error={this.state.errors.email}
                    />
-                   <Button
+                   <LoadingButton
                      className={classes.submit}
                      variant="contained"
                      color="secondary"
                      size="small"
                      type="submit"
+                     loading={this.state.submitting}
                    >
                      Verstuur reset e-mail
-                   </Button>
+                   </LoadingButton>
                  </form>
                : <React.Fragment>
                    <Typography variant="body2" paragraph>
