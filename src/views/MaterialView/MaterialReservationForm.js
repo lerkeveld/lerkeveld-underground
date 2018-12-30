@@ -23,7 +23,17 @@ class MaterialReservationForm extends React.Component {
     dateChosen: false,
     dialogOpen: false,
     snackbarOpen: false,
-    snackbarMessage: ''
+    messageInfo: {}
+  }
+
+  showMessage = (message) => {
+      this.setState({
+          snackbarOpen: true,
+          messageInfo: {
+              key: new Date().getTime(),
+              message: message
+          }
+      });
   }
 
   handleSnackbarClose = () => {
@@ -88,7 +98,7 @@ class MaterialReservationForm extends React.Component {
     this.setState({dialogOpen: true});
   }
 
-  handleDialogAccept = () => {
+  doReserve = () => {
     api.post({
         path: '/materiaal/',
         data: {
@@ -105,13 +115,20 @@ class MaterialReservationForm extends React.Component {
           },
           dateChosen: false,
           dialogOpen: false,
-          snackbarMessage: 'Materiaal gereserveerd',
-          snackbarOpen: true
+          snackbarOpen: true,
+          messageInfo: {
+              key: new Date().getTime(),
+              message: 'Materiaal gereserveerd'
+          }
         }
         this.setState(newState, this.props.refresh);
     }).catch(error => {
-        this.setState({snackbarMessage: error.message, snackbarOpen: true});
+        this.showMessage(error.message);
     })
+  }
+
+  handleDialogAccept = () => {
+    this.setState({snackbarOpen: false}, this.doReserve);
   }
 
   handleDialogChange = dialogOpen => () => {
@@ -177,9 +194,10 @@ class MaterialReservationForm extends React.Component {
             onClose={this.handleDialogChange(false).bind(this)}
           />
           <CloseableSnackbar
+            key={this.state.messageInfo.key}
+            message={this.state.messageInfo.message}
             open={this.state.snackbarOpen}
             onClose={this.handleSnackbarClose}
-            message={this.state.snackbarMessage}
           />
         </React.Fragment>
     );

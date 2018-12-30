@@ -21,7 +21,17 @@ class ResetForm extends React.Component {
     },
     submitted: false,
     snackbarOpen: false,
-    snackbarMessage: ''
+    messageInfo: {}
+  }
+
+  showMessage = (message) => {
+      this.setState({
+          snackbarOpen: true,
+          messageInfo: {
+              key: new Date().getTime(),
+              message: message
+          }
+      });
   }
 
   handleSnackbarClose = () => {
@@ -38,6 +48,19 @@ class ResetForm extends React.Component {
     this.setState(stateUpdate);
   }
 
+  doReset = () => {
+    api.post({
+        path: '/auth/reset',
+        data: {
+            email: this.state.email,
+        }
+    }).then(data => {
+        this.setState({submitted: true});
+    }).catch(error => {
+        this.showMessage(error.message);
+    })
+  }
+
   handleSubmit = event => {
     event.preventDefault();
 
@@ -51,16 +74,7 @@ class ResetForm extends React.Component {
         return false;
     }
 
-    api.post({
-        path: '/auth/reset',
-        data: {
-            email: this.state.email,
-        }
-    }).then(data => {
-        this.setState({submitted: true});
-    }).catch(error => {
-        this.setState({snackbarMessage: error.message, snackbarOpen: true});
-    })
+    this.setState({snackbarOpen: false}, this.doReset);
   }
 
   render() {
@@ -112,9 +126,11 @@ class ResetForm extends React.Component {
                </Button>
              </div>
              <CloseableSnackbar
+               anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
+               key={this.state.messageInfo.key}
+               message={this.state.messageInfo.message}
                open={this.state.snackbarOpen}
                onClose={this.handleSnackbarClose}
-               message={this.state.snackbarMessage}
              />
            </React.Fragment>
   }

@@ -22,12 +22,22 @@ class LoginForm extends React.Component {
       email: false,
       password: false
     },
-    snackbarMessage: '',
-    snackbarOpen: false
+    snackbarOpen: false,
+    messageInfo: {}
+  }
+
+  showMessage = (message) => {
+      this.setState({
+          snackbarOpen: true,
+          messageInfo: {
+              key: new Date().getTime(),
+              message: message
+          }
+      });
   }
 
   handleSnackbarClose = () => {
-      this.setState({snackbarOpen: false});
+    this.setState({snackbarOpen: false});
   }
 
   handleRequiredChange = prop => event => {
@@ -38,6 +48,23 @@ class LoginForm extends React.Component {
     };
     stateUpdate.errors[prop] = value.length === 0;
     this.setState(stateUpdate);
+  }
+
+  doLogin = () => {
+    const { referrer } = this.props.location.state || { referrer: { pathname: '/' } };
+    api.post({
+        path: '/auth/login',
+        data: {
+            email: this.state.email,
+            password: this.state.password
+        }
+    }).then(data => {
+        window.localStorage.setItem('a-csrf-token', data['a-csrf-token']);
+        window.localStorage.setItem('r-csrf-token', data['r-csrf-token']);
+        this.props.history.push(referrer);
+    }).catch(error => {
+        this.showMessage(error.message)
+    })
   }
 
   handleSubmit = event => {
@@ -55,20 +82,7 @@ class LoginForm extends React.Component {
         return false;
     }
 
-    const { referrer } = this.props.location.state || { referrer: { pathname: '/' } };
-    api.post({
-        path: '/auth/login',
-        data: {
-            email: this.state.email,
-            password: this.state.password
-        }
-    }).then(data => {
-        window.localStorage.setItem('a-csrf-token', data['a-csrf-token']);
-        window.localStorage.setItem('r-csrf-token', data['r-csrf-token']);
-        this.props.history.push(referrer);
-    }).catch(error => {
-        this.setState({snackbarMessage: error.message, snackbarOpen: true});
-    })
+    this.setState({snackbarOpen: false}, this.doLogin);
   }
 
   render() {
@@ -135,9 +149,11 @@ class LoginForm extends React.Component {
                 </div>
              </div>
              <CloseableSnackbar
+               anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
+               key={this.state.messageInfo.key}
+               message={this.state.messageInfo.message}
                open={this.state.snackbarOpen}
                onClose={this.handleSnackbarClose}
-               message={this.state.snackbarMessage}
              />
            </React.Fragment>
   }

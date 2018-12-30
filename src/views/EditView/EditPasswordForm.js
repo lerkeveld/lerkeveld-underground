@@ -22,8 +22,18 @@ class EditPasswordForm extends React.Component {
         confirm: false,
         check: false
     },
-    snackbarMessage: '',
-    snackbarOpen: false
+    snackbarOpen: false,
+    messageInfo: {}
+  }
+
+  showMessage = (message) => {
+      this.setState({
+          snackbarOpen: true,
+          messageInfo: {
+              key: new Date().getTime(),
+              message: message
+          }
+      });
   }
 
   handleSnackbarClose = () => {
@@ -61,6 +71,20 @@ class EditPasswordForm extends React.Component {
     this.setState(stateUpdate);
   }
 
+  doEdit = () => {
+    api.post({
+        path: '/user/edit/secure',
+        data: {
+            check: this.state.check,
+            password: this.state.password
+        }
+    }).then(data => {
+        this.props.history.push('/profiel');
+    }).catch(error => {
+        this.showMessage(error.message);
+    })
+  }
+
   handleSubmit = event => {
     event.preventDefault();
 
@@ -78,17 +102,7 @@ class EditPasswordForm extends React.Component {
         return false;
     }
 
-    api.post({
-        path: '/user/edit/secure',
-        data: {
-            check: this.state.check,
-            password: this.state.password
-        }
-    }).then(data => {
-        this.props.history.push('/profiel');
-    }).catch(error => {
-        this.setState({snackbarMessage: error.message, snackbarOpen: true});
-    })
+    this.setState({snackbarOpen: false}, this.doEdit);
   }
 
   render() {
@@ -160,9 +174,10 @@ class EditPasswordForm extends React.Component {
             </div>
           </form>
           <CloseableSnackbar
+            key={this.state.messageInfo.key}
+            message={this.state.messageInfo.message}
             open={this.state.snackbarOpen}
             onClose={this.handleSnackbarClose}
-            message={this.state.snackbarMessage}
           />
         </React.Fragment>
     );

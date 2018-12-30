@@ -6,17 +6,23 @@ import CloseIcon from '@material-ui/icons/Close';
 
 
 function CloseableSnackbar(props) {
-  const { message, onClose, ...rest } = props;
+  const {
+      message,
+      onClose,
+      anchorOrigin={vertical: 'bottom', horizontal: 'left'},
+      ...rest
+  } = props;
 
   return (
        <Snackbar
-         anchorOrigin={{
-           vertical: 'bottom',
-           horizontal: 'center',
-         }}
+         anchorOrigin={anchorOrigin}
          autoHideDuration={6000}
          ContentProps={{
            'aria-describedby': 'message-id',
+         }}
+         ClickAwayListenerProps={{
+           'mouseEvent': false,
+           'touchEvent': false
          }}
          onClose={onClose}
          message={<span id="message-id">{message}</span>}

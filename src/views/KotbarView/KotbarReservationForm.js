@@ -22,7 +22,17 @@ class KotbarReservationForm extends React.Component {
     },
     dialogOpen: false,
     snackbarOpen: false,
-    snackbarMessage: ''
+    messageInfo: {}
+  }
+
+  showMessage = (message) => {
+      this.setState({
+          snackbarOpen: true,
+          messageInfo: {
+              key: new Date().getTime(),
+              message: message
+          }
+      });
   }
 
   handleSnackbarClose = () => {
@@ -62,7 +72,7 @@ class KotbarReservationForm extends React.Component {
     this.setState({dialogOpen: true});
   }
 
-  handleDialogAccept = () => {
+  doReserve = () => {
     api.post({
         path: '/kotbar/',
         data: {
@@ -78,13 +88,20 @@ class KotbarReservationForm extends React.Component {
             description: false
           },
           dialogOpen: false,
-          snackbarMessage: 'Kotbar gereserveerd',
-          snackbarOpen: true
+          snackbarOpen: true,
+          messageInfo: {
+              key: new Date().getTime(),
+              message: 'Kotbar gereserveerd'
+          }
         }
         this.setState(newState, this.props.refresh);
     }).catch(error => {
-        this.setState({snackbarMessage: error.message, snackbarOpen: true});
+        this.showMessage(error.message);
     })
+  }
+
+  handleDialogAccept = () => {
+    this.setState({snackbarOpen: false}, this.doReserve);
   }
 
   handleDialogChange = (dialogOpen) => () => {
@@ -132,9 +149,10 @@ class KotbarReservationForm extends React.Component {
             onClose={this.handleDialogChange(false).bind(this)}
           />
           <CloseableSnackbar
+            key={this.state.messageInfo.key}
+            message={this.state.messageInfo.message}
             open={this.state.snackbarOpen}
             onClose={this.handleSnackbarClose}
-            message={this.state.snackbarMessage}
           />
         </React.Fragment>
     );

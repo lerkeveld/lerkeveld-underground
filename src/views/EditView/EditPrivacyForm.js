@@ -16,8 +16,18 @@ class EditPrivacyForm extends React.Component {
 
   state = {
     checked: false,
-    snackbarMessage: '',
-    snackbarOpen: false
+    snackbarOpen: false,
+    messageInfo: {}
+  }
+
+  showMessage = (message) => {
+      this.setState({
+          snackbarOpen: true,
+          messageInfo: {
+              key: new Date().getTime(),
+              message: message
+          }
+      });
   }
 
   handleSnackbarClose = () => {
@@ -28,9 +38,7 @@ class EditPrivacyForm extends React.Component {
     this.setState({checked: event.target.checked});
   }
 
-  handleSubmit = event => {
-    event.preventDefault();
-
+  doEdit = () => {
     api.post({
         path: '/user/edit',
         data: {
@@ -39,8 +47,13 @@ class EditPrivacyForm extends React.Component {
     }).then(data => {
         this.props.history.push('/profiel');
     }).catch(error => {
-        this.setState({snackbarMessage: error.message, snackbarOpen: true});
+        this.showMessage(error.message);
     })
+  }
+
+  handleSubmit = event => {
+    event.preventDefault();
+    this.setState({snackbarOpen: false}, this.doEdit);
   }
 
   render() {
@@ -89,9 +102,10 @@ class EditPrivacyForm extends React.Component {
             </div>
           </form>
           <CloseableSnackbar
+            key={this.state.messageInfo.key}
+            message={this.state.messageInfo.message}
             open={this.state.snackbarOpen}
             onClose={this.handleSnackbarClose}
-            message={this.state.snackbarMessage}
           />
         </React.Fragment>
     );
