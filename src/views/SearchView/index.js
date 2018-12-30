@@ -8,6 +8,9 @@ import Typography from '@material-ui/core/Typography';
 
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
+import CloseableSnackbar from '../../components/CloseableSnackbar';
+import LoadingSnackbar from '../../components/LoadingSnackbar';
+
 import SearchCard from './SearchCard';
 import SearchDialog from './SearchDialog';
 
@@ -23,17 +26,44 @@ class SearchView extends React.Component {
       users: [],
       displayLimit: 30,
       dialogOpen: false,
-      selectedUser: {}
+      selectedUser: {},
+      fetching: true,
+      disabled: true,
+      snackbarOpen: false,
+      messageInfo: {}
     }
     this.state.filteredUsers = this.state.users;
+  }
+
+  showMessage = (message) => {
+      this.setState({
+          snackbarOpen: true,
+          messageInfo: {
+              key: new Date().getTime(),
+              message: message
+          }
+      });
+  }
+
+  handleSnackbarClose = () => {
+      this.setState({snackbarOpen: false});
   }
 
   fetchUsers = () => {
     return api.get({
         path: '/user/all'
     }).then(data => {
-        console.log(data.users);
-        this.setState({users: data.users, filteredUsers: data.users});
+        this.setState({
+            users: data.users,
+            filteredUsers: data.users,
+            disabled: false,
+            fetching: false
+        });
+    }).catch(error => {
+        this.setState(
+            {fetching: false},
+            () => this.showMessage(error.message)
+        );
     })
   }
 
@@ -96,6 +126,7 @@ class SearchView extends React.Component {
                 onChange={this.onSearchInput.bind(this)}
                 onCancelSearch={this.onCancelSearch.bind(this)}
                 cancelOnEscape={true}
+                disabled={this.state.disabled}
               />
             </Grid>
           </Grid>
@@ -125,6 +156,15 @@ class SearchView extends React.Component {
             user={this.state.selectedUser}
             onClose={this.onDialogClose.bind(this)}
           />
+          { this.state.fetching
+              ? <LoadingSnackbar open={this.state.fetching} />
+              : <CloseableSnackbar
+                  key={this.state.messageInfo.key}
+                  message={this.state.messageInfo.message}
+                  open={this.state.snackbarOpen}
+                  onClose={this.handleSnackbarClose}
+                />
+          }
         </main>
     );
   }

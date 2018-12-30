@@ -4,6 +4,9 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
+import CloseableSnackbar from '../../components/CloseableSnackbar';
+import LoadingSnackbar from '../../components/LoadingSnackbar';
+
 import viewStyle from '../../assets/jss/viewStyle';
 import MaterialReservationForm from './MaterialReservationForm';
 import MaterialReservationTable from './MaterialReservationTable';
@@ -14,7 +17,31 @@ class MaterialView extends React.Component {
 
   state = {
     items: [],
-    reservations: []
+    reservations: [],
+    fetchingItems: true,
+    fetchingReservations: true,
+    disableFormItems: true,
+    disableFormReservations: true,
+    snackbarOpen: false,
+    messageInfo: {}
+  }
+
+  showMessage = (message, callback) => {
+      this.setState({
+          snackbarOpen: true,
+          messageInfo: {
+              key: new Date().getTime(),
+              message: message
+          }
+      }, callback);
+  }
+
+  handleSnackbarClose = () => {
+      this.closeSnackbar();
+  }
+
+  closeSnackbar = (callback) => {
+      this.setState({snackbarOpen: false}, callback);
   }
 
   fetchReservations = () => {
@@ -28,7 +55,16 @@ class MaterialView extends React.Component {
                 {date: new Date(reservation.date)}
             )
         });
-        this.setState({reservations: reservations});
+        this.setState({
+            reservations: reservations,
+            disableFormReservations: false,
+            fetchingReservations: false
+        });
+    }).catch(error => {
+        this.setState(
+            {fetchingReservations: false},
+            () => this.showMessage(error.message)
+        );
     })
   }
 
@@ -37,7 +73,16 @@ class MaterialView extends React.Component {
         path: '/materiaal/type'
     }).then(data => {
         const items = data.items.map(item => item.name);
-        this.setState({items: items});
+        this.setState({
+            items: items,
+            disableFormItems: false,
+            fetchingItems: false
+        });
+    }).catch(error => {
+        this.setState(
+            {fetchingItems: false},
+            () => this.showMessage(error.message)
+        );
     })
   }
 
@@ -68,9 +113,12 @@ class MaterialView extends React.Component {
                 Nieuwe reservatie
               </Typography>
               <MaterialReservationForm
-                refresh={this.refresh.bind(this)}
                 reservations={this.state.reservations}
                 items={this.state.items}
+                refresh={this.fetchReservations}
+                disabled={this.state.disableFormReservations || this.state.disableFormItems}
+                showMessage={this.showMessage}
+                closeSnackbar={this.closeSnackbar}
               />
             </Grid>
             <Grid item xs={12}>
@@ -80,10 +128,20 @@ class MaterialView extends React.Component {
               <div style={{width: '100%', overflowX: 'auto'}}>
                 <MaterialReservationTable
                   reservations={this.state.reservations}
+                  loading={this.state.fetchingReservations}
                 />
               </div>
             </Grid>
           </Grid>
+          { this.state.fetchingReservations || this.state.fetchingItems
+              ? <LoadingSnackbar open />
+              : <CloseableSnackbar
+                  key={this.state.messageInfo.key}
+                  message={this.state.messageInfo.message}
+                  open={this.state.snackbarOpen}
+                  onClose={this.handleSnackbarClose}
+                />
+          }
         </main>
     );
   }

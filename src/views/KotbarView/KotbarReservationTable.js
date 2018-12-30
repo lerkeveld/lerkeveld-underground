@@ -9,9 +9,23 @@ import TableRow from '@material-ui/core/TableRow';
 
 import tableStyle from '../../assets/jss/tableStyle';
 
+const emptyRow = (classes, message) => {
+    return (
+        <TableRow>
+          <TableCell className={classes.tableCell} style={{ minWidth: "120px" }}>
+            {message}
+          </TableCell>
+          <TableCell className={classes.tableCell} style={{ minWidth: "200px" }}>
+          </TableCell>
+          <TableCell className={classes.tableCell} style={{ minWidth: "400px" }}>
+          </TableCell>
+        </TableRow>
+    )
+};
+
 
 function KotbarReservationTable(props) {
-  const { classes, reservations } = props;
+  const { classes, reservations, loading } = props;
 
   return (
       <Table>
@@ -23,10 +37,12 @@ function KotbarReservationTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
+          {loading ? emptyRow(classes) : null}
+          {!loading && reservations.length === 0 ? emptyRow(classes, 'Geen reservaties') : null}
           {reservations.sort((r1, r2) => {return r1.date > r2.date}).map(row => {
             return (
               <TableRow key={row.id}>
-                <TableCell className={classes.tableCell} style={{ minWidth: "100px" }}>
+                <TableCell className={classes.tableCell} style={{ minWidth: "120px" }}>
                   {row.date.toLocaleDateString('nl-be', {'day': '2-digit', 'month': '2-digit', 'year': 'numeric'})}
                 </TableCell>
                 <TableCell className={classes.tableCell} style={{ minWidth: "200px" }}>

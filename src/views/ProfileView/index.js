@@ -4,6 +4,9 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
+import CloseableSnackbar from '../../components/CloseableSnackbar';
+import LoadingSnackbar from '../../components/LoadingSnackbar';
+
 import EmailCard from './cards/EmailCard';
 import LocationCard from './cards/LocationCard';
 import MembershipCard from './cards/MembershipCard';
@@ -19,14 +22,36 @@ import * as api from '../../api';
 class ProfileView extends React.Component {
 
   state = {
-    user: {}
+    user: {},
+    fetching: true,
+    snackbarOpen: false,
+    messageInfo: {}
+  }
+
+  showMessage = (message) => {
+      this.setState({
+          snackbarOpen: true,
+          messageInfo: {
+              key: new Date().getTime(),
+              message: message
+          }
+      });
+  }
+
+  handleSnackbarClose = () => {
+      this.setState({snackbarOpen: false});
   }
 
   fetchProfile = () => {
     return api.get({
         path: '/user/profile'
     }).then(data => {
-        this.setState({user: data.user});
+        this.setState({user: data.user, fetching: false});
+    }).catch(error => {
+        this.setState(
+            {fetching: false},
+            () => this.showMessage(error.message)
+        );
     })
   }
 
@@ -70,6 +95,15 @@ class ProfileView extends React.Component {
               <PrivacyCard isSharing={user.is_sharing}/>
             </Grid>
           </Grid>
+        { this.state.fetching
+            ? <LoadingSnackbar open />
+            : <CloseableSnackbar
+                key={this.state.messageInfo.key}
+                message={this.state.messageInfo.message}
+                open={this.state.snackbarOpen}
+                onClose={this.handleSnackbarClose}
+              />
+        }
         </main>
     );
   }

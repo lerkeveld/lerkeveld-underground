@@ -4,6 +4,9 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
+import CloseableSnackbar from '../../components/CloseableSnackbar';
+import LoadingSnackbar from '../../components/LoadingSnackbar';
+
 import KotbarReservationForm from './KotbarReservationForm';
 import KotbarReservationTable from './KotbarReservationTable';
 
@@ -14,7 +17,29 @@ import * as api from '../../api';
 class KotbarView extends React.Component {
 
   state = {
-    reservations: []
+    reservations: [],
+    fetching: true,
+    disableForm: true,
+    snackbarOpen: false,
+    messageInfo: {}
+  }
+
+  showMessage = (message, callback) => {
+      this.setState({
+          snackbarOpen: true,
+          messageInfo: {
+              key: new Date().getTime(),
+              message: message
+          }
+      }, callback);
+  }
+
+  handleSnackbarClose = () => {
+      this.closeSnackbar();
+  }
+
+  closeSnackbar = (callback) => {
+      this.setState({snackbarOpen: false}, callback);
   }
 
   fetchReservations = () => {
@@ -28,7 +53,16 @@ class KotbarView extends React.Component {
                 {date: new Date(reservation.date)}
             )
         });
-        this.setState({reservations: reservations});
+        this.setState({
+            reservations: reservations,
+            disableForm: false,
+            fetching: false
+        });
+    }).catch(error => {
+        this.setState(
+            {fetching: false},
+            () => this.showMessage(error.message)
+        );
     })
   }
 
@@ -55,7 +89,10 @@ class KotbarView extends React.Component {
               </Typography>
               <KotbarReservationForm
                 reservations={this.state.reservations}
-                refresh={this.fetchReservations.bind(this)}
+                refresh={this.fetchReservations}
+                disabled={this.state.disableForm}
+                showMessage={this.showMessage}
+                closeSnackbar={this.closeSnackbar}
               />
             </Grid>
             <Grid item xs={12}>
@@ -63,10 +100,22 @@ class KotbarView extends React.Component {
                 Reservaties
               </Typography>
               <div style={{width: '100%', overflowX: 'auto'}}>
-                <KotbarReservationTable reservations={this.state.reservations} />
+                <KotbarReservationTable
+                  reservations={this.state.reservations}
+                  loading={this.state.fetching}
+                />
               </div>
             </Grid>
           </Grid>
+          { this.state.fetching
+              ? <LoadingSnackbar open={this.state.fetching} />
+              : <CloseableSnackbar
+                  key={this.state.messageInfo.key}
+                  message={this.state.messageInfo.message}
+                  open={this.state.snackbarOpen}
+                  onClose={this.handleSnackbarClose}
+                />
+          }
         </main>
     );
   }

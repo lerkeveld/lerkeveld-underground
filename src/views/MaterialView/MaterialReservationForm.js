@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 
-import CloseableSnackbar from '../../components/CloseableSnackbar';
-
 import MaterialRulesDialog from './MaterialRulesDialog';
 import MaterialSelect from './MaterialSelect';
 import MaterialDatePicker from './MaterialDatePicker';
@@ -21,23 +19,7 @@ class MaterialReservationForm extends React.Component {
       items: false
     },
     dateChosen: false,
-    dialogOpen: false,
-    snackbarOpen: false,
-    messageInfo: {}
-  }
-
-  showMessage = (message) => {
-      this.setState({
-          snackbarOpen: true,
-          messageInfo: {
-              key: new Date().getTime(),
-              message: message
-          }
-      });
-  }
-
-  handleSnackbarClose = () => {
-      this.setState({snackbarOpen: false});
+    dialogOpen: false
   }
 
   handleRequiredChange = prop => event => {
@@ -106,7 +88,7 @@ class MaterialReservationForm extends React.Component {
             items: this.state.items
         }
     }).then(data => {
-        const newState = {
+        const resetState = {
           date: null,
           items: [],
           errors: {
@@ -114,21 +96,19 @@ class MaterialReservationForm extends React.Component {
             items: false
           },
           dateChosen: false,
-          dialogOpen: false,
-          snackbarOpen: true,
-          messageInfo: {
-              key: new Date().getTime(),
-              message: 'Materiaal gereserveerd'
-          }
-        }
-        this.setState(newState, this.props.refresh);
+          dialogOpen: false
+        };
+        this.setState(
+            resetState,
+            this.props.showMessage('Materiaal gereserveerd', this.props.refresh)
+        );
     }).catch(error => {
-        this.showMessage(error.message);
+        this.props.showMessage(error.message);
     })
   }
 
   handleDialogAccept = () => {
-    this.setState({snackbarOpen: false}, this.doReserve);
+    this.props.closeSnackbar(this.doReserve);
   }
 
   handleDialogChange = dialogOpen => () => {
@@ -136,19 +116,28 @@ class MaterialReservationForm extends React.Component {
   }
 
   render() {
-    const { reservations, items, refresh, ...rest } = this.props;
+    const {
+        disabled,
+        reservations,
+        items,
+        refresh,
+        showMessage,
+        closeSnackbar,
+        ...rest
+    } = this.props;
 
     return (
         <React.Fragment>
           <form noValidate onSubmit={this.handleSubmit} {...rest}>
             <MaterialDatePicker
-              disabled={this.state.dateChosen}
+              disabled={disabled || this.state.dateChosen}
               onChange={this.handleDateChange.bind(this)}
               value={this.state.date}
               error={this.state.errors.date}
             />
             { this.state.dateChosen
                 ? <MaterialSelect
+                     disabled={disabled}
                      reservations={reservations}
                      select={items}
                      items={this.state.items}
@@ -192,12 +181,6 @@ class MaterialReservationForm extends React.Component {
             open={this.state.dialogOpen}
             onAccept={this.handleDialogAccept.bind(this)}
             onClose={this.handleDialogChange(false).bind(this)}
-          />
-          <CloseableSnackbar
-            key={this.state.messageInfo.key}
-            message={this.state.messageInfo.message}
-            open={this.state.snackbarOpen}
-            onClose={this.handleSnackbarClose}
           />
         </React.Fragment>
     );
