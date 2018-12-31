@@ -8,6 +8,7 @@ import KotbarDatePicker from './KotbarDatePicker';
 import KotbarRulesDialog from './KotbarRulesDialog';
 
 import * as api from '../../api';
+import * as utils from '../../utils';
 
 
 class KotbarReservationForm extends React.Component {
@@ -60,7 +61,7 @@ class KotbarReservationForm extends React.Component {
     api.post({
         path: '/kotbar/',
         data: {
-            date: this.state.date,
+            date: utils.formatDate(this.state.date),
             description: this.state.description
         }
     }).then(data => {

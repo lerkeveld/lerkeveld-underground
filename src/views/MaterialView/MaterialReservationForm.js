@@ -9,6 +9,7 @@ import MaterialSelect from './MaterialSelect';
 import MaterialDatePicker from './MaterialDatePicker';
 
 import * as api from '../../api';
+import * as utils from '../../utils';
 
 
 class MaterialReservationForm extends React.Component {
@@ -87,7 +88,7 @@ class MaterialReservationForm extends React.Component {
     api.post({
         path: '/materiaal/',
         data: {
-            date: this.state.date,
+            date: utils.formatDate(this.state.date),
             items: this.state.items
         }
     }).then(data => {
