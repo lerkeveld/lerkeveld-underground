@@ -58,8 +58,7 @@ class SearchView extends React.Component {
             if (fullName(u1) > fullName(u2)) {return 1;}
             if (fullName(u1) < fullName(u2)) {return -1;}
             return 0;
-        }
-        );
+        });
         this.setState({
             users: sortedUsers,
             filteredUsers: sortedUsers,
