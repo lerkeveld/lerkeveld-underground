@@ -55,8 +55,13 @@ class MaterialView extends React.Component {
                 {date: new Date(reservation.date)}
             )
         });
+        const sorted = reservations.sort((r1, r2) => {
+            if (r1.date > r2.date) {return 1;}
+            if (r1.date < r2.date) {return -1;}
+            return 0;
+        });
         this.setState({
-            reservations: reservations,
+            reservations: sorted,
             disableFormReservations: false,
             fetchingReservations: false
         });
@@ -72,7 +77,7 @@ class MaterialView extends React.Component {
     return api.get({
         path: '/materiaal/type'
     }).then(data => {
-        const items = data.items.map(item => item.name);
+        const items = data.items.map(item => item.name).sort();
         this.setState({
             items: items,
             disableFormItems: false,

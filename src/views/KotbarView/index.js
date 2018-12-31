@@ -53,8 +53,13 @@ class KotbarView extends React.Component {
                 {date: new Date(reservation.date)}
             )
         });
+        const sorted = reservations.sort((r1, r2) => {
+            if (r1.date > r2.date) {return 1;}
+            if (r1.date < r2.date) {return -1;}
+            return 0;
+        });
         this.setState({
-            reservations: reservations,
+            reservations: sorted,
             disableForm: false,
             fetching: false
         });

@@ -46,7 +46,7 @@ function MaterialReservationTable(props) {
         <TableBody>
           {loading ? emptyRow(classes) : null}
           {!loading && reservations.length === 0 ? emptyRow(classes, 'Geen reservaties') : null}
-          { reservations.sort((r1, r2) => {return r1.date > r2.date}).map(row => {
+          { reservations.map(row => {
               return (
                 <TableRow key={row.id}>
                   <TableCell className={classes.tableCell} style={{ minWidth: "120px" }}>

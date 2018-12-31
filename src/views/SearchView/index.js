@@ -53,9 +53,12 @@ class SearchView extends React.Component {
     return api.get({
         path: '/user/all'
     }).then(data => {
-        const fullname = (u) => u['first_name'] + u['last_name'];
-        const sortedUsers = data.users.sort((u1, u2) =>
-            fullname(u1) > fullname(u2) 
+        const fullName = u => u['first_name'] + u['last_name'];
+        const sortedUsers = data.users.sort((u1, u2) => {
+            if (fullName(u1) > fullName(u2)) {return 1;}
+            if (fullName(u1) < fullName(u2)) {return -1;}
+            return 0;
+        }
         );
         this.setState({
             users: sortedUsers,
