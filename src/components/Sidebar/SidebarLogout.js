@@ -11,15 +11,10 @@ import * as api from '../../api';
 class SidebarLogout extends React.Component {
 
   handleLogoutClick = () => {
-    // clear localStorage
-    localStorage.removeItem('a-csrf-token');
-    localStorage.removeItem('r-csrf-token');
-
-    this.props.setDrawerOpen(false);
-    this.props.history.push('/auth/login');
-
-    // (optional) clear HTTPOnly cookies
-    api.post({path: '/auth/logout'})
+    api.removeCredentials().then(() => {
+      this.props.setDrawerOpen(false);
+      this.props.history.push('/auth/login');
+    });
   }
 
   render() {

@@ -11,19 +11,9 @@ import * as api from './api';
 
 class App extends React.Component {
 
-  refreshToken() {
-    return api.post({
-        path: '/auth/refresh',
-        refresh: true
-    }).then(data => {
-        window.localStorage.setItem('a-csrf-token', data['a-csrf-token']);
-        return Promise.resolve(true)
-    }).catch(() => Promise.resolve(false))
-  }
-
   componentDidMount() {
-    this.refreshToken().then((authenticated) => {
-      // redirect based on authenticated state of refreshToken
+    api.hasCredentials().then((authenticated) => {
+      // redirect based on authenticated state of hasCredentials
       if (authenticated) {
         if (this.props.location.pathname.startsWith('/auth'))
           this.props.history.push('/');

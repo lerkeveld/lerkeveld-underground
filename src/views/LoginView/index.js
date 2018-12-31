@@ -59,11 +59,12 @@ class LoginForm extends React.Component {
         data: {
             email: this.state.email,
             password: this.state.password
-        }
+        },
+        retryCredentials: false
     }).then(data => {
-        window.localStorage.setItem('a-csrf-token', data['a-csrf-token']);
-        window.localStorage.setItem('r-csrf-token', data['r-csrf-token']);
-        this.props.history.push(referrer);
+        api.setCredentials(data).then(
+            () => this.props.history.push(referrer)
+        );
     }).catch(error => {
         this.setState(
             {submitting: false},
