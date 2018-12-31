@@ -53,9 +53,13 @@ class SearchView extends React.Component {
     return api.get({
         path: '/user/all'
     }).then(data => {
+        const fullname = (u) => u['first_name'] + u['last_name'];
+        const sortedUsers = data.users.sort((u1, u2) =>
+            fullname(u1) > fullname(u2) 
+        );
         this.setState({
-            users: data.users,
-            filteredUsers: data.users,
+            users: sortedUsers,
+            filteredUsers: sortedUsers,
             disabled: false,
             fetching: false
         });
@@ -133,8 +137,7 @@ class SearchView extends React.Component {
           <Grid container spacing={16}>
             {
               this.state.filteredUsers.slice(0, this.state.displayLimit).map(user => {
-                const key = JSON.stringify(user);
-                return <Grid key={key} item xs={12} sm={6} md={4}>
+                return <Grid key={user.id} item xs={12} sm={6} md={4}>
                          <SearchCard
                            user={user}
                            onClick={this.onSelectUser.bind(this, user)}
