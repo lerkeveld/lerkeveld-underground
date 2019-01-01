@@ -5,7 +5,7 @@ const CREDENTIALS = process.env.REACT_APP_CREDENTIALS;
 // Fetch wrappers //
 ////////////////////
 
-const RETRY_CREDENTIALS_STATUS = new Set([
+const INVALID_CREDENTIALS_STATUS = new Set([
     401,
     422
 ]);
@@ -16,14 +16,10 @@ function wrapper(path, init, retryCredentials = true) {
             return Promise.reject(new Error('Sorry, the server could not be reached'));
         })
         .then(response => {
-            if (retryCredentials === true && RETRY_CREDENTIALS_STATUS.has(response.status)) {
-                return refreshCredentials().then(success => {
-                    if (success === true)
-                        return wrapper(path, init, false);
-                    return removeCredentials().then(() => {
-                        return Promise.reject(new Error('Authentication failure, please refresh'))
-                    });
-                });
+            if (retryCredentials === true && INVALID_CREDENTIALS_STATUS.has(response.status)) {
+                return refreshCredentials()
+                    .then(() => wrapper(path, init, false))
+                    .catch((error) => Promise.reject(new Error(error.message)));
             }
             return response.json();
         })
@@ -98,12 +94,26 @@ export function removeCredentials() {
 }
 
 export function refreshCredentials() {
-  return post({
-      path: '/auth/refresh',
-      refresh: true,
-      retryCredentials: false
+  return fetch(
+      API_URL + '/auth/refresh',
+      {
+        method: 'POST',
+        headers: new Headers({
+            'X-CSRF-TOKEN' : window.localStorage.getItem('r-csrf-token')
+        }),
+        credentials: CREDENTIALS
+      }
+  ).catch(error => {
+      return Promise.reject(new Error('Sorry, the server could not be reached'));
+  }).then(response => {
+      if (INVALID_CREDENTIALS_STATUS.has(response.status)) {
+        return removeCredentials().then(() => {
+            return Promise.reject(new Error('Authentication failure, please refresh'))
+        });
+      }
+      return response.json()
   }).then(data => {
       window.localStorage.setItem('a-csrf-token', data['a-csrf-token']);
-      return Promise.resolve(true)
-  }).catch((error) => Promise.resolve(false))
+      return Promise.resolve()
+  })
 }
