@@ -38,7 +38,7 @@ function ContactPanel(props) {
                 <Avatar style={{backgroundColor: green[500]}}>
                   <BusinessCenterIcon />
                 </Avatar>
-                <ListItemText primary="Inge Zwinnen" secondary="inge.zwinnen.ftc@gmail.com" />
+                <ListItemText primary="Dirk van Tricht" secondary="direkteur.ftc@gmail.com" />
                 <StarIcon className={classes.star} />
               </ListItem>
               <Divider />
