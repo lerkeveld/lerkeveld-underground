@@ -2,21 +2,28 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 
+import LoadingButton from '../../components/LoadingButton';
+
 import MaterialRulesDialog from './MaterialRulesDialog';
 import MaterialSelect from './MaterialSelect';
 import MaterialDatePicker from './MaterialDatePicker';
+
+import * as api from '../../api';
+import * as utils from '../../utils';
 
 
 class MaterialReservationForm extends React.Component {
 
   state = {
-    date: new Date(),
+    date: null,
     items: [],
     errors: {
+      date: false,
       items: false
     },
     dateChosen: false,
     dialogOpen: false,
+    submitting: false
   }
 
   handleRequiredChange = prop => event => {
@@ -30,7 +37,8 @@ class MaterialReservationForm extends React.Component {
   }
 
   handleDateChange = value => {
-    this.setState({date: value});
+    const errors = Object.assign({}, this.state.errors, {date: false});
+    this.setState({date: value, errors: errors});
   }
 
   handleBackButton = () => {
@@ -48,6 +56,16 @@ class MaterialReservationForm extends React.Component {
 
     // next button
     if (!this.state.dateChosen) {
+        const errors = {};
+        if (this.state.date === null)
+            errors.date = true;
+
+        if (Object.keys(errors).length !== 0) {
+            errors.items = false;
+            this.setState({errors: errors});
+            return false;
+        }
+
         this.setState({dateChosen: true});
         return true;
     }
@@ -58,6 +76,7 @@ class MaterialReservationForm extends React.Component {
         errors.items = true;
 
     if (Object.keys(errors).length !== 0) {
+        errors.date = false;
         this.setState({errors: errors});
         return false;
     }
@@ -65,10 +84,42 @@ class MaterialReservationForm extends React.Component {
     this.setState({dialogOpen: true});
   }
 
+  doReserve = () => {
+    api.post({
+        path: '/materiaal/',
+        data: {
+            date: utils.formatDate(this.state.date),
+            items: this.state.items
+        }
+    }).then(data => {
+        const resetState = {
+          date: null,
+          items: [],
+          errors: {
+            date: false,
+            items: false
+          },
+          dateChosen: false,
+          dialogOpen: false,
+          submitting: false
+        };
+        this.setState(
+            resetState,
+            this.props.showMessage('Materiaal gereserveerd', this.props.refresh)
+        );
+    }).catch(error => {
+        this.setState(
+            {submitting: false},
+            () => this.props.showMessage(error.message)
+        );
+    })
+  }
+
   handleDialogAccept = () => {
-    // TODO api:material:reserve
-    console.log('accept');
-    this.setState({dialogOpen: false});
+    this.setState(
+        {dialogOpen: false, submitting: true},
+        () => this.props.closeSnackbar(this.doReserve)
+    );
   }
 
   handleDialogChange = dialogOpen => () => {
@@ -76,20 +127,30 @@ class MaterialReservationForm extends React.Component {
   }
 
   render() {
-    const { reservations, material } = this.props;
+    const {
+        disabled,
+        reservations,
+        items,
+        refresh,
+        showMessage,
+        closeSnackbar,
+        ...rest
+    } = this.props;
 
     return (
         <React.Fragment>
-          <form noValidate onSubmit={this.handleSubmit}>
+          <form noValidate onSubmit={this.handleSubmit} {...rest}>
             <MaterialDatePicker
-              disabled={this.state.dateChosen}
+              disabled={disabled || this.state.dateChosen}
               onChange={this.handleDateChange.bind(this)}
               value={this.state.date}
+              error={this.state.errors.date}
             />
             { this.state.dateChosen
                 ? <MaterialSelect
+                     disabled={disabled}
                      reservations={reservations}
-                     material={material}
+                     select={items}
                      items={this.state.items}
                      date={this.state.date}
                      onChange={this.handleRequiredChange('items').bind(this)}
@@ -97,7 +158,7 @@ class MaterialReservationForm extends React.Component {
                   />
                 : null
             }
-            <div style={{marginTop: '8px'}}>
+            <div style={{marginTop: '8px', display: 'flex'}}>
               <Button
                 disabled={!this.state.dateChosen}
                 variant="contained"
@@ -108,14 +169,15 @@ class MaterialReservationForm extends React.Component {
                 Back
               </Button>
               { this.state.dateChosen
-                  ? <Button
+                  ? <LoadingButton
                       variant="contained"
                       color="primary"
                       size="small"
                       type="submit"
+                      loading={this.state.submitting}
                     >
                       Submit
-                    </Button>
+                    </LoadingButton>
                   : <Button
                       variant="contained"
                       color="primary"
@@ -139,12 +201,12 @@ class MaterialReservationForm extends React.Component {
 
 MaterialReservationForm.propTypes = {
   reservations: PropTypes.array.isRequired,
-  material: PropTypes.array.isRequired
+  items: PropTypes.array.isRequired
 };
 
 MaterialReservationForm.defaultProps = {
   reservations: [],
-  material: []
+  items: []
 }
 
 export default MaterialReservationForm;

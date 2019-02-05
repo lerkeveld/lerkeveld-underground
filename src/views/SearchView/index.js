@@ -8,11 +8,14 @@ import Typography from '@material-ui/core/Typography';
 
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
+import CloseableSnackbar from '../../components/CloseableSnackbar';
+import LoadingSnackbar from '../../components/LoadingSnackbar';
+
 import SearchCard from './SearchCard';
 import SearchDialog from './SearchDialog';
 
 import viewStyle from '../../assets/jss/viewStyle';
-import data from '../../data.js';
+import * as api from '../../api';
 
 
 class SearchView extends React.Component {
@@ -20,12 +23,58 @@ class SearchView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      users: 'searches' in data ? data['searches'] : [],
+      users: [],
       displayLimit: 30,
       dialogOpen: false,
-      selectedUser: {}
+      selectedUser: {},
+      fetching: true,
+      disabled: true,
+      snackbarOpen: false,
+      messageInfo: {}
     }
     this.state.filteredUsers = this.state.users;
+  }
+
+  showMessage = (message) => {
+      this.setState({
+          snackbarOpen: true,
+          messageInfo: {
+              key: new Date().getTime(),
+              message: message
+          }
+      });
+  }
+
+  handleSnackbarClose = () => {
+      this.setState({snackbarOpen: false});
+  }
+
+  fetchUsers = () => {
+    return api.get({
+        path: '/user/all'
+    }).then(data => {
+        const fullName = u => u['first_name'] + u['last_name'];
+        const sortedUsers = data.users.sort((u1, u2) => {
+            if (fullName(u1) > fullName(u2)) {return 1;}
+            if (fullName(u1) < fullName(u2)) {return -1;}
+            return 0;
+        });
+        this.setState({
+            users: sortedUsers,
+            filteredUsers: sortedUsers,
+            disabled: false,
+            fetching: false
+        });
+    }).catch(error => {
+        this.setState(
+            {fetching: false},
+            () => this.showMessage(error.message)
+        );
+    })
+  }
+
+  componentDidMount() {
+    this.fetchUsers();
   }
 
   onSelectUser(user) {
@@ -53,7 +102,7 @@ class SearchView extends React.Component {
 
   onSearchInput(query) {
     const keywords = query.split(' ').map(keyword => keyword.toLowerCase());
-    const fields = ['firstName', 'lastName'];
+    const fields = ['first_name', 'last_name'];
     const filteredUsers = this.state.users.filter(user => {
         return keywords.every(keyword => {
             return fields.some(field => {
@@ -83,14 +132,14 @@ class SearchView extends React.Component {
                 onChange={this.onSearchInput.bind(this)}
                 onCancelSearch={this.onCancelSearch.bind(this)}
                 cancelOnEscape={true}
+                disabled={this.state.disabled}
               />
             </Grid>
           </Grid>
           <Grid container spacing={16}>
             {
               this.state.filteredUsers.slice(0, this.state.displayLimit).map(user => {
-                const key = JSON.stringify(user);
-                return <Grid key={key} item xs={12} sm={6} md={4}>
+                return <Grid key={user.id} item xs={12} sm={6} md={4}>
                          <SearchCard
                            user={user}
                            onClick={this.onSelectUser.bind(this, user)}
@@ -112,6 +161,15 @@ class SearchView extends React.Component {
             user={this.state.selectedUser}
             onClose={this.onDialogClose.bind(this)}
           />
+          { this.state.fetching
+              ? <LoadingSnackbar open={this.state.fetching} />
+              : <CloseableSnackbar
+                  key={this.state.messageInfo.key}
+                  message={this.state.messageInfo.message}
+                  open={this.state.snackbarOpen}
+                  onClose={this.handleSnackbarClose}
+                />
+          }
         </main>
     );
   }

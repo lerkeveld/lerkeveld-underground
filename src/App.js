@@ -6,18 +6,14 @@ import Switch from 'react-router-dom/Switch';
 import AuthLayout from './layouts/AuthLayout';
 import MainLayout from './layouts/MainLayout';
 
+import * as api from './api';
+
 
 class App extends React.Component {
 
-  // fake refreshToken Promise
-  refreshToken() {
-    const authenticated = false;
-    return new Promise(resolve => setTimeout(() => resolve(authenticated), 2000))
-  }
-
   componentDidMount() {
-    this.refreshToken().then((authenticated) => {
-      // redirect based on authenticated state of refreshToken
+    api.hasCredentials().then((authenticated) => {
+      // redirect based on authenticated state of hasCredentials
       if (authenticated) {
         if (this.props.location.pathname.startsWith('/auth'))
           this.props.history.push('/');

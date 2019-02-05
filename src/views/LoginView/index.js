@@ -6,9 +6,12 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
+import CloseableSnackbar from '../../components/CloseableSnackbar';
+import LoadingButton from '../../components/LoadingButton';
 import PasswordField from '../../components/PasswordField';
 
 import authStyle from '../../assets/jss/authStyle';
+import * as api from '../../api';
 
 
 class LoginForm extends React.Component {
@@ -19,7 +22,24 @@ class LoginForm extends React.Component {
     errors: {
       email: false,
       password: false
-    }
+    },
+    snackbarOpen: false,
+    messageInfo: {},
+    submitting: false
+  }
+
+  showMessage = (message) => {
+      this.setState({
+          snackbarOpen: true,
+          messageInfo: {
+              key: new Date().getTime(),
+              message: message
+          }
+      });
+  }
+
+  handleSnackbarClose = () => {
+    this.setState({snackbarOpen: false});
   }
 
   handleRequiredChange = prop => event => {
@@ -30,6 +50,27 @@ class LoginForm extends React.Component {
     };
     stateUpdate.errors[prop] = value.length === 0;
     this.setState(stateUpdate);
+  }
+
+  doLogin = () => {
+    const { referrer } = this.props.location.state || { referrer: { pathname: '/' } };
+    api.post({
+        path: '/auth/login',
+        data: {
+            email: this.state.email,
+            password: this.state.password
+        },
+        retryCredentials: false
+    }).then(data => {
+        api.setCredentials(data).then(
+            () => this.props.history.push(referrer)
+        );
+    }).catch(error => {
+        this.setState(
+            {submitting: false},
+            () => this.showMessage(error.message)
+        );
+    })
   }
 
   handleSubmit = event => {
@@ -47,10 +88,7 @@ class LoginForm extends React.Component {
         return false;
     }
 
-    // TODO api:login
-    // redirect to referrer
-    const { referrer } = this.props.location.state || { referrer: { pathname: '/' } }
-    this.props.history.push(referrer);
+    this.setState({snackbarOpen: false, submitting: true}, this.doLogin);
   }
 
   render() {
@@ -86,15 +124,16 @@ class LoginForm extends React.Component {
                  value={this.state.password}
                  error={this.state.errors.password}
                />
-               <Button
+               <LoadingButton
                  className={classes.submit}
                  variant="contained"
                  color="secondary"
                  size="medium"
                  type="submit"
+                 loading={this.state.submitting}
                >
                  Login
-               </Button>
+               </LoadingButton>
              </form>
              <div className={classes.actions}>
                 <div className={classes.actionLeft}>
@@ -116,6 +155,13 @@ class LoginForm extends React.Component {
                   </Button>
                 </div>
              </div>
+             <CloseableSnackbar
+               anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
+               key={this.state.messageInfo.key}
+               message={this.state.messageInfo.message}
+               open={this.state.snackbarOpen}
+               onClose={this.handleSnackbarClose}
+             />
            </React.Fragment>
   }
 }

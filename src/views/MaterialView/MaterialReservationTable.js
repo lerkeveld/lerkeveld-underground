@@ -16,9 +16,23 @@ const formatDate = (date) => {
   );
 };
 
+const emptyRow = (classes, message) => {
+    return (
+        <TableRow>
+          <TableCell className={classes.tableCell} style={{ minWidth: "120px" }}>
+            {message}
+          </TableCell>
+          <TableCell className={classes.tableCell} style={{ minWidth: "200px" }}>
+          </TableCell>
+          <TableCell className={classes.tableCell} style={{ minWidth: "400px" }}>
+          </TableCell>
+        </TableRow>
+    )
+};
+
 
 function MaterialReservationTable(props) {
-  const { classes, reservations } = props;
+  const { classes, reservations, loading } = props;
 
   return (
       <Table>
@@ -30,14 +44,16 @@ function MaterialReservationTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          { reservations.sort((r1, r2) => {return r1.date > r2.date}).map(row => {
+          {loading ? emptyRow(classes) : null}
+          {!loading && reservations.length === 0 ? emptyRow(classes, 'Geen reservaties') : null}
+          { reservations.map(row => {
               return (
                 <TableRow key={row.id}>
-                  <TableCell className={classes.tableCell} style={{ minWidth: "100px" }}>
+                  <TableCell className={classes.tableCell} style={{ minWidth: "120px" }}>
                     {formatDate(row.date)}
                   </TableCell>
                   <TableCell className={classes.tableCell} style={{ minWidth: "200px" }}>
-                    {row.user}
+                    {row.username}
                   </TableCell>
                   <TableCell className={classes.tableCell} style={{ minWidth: "400px" }}>
                     {row.items.join(", ")}

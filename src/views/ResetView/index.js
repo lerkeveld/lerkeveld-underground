@@ -6,17 +6,38 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
+import CloseableSnackbar from '../../components/CloseableSnackbar';
+import LoadingButton from '../../components/LoadingButton';
+
 import authStyle from '../../assets/jss/authStyle';
+import * as api from '../../api';
 
 
 class ResetForm extends React.Component {
 
   state = {
     email: '',
-    submitted: false,
     errors: {
       email: false
-    }
+    },
+    submitting: false,
+    submitted: false,
+    snackbarOpen: false,
+    messageInfo: {}
+  }
+
+  showMessage = (message) => {
+      this.setState({
+          snackbarOpen: true,
+          messageInfo: {
+              key: new Date().getTime(),
+              message: message
+          }
+      });
+  }
+
+  handleSnackbarClose = () => {
+      this.setState({snackbarOpen: false});
   }
 
   handleRequiredChange = prop => event => {
@@ -27,6 +48,22 @@ class ResetForm extends React.Component {
     };
     stateUpdate.errors[prop] = value.length === 0;
     this.setState(stateUpdate);
+  }
+
+  doReset = () => {
+    api.post({
+        path: '/auth/reset',
+        data: {
+            email: this.state.email,
+        }
+    }).then(data => {
+        this.setState({submitted: true, submitting: false});
+    }).catch(error => {
+        this.setState(
+            {submitting: false},
+            () => this.showMessage(error.message)
+        );
+    })
   }
 
   handleSubmit = event => {
@@ -42,8 +79,7 @@ class ResetForm extends React.Component {
         return false;
     }
 
-    // TODO api:reset
-    this.setState({submitted: true});
+    this.setState({snackbarOpen: false, submitting: true}, this.doReset);
   }
 
   render() {
@@ -65,15 +101,16 @@ class ResetForm extends React.Component {
                      value={this.state.email}
                      error={this.state.errors.email}
                    />
-                   <Button
+                   <LoadingButton
                      className={classes.submit}
                      variant="contained"
                      color="secondary"
                      size="small"
                      type="submit"
+                     loading={this.state.submitting}
                    >
                      Verstuur reset e-mail
-                   </Button>
+                   </LoadingButton>
                  </form>
                : <React.Fragment>
                    <Typography variant="body2" paragraph>
@@ -94,6 +131,13 @@ class ResetForm extends React.Component {
                  Naar Login
                </Button>
              </div>
+             <CloseableSnackbar
+               anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
+               key={this.state.messageInfo.key}
+               message={this.state.messageInfo.message}
+               open={this.state.snackbarOpen}
+               onClose={this.handleSnackbarClose}
+             />
            </React.Fragment>
   }
 }

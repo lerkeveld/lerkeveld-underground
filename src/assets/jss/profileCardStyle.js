@@ -15,10 +15,14 @@ const profileCardStyle = theme => ({
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
-      fontWeight: theme.typography.fontWeightRegular
+      fontWeight: theme.typography.fontWeightRegular,
   },
   cardHeaderContent: {
       overflow: 'hidden',
+  },
+  blur: {
+      color: 'transparent',
+      textShadow: '0 0 5px rgba(0,0,0,0.5)'
   }
 });
 

@@ -1,27 +1,45 @@
 import React from 'react';
-import withMobileDialog from '@material-ui/core/withMobileDialog';
+import Link from 'react-router-dom/Link';
+import withRouter from 'react-router-dom/withRouter'
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 
-import PasswordField from '../../../components/PasswordField';
+import CloseableSnackbar from '../../components/CloseableSnackbar';
+import LoadingButton from '../../components/LoadingButton';
+import PasswordField from '../../components/PasswordField';
+
+import * as api from '../../api';
 
 
-class PasswordFormDialog extends React.Component {
+class EditPasswordForm extends React.Component {
 
   state = {
     password: '',
     confirm: '',
-    old: '',
+    check: '',
     errors: {
         password: false,
         confirm: false,
-        old: false
-    }
+        check: false
+    },
+    snackbarOpen: false,
+    messageInfo: {},
+    submitting: false
+  }
+
+  showMessage = (message) => {
+      this.setState({
+          snackbarOpen: true,
+          messageInfo: {
+              key: new Date().getTime(),
+              message: message
+          }
+      });
+  }
+
+  handleSnackbarClose = () => {
+      this.setState({snackbarOpen: false});
   }
 
   handleRequiredChange = prop => event => {
@@ -55,43 +73,52 @@ class PasswordFormDialog extends React.Component {
     this.setState(stateUpdate);
   }
 
+  doEdit = () => {
+    api.post({
+        path: '/user/edit/secure',
+        data: {
+            check: this.state.check,
+            password: this.state.password
+        }
+    }).then(data => {
+        this.props.history.push('/profiel');
+    }).catch(error => {
+        this.setState(
+            {submitting: false},
+            () => this.showMessage(error.message)
+        );
+    })
+  }
+
   handleSubmit = event => {
     event.preventDefault();
 
     // check errors
     const errors = {};
+    if (this.state.check.length === 0)
+        errors.confirm = true;
     if (this.state.password.length < 8)
         errors.password = true;
     if (this.state.confirm !== this.state.password)
         errors.confirm = true;
-    if (this.state.old.length === 0)
-        errors.old = true;
 
     if (Object.keys(errors).length !== 0) {
         this.setState({errors: errors});
         return false;
     }
 
-    // TODO api:user:edit:password
-    this.props.handleDialogClose();
+    this.setState({snackbarOpen: false, submitting: true}, this.doEdit);
   }
 
   render() {
-    const { dialogOpen, handleDialogClose, fullScreen, ...rest } = this.props;
+    const ProfileLink = props => <Link to="/profiel" {...props} />;
 
     return (
-        <Dialog
-          fullScreen={fullScreen}
-          open={dialogOpen}
-          onClose={handleDialogClose}
-          aria-labelledby='passwordform-dialog-title'
-          fullWidth
-          {...rest}
-        >
-          <DialogTitle id='passwordform-dialog-title'>Update wachtwoord</DialogTitle>
-          <DialogContent>
-            <DialogContentText variant="body2">
-              Update het wachtwoord waarmee je inlogt op deze applicatie.
+        <React.Fragment>
+          <Typography variant="subtitle2">
+            Wijzig wachtwoord
+          </Typography>
+          <form noValidate onSubmit={this.handleSubmit}>
             <PasswordField
               margin="normal"
               label="Huidig wachtwoord"
@@ -101,11 +128,10 @@ class PasswordFormDialog extends React.Component {
                 shrink: true
               }}
               required
-              value={this.state.old}
-              onChange={this.handleRequiredChange('old')}
-              error={this.state.errors.old}
+              value={this.state.check}
+              onChange={this.handleRequiredChange('check')}
+              error={this.state.errors.check}
             />
-            </DialogContentText>
             <TextField
               margin="normal"
               label="Nieuw wachtwoord"
@@ -133,18 +159,35 @@ class PasswordFormDialog extends React.Component {
               onChange={this.handleConfirmChange}
               error={this.state.errors.confirm}
             />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleDialogClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={this.handleSubmit} color="primary">
-              Submit
-            </Button>
-          </DialogActions>
-        </Dialog>
+            <div style={{marginTop: '8px', display: 'flex'}}>
+              <LoadingButton
+                variant="contained"
+                color="primary"
+                size="small"
+                type="submit"
+                style={{marginRight: "8px"}}
+                loading={this.state.submitting}
+              >
+                Submit
+              </LoadingButton>
+              <Button
+                color="primary"
+                size="small"
+                component={ProfileLink}
+              >
+                Back
+              </Button>
+            </div>
+          </form>
+          <CloseableSnackbar
+            key={this.state.messageInfo.key}
+            message={this.state.messageInfo.message}
+            open={this.state.snackbarOpen}
+            onClose={this.handleSnackbarClose}
+          />
+        </React.Fragment>
     );
   }
 }
 
-export default withMobileDialog()(PasswordFormDialog);
+export default withRouter(EditPasswordForm);

@@ -6,9 +6,12 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
+import CloseableSnackbar from '../../components/CloseableSnackbar';
+import LoadingButton from '../../components/LoadingButton';
 import PasswordField from '../../components/PasswordField';
 
 import authStyle from '../../assets/jss/authStyle';
+import * as api from '../../api';
 
 
 class ActivateForm extends React.Component {
@@ -22,7 +25,24 @@ class ActivateForm extends React.Component {
         password: false,
         confirm: false
     },
-    submitted: false
+    submitting: false,
+    submitted: false,
+    snackbarOpen: false,
+    messageInfo: {}
+  }
+
+  showMessage = (message) => {
+      this.setState({
+          snackbarOpen: true,
+          messageInfo: {
+              key: new Date().getTime(),
+              message: message
+          }
+      });
+  }
+
+  handleSnackbarClose = () => {
+      this.setState({snackbarOpen: false});
   }
 
   handleRequiredChange = prop => event => {
@@ -56,6 +76,23 @@ class ActivateForm extends React.Component {
     this.setState(stateUpdate);
   }
 
+  doActivate = () => {
+    api.post({
+        path: '/auth/activate',
+        data: {
+            email: this.state.email,
+            password: this.state.password
+        }
+    }).then(data => {
+        this.setState({submitted: true, submitting: false});
+    }).catch(error => {
+        this.setState(
+            {submitting: false},
+            () => this.showMessage(error.message)
+        );
+    })
+  }
+
   handleSubmit = event => {
     event.preventDefault();
 
@@ -73,8 +110,7 @@ class ActivateForm extends React.Component {
         return false;
     }
 
-    // TODO api:activate
-    this.setState({submitted: true});
+    this.setState({snackbarOpen: false, submitting: true}, this.doActivate)
   }
 
   render() {
@@ -121,15 +157,16 @@ class ActivateForm extends React.Component {
                      value={this.state.confirm}
                      error={this.state.errors.confirm}
                    />
-                   <Button
+                   <LoadingButton
                      className={classes.submit}
                      variant="contained"
                      color="secondary"
                      size="medium"
                      type="submit"
+                     loading={this.state.submitting}
                    >
                      Activeer
-                   </Button>
+                   </LoadingButton>
                  </form>
                : <React.Fragment>
                    <Typography variant="body2" paragraph>
@@ -150,6 +187,13 @@ class ActivateForm extends React.Component {
                  Naar Login
                </Button>
              </div>
+             <CloseableSnackbar
+               anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
+               key={this.state.messageInfo.key}
+               message={this.state.messageInfo.message}
+               open={this.state.snackbarOpen}
+               onClose={this.handleSnackbarClose}
+             />
           </React.Fragment>
   }
 }
