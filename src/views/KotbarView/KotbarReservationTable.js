@@ -22,7 +22,7 @@ const emptyRow = (classes, message) => {
     return (
         <TableRow>
           <TableCell className={classes.removeCell}>
-            <IconButton disabled>
+            <IconButton disabled title="Delete">
               <DeleteIcon fontSize="small" />
             </IconButton>
           </TableCell>
@@ -95,6 +95,7 @@ class KotbarReservationTable extends React.Component {
                    <TableRow key={row.id}>
                      <TableCell className={classes.removeCell}>
                         <IconButton
+                           title="Delete"
                            disabled={this.state.submitting || !row.own}
                            onClick={this.handleButtonClick(row)}
                         >
