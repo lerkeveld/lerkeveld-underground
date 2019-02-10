@@ -8,12 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 
-const formatDate = (date) => {
-  return date.toLocaleDateString(
-    'nl-be',
-    {'day': '2-digit', 'month': '2-digit', 'year': 'numeric'}
-  );
-};
+import * as utils from '../../utils';
 
 
 function MaterialSelect(props) {
@@ -22,7 +17,7 @@ function MaterialSelect(props) {
   const reserved = new Set();
 
   reservations.forEach(reservation => {
-    if (formatDate(date) === formatDate(reservation["date"])) {
+    if (utils.serializeDate(date) === utils.serializeDate(reservation["date"])) {
       reservation.items.forEach(item => {
           reserved.add(item);
       });

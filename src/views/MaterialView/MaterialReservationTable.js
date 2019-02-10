@@ -8,13 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 import tableStyle from '../../assets/jss/tableStyle';
-
-const formatDate = (date) => {
-  return date.toLocaleDateString(
-    'nl-be',
-    {'day': '2-digit', 'month': '2-digit', 'year': 'numeric'}
-  );
-};
+import * as utils from '../../utils';
 
 const emptyRow = (classes, message) => {
     return (
@@ -50,7 +44,7 @@ function MaterialReservationTable(props) {
               return (
                 <TableRow key={row.id}>
                   <TableCell className={classes.tableCell} style={{ minWidth: "120px" }}>
-                    {formatDate(row.date)}
+                    {utils.formatDate(row.date)}
                   </TableCell>
                   <TableCell className={classes.tableCell} style={{ minWidth: "200px" }}>
                     {row.username}

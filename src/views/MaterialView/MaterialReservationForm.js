@@ -88,7 +88,7 @@ class MaterialReservationForm extends React.Component {
     api.post({
         path: '/materiaal/',
         data: {
-            date: utils.formatDate(this.state.date),
+            date: utils.serializeDate(this.state.date),
             items: this.state.items
         }
     }).then(data => {
