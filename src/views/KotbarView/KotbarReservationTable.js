@@ -21,7 +21,11 @@ import * as utils from '../../utils';
 const emptyRow = (classes, message) => {
     return (
         <TableRow>
-          <TableCell className={classes.removeCell}></TableCell>
+          <TableCell className={classes.removeCell}>
+            <IconButton disabled>
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+          </TableCell>
           <TableCell className={classes.dateCell}>{message}</TableCell>
           <TableCell className={classes.nameCell}></TableCell>
           <TableCell className={classes.descriptionCell}></TableCell>
