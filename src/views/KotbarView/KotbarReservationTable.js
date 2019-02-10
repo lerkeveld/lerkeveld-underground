@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import IconButton from '@material-ui/core/IconButton';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import DeleteIcon from '@material-ui/icons/Delete';
 
@@ -51,7 +51,10 @@ class KotbarReservationTable extends React.Component {
           () => this.props.showMessage('Reservatie geannuleerd', this.props.refresh)
         );
     }).catch(error => {
-        this.props.showMessage(error.message);
+        this.setState(
+          {submitting: false, reservation: {}},
+          () => this.props.showMessage(error.message)
+        );
     })
   }
 
@@ -84,30 +87,30 @@ class KotbarReservationTable extends React.Component {
               {loading ? emptyRow(classes) : null}
               {!loading && reservations.length === 0 ? emptyRow(classes, 'Geen reservaties') : null}
               {reservations.map(row => {
-                return (
-                  <TableRow key={row.id}>
-                    <TableCell className={classes.removeCell}>
-                       <IconButton
-                          disabled={this.state.submitting || !row.own}
-                          onClick={this.handleButtonClick(row)}
-                       >
-                          { this.state.submitting && row.id === this.state.reservation.id
-                              ? <CircularProgress size={20} />
-                              : <DeleteIcon fontSize="small" />
-                          }
-                       </IconButton>
-                    </TableCell>
-                    <TableCell className={classes.dateCell}>
-                      {utils.formatDate(row.date)}
-                    </TableCell>
-                    <TableCell className={classes.nameCell}>
-                      {row.username}
-                    </TableCell>
-                    <TableCell className={classes.descriptionCell}>
-                      {row.description}
-                    </TableCell>
-                  </TableRow>
-                );
+                 return (
+                   <TableRow key={row.id}>
+                     <TableCell className={classes.removeCell}>
+                        <IconButton
+                           disabled={this.state.submitting || !row.own}
+                           onClick={this.handleButtonClick(row)}
+                        >
+                           { this.state.submitting && row.id === this.state.reservation.id
+                               ? <CircularProgress size={20} />
+                               : <DeleteIcon fontSize="small" />
+                           }
+                        </IconButton>
+                     </TableCell>
+                     <TableCell className={classes.dateCell}>
+                       {utils.formatDate(row.date)}
+                     </TableCell>
+                     <TableCell className={classes.nameCell}>
+                       {row.username}
+                     </TableCell>
+                     <TableCell className={classes.descriptionCell}>
+                       {row.description}
+                     </TableCell>
+                   </TableRow>
+                 );
               })}
             </TableBody>
           </Table>
