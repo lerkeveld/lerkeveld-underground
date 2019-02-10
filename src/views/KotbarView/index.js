@@ -107,7 +107,10 @@ class KotbarView extends React.Component {
               <div style={{width: '100%', overflowX: 'auto'}}>
                 <KotbarReservationTable
                   reservations={this.state.reservations}
+                  refresh={this.fetchReservations}
                   loading={this.state.fetching}
+                  showMessage={this.showMessage}
+                  closeSnackbar={this.closeSnackbar}
                 />
               </div>
             </Grid>

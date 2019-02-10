@@ -133,7 +133,10 @@ class MaterialView extends React.Component {
               <div style={{width: '100%', overflowX: 'auto'}}>
                 <MaterialReservationTable
                   reservations={this.state.reservations}
+                  refresh={this.fetchReservations}
                   loading={this.state.fetchingReservations}
+                  showMessage={this.showMessage}
+                  closeSnackbar={this.closeSnackbar}
                 />
               </div>
             </Grid>

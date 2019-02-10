@@ -61,7 +61,7 @@ class KotbarReservationForm extends React.Component {
     api.post({
         path: '/kotbar/',
         data: {
-            date: utils.formatDate(this.state.date),
+            date: utils.serializeDate(this.state.date),
             description: this.state.description
         }
     }).then(data => {
@@ -77,7 +77,7 @@ class KotbarReservationForm extends React.Component {
         };
         this.setState(
             resetState,
-            this.props.showMessage('Kotbar gereserveerd', this.props.refresh)
+            () => this.props.showMessage('Kotbar gereserveerd', this.props.refresh)
         );
     }).catch(error => {
         this.setState(
@@ -148,7 +148,6 @@ class KotbarReservationForm extends React.Component {
             open={this.state.dialogOpen}
             onAccept={this.handleDialogAccept.bind(this)}
             onClose={this.handleDialogChange(false).bind(this)}
-            submitting={this.state.submitting}
           />
         </React.Fragment>
     );

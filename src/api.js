@@ -68,6 +68,25 @@ export function post({path, data, refresh = false, retryCredentials = true}) {
     );
 }
 
+export function del({path, refresh = false, retryCredentials = true}) {
+    return wrapper(
+        API_URL + path,
+        {
+            method: 'DELETE',
+            headers: new Headers({
+                'X-CSRF-TOKEN' : window.localStorage.getItem(
+                    refresh === true
+                      ? 'r-csrf-token'
+                      : 'a-csrf-token'
+                )
+            }),
+            credentials: CREDENTIALS
+        },
+        retryCredentials
+    );
+}
+
+
 /////////////////////////
 // Credential managing //
 /////////////////////////
