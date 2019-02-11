@@ -85,6 +85,11 @@ function KotbarRulesDialog(props) {
               <li><Typography variant="body2">Achter de deur ligt het kuisgerief.</Typography></li>
             </ul>
           </li>
+          <li>
+            <Typography variant="body2">
+              <span className={classes.bold}>Doe glas in de glascontainers</span> in de garageboxen op parking Noord. 
+            </Typography>
+          </li>
         </ul>
       </DialogContent>
       <DialogActions>
