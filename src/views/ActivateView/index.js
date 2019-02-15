@@ -8,7 +8,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-
 import CloseableSnackbar from '../../components/CloseableSnackbar';
 import LoadingButton from '../../components/LoadingButton';
 import PasswordField from '../../components/PasswordField';
