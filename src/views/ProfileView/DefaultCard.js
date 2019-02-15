@@ -13,7 +13,7 @@ import Edit from '@material-ui/icons/Edit';
 import profileCardStyle from '../../assets/jss/profileCardStyle';
 
 function DefaultCard(props) {
-  const { classes, disabled, name, link, avatarIcon, avatarColor } = props;
+  const { classes, loading, disabled, name, link, avatarIcon, avatarColor } = props;
 
   let MyLink = undefined;
   if (link)
@@ -22,8 +22,10 @@ function DefaultCard(props) {
   const editIcon = <IconButton title="Edit" component={MyLink}><Edit /></IconButton>;
   const blockIcon = <IconButton title="Contacteer IT"><Block /></IconButton>;
 
-  let { textValue } = props;
-  if (textValue === undefined)
+  let { textValue = null } = props;
+  if (textValue === null)
+    textValue = "Status unknown"
+  if (loading)
     textValue = <span className={classes.blur}>{'a'.repeat(16)}</span>
 
   return (

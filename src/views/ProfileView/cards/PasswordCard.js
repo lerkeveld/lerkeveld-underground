@@ -6,10 +6,12 @@ import DefaultCard from '../DefaultCard';
 
 
 function PasswordCard(props) {
+  const { loading } = props;
   const bullet = "\u2022";
 
   return (
         <DefaultCard
+          loading={loading}
           avatarIcon={<VpnKey />}
           avatarColor={green[500]}
           name="Wachtwoord"
