@@ -3,6 +3,8 @@ import Link from 'react-router-dom/Link'
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
@@ -20,6 +22,7 @@ class ActivateForm extends React.Component {
     email: '',
     password: '',
     confirm: '',
+    checked: false,
     errors: {
         email: false,
         password: false,
@@ -76,12 +79,17 @@ class ActivateForm extends React.Component {
     this.setState(stateUpdate);
   }
 
+  handleCheckedState = event => {
+    this.setState({checked: event.target.checked});
+  }
+
   doActivate = () => {
     api.post({
         path: '/auth/activate',
         data: {
             email: this.state.email,
-            password: this.state.password
+            password: this.state.password,
+            isSharing: this.state.checked
         }
     }).then(data => {
         this.setState({submitted: true, submitting: false});
@@ -156,6 +164,13 @@ class ActivateForm extends React.Component {
                      onChange={this.handleConfirmChange}
                      value={this.state.confirm}
                      error={this.state.errors.confirm}
+                   />
+                   <FormControlLabel
+                     control={<Checkbox
+                         onChange={this.handleCheckedState}
+                         checked={this.state.checked}
+                     />}
+                     label="Ik deel mijn contactgegevens met alle Lerkies"
                    />
                    <LoadingButton
                      className={classes.submit}
