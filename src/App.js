@@ -16,10 +16,10 @@ class App extends React.Component {
       // redirect based on authenticated state of hasCredentials
       if (authenticated) {
         if (this.props.location.pathname.startsWith('/auth'))
-          this.props.history.push('/');
+          this.props.history.replace('/');
       } else {
         if (!this.props.location.pathname.startsWith('/auth')) {
-          this.props.history.push({
+          this.props.history.replace({
               pathname: '/auth/login',
               state: {referrer: this.props.location}
           });
