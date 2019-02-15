@@ -74,25 +74,45 @@ class ProfileView extends React.Component {
           </Typography>
           <Grid container spacing={16}>
             <Grid item xs={12} md={4}>
-              <NameCard firstName={user.first_name} lastName={user.last_name}/>
+              <NameCard
+                loading={this.state.fetching}
+                firstName={user.first_name}
+                lastName={user.last_name}
+              />
             </Grid>
             <Grid item xs={12} md={4}>
-              <EmailCard email={user.email}/>
+              <EmailCard
+                loading={this.state.fetching}
+                email={user.email}
+              />
             </Grid>
             <Grid item xs={12} md={4}>
-              <PasswordCard/>
+              <PasswordCard loading={this.state.fetching}/>
             </Grid>
             <Grid item xs={12} md={4}>
-              <LocationCard corridor={user.corridor} room={user.room}/>
+              <LocationCard
+                loading={this.state.fetching}
+                corridor={user.corridor}
+                room={user.room}
+              />
             </Grid>
             <Grid item xs={12} md={4}>
-              <PhoneCard phone={user.phone}/>
+              <PhoneCard
+                loading={this.state.fetching}
+                phone={user.phone}
+              />
             </Grid>
             <Grid item xs={12} md={4}>
-              <MembershipCard isMember={user.is_member}/>
+              <MembershipCard
+                loading={this.state.fetching}
+                isMember={user.is_member}
+              />
             </Grid>
             <Grid item xs={12} md={4}>
-              <PrivacyCard isSharing={user.is_sharing}/>
+              <PrivacyCard
+                loading={this.state.fetching}
+                isSharing={user.is_sharing}
+              />
             </Grid>
           </Grid>
         { this.state.fetching

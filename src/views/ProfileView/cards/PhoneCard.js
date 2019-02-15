@@ -6,10 +6,11 @@ import DefaultCard from '../DefaultCard';
 
 
 function PhoneCard(props) {
-  const { phone } = props;
+  const { loading, phone = null } = props;
 
   return (
       <DefaultCard
+        loading={loading}
         avatarIcon={<Smartphone />}
         avatarColor={indigo[500]}
         name="Telefoon"

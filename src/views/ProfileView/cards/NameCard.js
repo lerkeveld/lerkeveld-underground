@@ -6,14 +6,15 @@ import DefaultCard from '../DefaultCard';
 
 
 function NameCard(props) {
-  const { firstName, lastName } = props;
+  const { loading, firstName = null, lastName = null} = props;
 
-  let textValue = undefined;
-  if (firstName !== undefined && lastName !== undefined)
+  let textValue = null;
+  if (firstName !== null && lastName !== null)
     textValue = `${firstName} ${lastName}`;
 
   return (
       <DefaultCard
+        loading={loading}
         avatarIcon={<AccountCircle />}
         avatarColor={red[500]}
         name="Naam"

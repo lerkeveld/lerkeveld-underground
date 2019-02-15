@@ -6,9 +6,9 @@ import DefaultCard from '../DefaultCard';
 
 
 function MembershipCard(props) {
-  const { isMember } = props;
+  const { loading, isMember = null } = props;
 
-  let textValue = undefined;
+  let textValue = null;
   switch (isMember) {
       case true:
           textValue = 'Lidkaart aangekocht';
@@ -16,16 +16,14 @@ function MembershipCard(props) {
       case false:
           textValue = 'Lidkaart niet gekocht';
           break;
-      case null:
-          textValue = 'Status unknown';
-          break;
       default:
-          textValue = undefined;
+          textValue = null;
           break;
   }
 
   return (
       <DefaultCard
+        loading={loading}
         avatarIcon={<PriorityHigh />}
         avatarColor={teal[500]}
         name="Lidkaart"

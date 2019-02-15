@@ -6,14 +6,15 @@ import DefaultCard from '../DefaultCard';
 
 
 function LocationCard(props) {
-  const { corridor, room } = props;
+  const { loading, corridor = null, room = null } = props;
 
-  let textValue = undefined;
-  if (corridor !== undefined && room !== undefined)
+  let textValue = null;
+  if (corridor !== null && room !== null)
     textValue = `${corridor}/${room.toString().padStart(4,'0')}`;
 
   return (
       <DefaultCard
+        loading={loading}
         avatarIcon={<LocationOn />}
         avatarColor={orange[500]}
         name="Locatie"

@@ -6,10 +6,11 @@ import DefaultCard from '../DefaultCard';
 
 
 function EmailCard(props) {
-  const { email } = props;
+  const { loading, email = null } = props;
 
   return (
       <DefaultCard
+        loading={loading}
         avatarIcon={<Email />}
         avatarColor={blue[500]}
         name="E-mailadres"

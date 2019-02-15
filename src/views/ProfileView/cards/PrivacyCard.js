@@ -6,9 +6,9 @@ import DefaultCard from '../DefaultCard';
 
 
 function PrivacyCard(props) {
-  const { isSharing } = props;
+  const { loading, isSharing = null } = props;
 
-  let textValue = undefined;
+  let textValue = null;
   switch (isSharing) {
       case true:
           textValue = 'Deel mijn contactgegevens';
@@ -17,12 +17,13 @@ function PrivacyCard(props) {
           textValue = 'Deel mijn contactgegevens niet';
           break;
       default:
-          textValue = undefined;
+          textValue = null;
           break;
   }
 
   return (
       <DefaultCard
+        loading={loading}
         avatarIcon={<Settings />}
         avatarColor={amber[500]}
         name="Privacy Settings"
