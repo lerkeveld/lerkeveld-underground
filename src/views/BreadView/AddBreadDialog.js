@@ -14,19 +14,15 @@ import React from 'react';
 
 
 class AddBreadDialog extends React.Component {
-  handleClose = () => {
-    this.props.onClose(this.props.selectedValue);
-  };
-
   handleListItemClick = value => {
-    this.props.onSelect(value);
+    this.props.onSelect(value.name);
   };
 
   render() {
     const {classes, onClose, selectedValue, items, ...other } = this.props;
 
     return (
-      <Dialog onClose={this.handleClose} aria-labelledby="dialog-title" {...other}>
+      <Dialog onClose={onClose} aria-labelledby="dialog-title" {...other}>
         <DialogTitle id="dialog-title">Kies een brood</DialogTitle>
         <div style={{minWidth: '250px'}}>
           <List>
