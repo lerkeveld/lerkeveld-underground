@@ -40,7 +40,7 @@ class BreadTable extends React.Component {
     dialogOpen: false,
     submitting: false,
     order: {},
-    items: [],
+    items: {},
     selectedItem: "buh"
   }
 
@@ -122,7 +122,8 @@ class BreadTable extends React.Component {
                        {utils.formatDate(row.date)}
                      </TableCell>
                      <TableCell className={classes.ordersCell}>
-                       {row.items.join(", ")}
+                         {row.items.map(item => item.name).join(", ")}
+                         {/*  {row.items.map(item => item.price/100).reduce((a,b) => a + b, 0)} */}
                      </TableCell>
                      <TableCell className={classes.buttonCell}>
                         <IconButton

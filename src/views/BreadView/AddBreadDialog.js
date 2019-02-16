@@ -23,12 +23,12 @@ class AddBreadDialog extends React.Component {
   };
 
   render() {
-    const {onClose, selectedValue, items, ...other } = this.props;
+    const {classes, onClose, selectedValue, items, ...other } = this.props;
 
     return (
-      <Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" {...other}>
-        <DialogTitle id="simple-dialog-title">Kies een brood</DialogTitle>
-        <div>
+      <Dialog onClose={this.handleClose} aria-labelledby="dialog-title" {...other}>
+        <DialogTitle id="dialog-title">Kies een brood</DialogTitle>
+        <div style={{minWidth: '250px'}}>
           <List>
             {items.map(item => (
               <ListItem button onClick={() => this.handleListItemClick(item)} key={item}>
@@ -37,7 +37,7 @@ class AddBreadDialog extends React.Component {
                     <FastfoodIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={item} />
+                <ListItemText primary={item.name} secondary={"€" + item.price/100} />
               </ListItem>
             ))}
           </List>

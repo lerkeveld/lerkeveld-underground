@@ -75,7 +75,7 @@ class BreadView extends React.Component {
     return api.get({
         path: '/bread/type'
     }).then(data => {
-        const items = data.items.map(item => item.name).sort();
+        const items = data.items;
         this.setState({
             items: items,
             fetchingItems: false
