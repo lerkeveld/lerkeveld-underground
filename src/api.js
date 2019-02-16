@@ -68,6 +68,46 @@ export function post({path, data, refresh = false, retryCredentials = true}) {
     );
 }
 
+export function put({path, data, refresh = false, retryCredentials = true}) {
+    return wrapper(
+        API_URL + path,
+        {
+            method: 'PUT',
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN' : window.localStorage.getItem(
+                    refresh === true
+                      ? 'r-csrf-token'
+                      : 'a-csrf-token'
+                )
+            }),
+            credentials: CREDENTIALS,
+            body: JSON.stringify(data)
+        },
+        retryCredentials
+    );
+}
+
+export function patch({path, data, refresh = false, retryCredentials = true}) {
+    return wrapper(
+        API_URL + path,
+        {
+            method: 'PATCH',
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN' : window.localStorage.getItem(
+                    refresh === true
+                      ? 'r-csrf-token'
+                      : 'a-csrf-token'
+                )
+            }),
+            credentials: CREDENTIALS,
+            body: JSON.stringify(data)
+        },
+        retryCredentials
+    );
+}
+
 export function del({path, refresh = false, retryCredentials = true}) {
     return wrapper(
         API_URL + path,
