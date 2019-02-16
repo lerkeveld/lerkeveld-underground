@@ -39,21 +39,24 @@ class BreadTable extends React.Component {
   state = {
     dialogOpen: false,
     submitting: false,
-    order: {}
+    order: {},
+    items: [],
+    selectedItem: "buh"
   }
 
-  handleButtonClick = (order) => () => {
+  handleAddClick = (order) => () => {
     this.setState({dialogOpen: true, order: order});
   }
 
   handleClearOrder = (order) => () => {
-      this.setState({dialogOpen: false, order: order},
-          () => this.doClear
+      this.setState(
+          {dialogOpen: false, order: order},
+          () => this.doClear()
       );
   }
 
   doClear = () => {
-    api.put({
+    api.del({
         path: '/bread/' + this.state.order.id,
     }).then(data => {
         this.setState(
@@ -68,11 +71,28 @@ class BreadTable extends React.Component {
     })
   }
 
-  handleDialogAccept = () => {
+  handleAddToOrder = value => {
     this.setState(
         {dialogOpen: false, submitting: true},
-        () => this.props.closeSnackbar(this.doDelete)
+        () => this.doAddItem(value)
     );
+  }
+
+  doAddItem = value => {
+    api.patch({
+        path: '/bread/' + this.state.order.id,
+        data: { items: [value] },
+    }).then(data => {
+        this.setState(
+          {submitting: false, order: {}},
+          () => this.props.showMessage('Brood toegevoegd', this.props.refresh)
+        );
+    }).catch(error => {
+        this.setState(
+          {submitting: false, order: {}},
+          () => this.props.showMessage(error.message)
+        );
+    })
   }
 
   handleDialogChange = (dialogOpen) => () => {
@@ -80,7 +100,7 @@ class BreadTable extends React.Component {
   }
 
   render () {
-    const { classes, orders, loading } = this.props;
+    const { classes, orders, loading, items } = this.props;
 
     return (
         <React.Fragment>
@@ -108,7 +128,7 @@ class BreadTable extends React.Component {
                         <IconButton
                            title="Voeg brood toe"
                            disabled={this.state.submitting}
-                           onClick={this.handleButtonClick(row)}
+                           onClick={this.handleAddClick(row)}
                         >
                            { this.state.submitting && row.id === this.state.order.id
                                ? <CircularProgress size={20} />
@@ -133,9 +153,11 @@ class BreadTable extends React.Component {
           </Table>
           <AddBreadDialog 
             open={this.state.dialogOpen}
-            onAccept={this.handleDialogAccept}
+            onSelect={this.handleAddToOrder}
             onClose={this.handleDialogChange(false)}
             order={this.state.order}
+            items={items}
+            selectedValue={this.state.selectedValue}
           />
         </React.Fragment>
     );

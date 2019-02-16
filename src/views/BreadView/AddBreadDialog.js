@@ -1,47 +1,61 @@
-import React from 'react';
+import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Typography from '@material-ui/core/Typography';
+import FastfoodIcon from '@material-ui/icons/Fastfood';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemText from '@material-ui/core/ListItemText';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-import * as utils from '../../utils';
 
 
-function AddBreadDialog(props) {
-  const { open, onAccept, onClose, order } = props;
-  const { date=new Date() } = order;
-   
-  return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      maxWidth="xs"
-      fullWidth
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title" disableTypography>
-        <Typography variant="subtitle1">
-            Brood toevoegen
-        </Typography>
-      </DialogTitle>
-      <DialogContent>
-        <Typography id="alert-dialog-description" variant="body2">
-          Kies een brood uit deze opties, je kan meerdere broden tegelijk bestellen.
-        </Typography>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="default">
-          Cancel
-        </Button>
-        <Button onClick={onAccept} color="primary" autoFocus>
-          Ok
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
+class AddBreadDialog extends React.Component {
+  handleClose = () => {
+    this.props.onClose(this.props.selectedValue);
+  };
+
+  handleListItemClick = value => {
+    this.props.onSelect(value);
+  };
+
+  render() {
+    const {onClose, selectedValue, items, ...other } = this.props;
+
+    return (
+      <Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" {...other}>
+        <DialogTitle id="simple-dialog-title">Kies een brood</DialogTitle>
+        <div>
+          <List>
+            {items.map(item => (
+              <ListItem button onClick={() => this.handleListItemClick(item)} key={item}>
+                <ListItemAvatar>
+                  <Avatar>
+                    <FastfoodIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={item} />
+              </ListItem>
+            ))}
+          </List>
+        </div>
+        <DialogActions>
+          <Button onClick={onClose} color="default">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  }
 }
+
+AddBreadDialog.propTypes = {
+  onClose: PropTypes.func,
+  selectedValue: PropTypes.string,
+  items: PropTypes.array,
+};
 
 export default AddBreadDialog;

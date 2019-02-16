@@ -21,8 +21,6 @@ class BreadView extends React.Component {
     orders: [],
     fetchingItems: true,
     fetchingOrders: true,
-    disableFormItems: true,
-    disableFormOrders: true,
     snackbarOpen: false,
     messageInfo: {}
   }
@@ -63,7 +61,6 @@ class BreadView extends React.Component {
         });
         this.setState({
             orders: sorted,
-            disableFormOrders: false,
             fetchingOrders: false
         });
     }).catch(error => {
@@ -81,7 +78,6 @@ class BreadView extends React.Component {
         const items = data.items.map(item => item.name).sort();
         this.setState({
             items: items,
-            disableFormItems: false,
             fetchingItems: false
         });
     }).catch(error => {
@@ -121,6 +117,7 @@ class BreadView extends React.Component {
               <div style={{width: '100%', overflowX: 'auto'}}>
                 <BreadTable
                   orders={this.state.orders}
+                  items={this.state.items}
                   refresh={this.fetchOrders}
                   loading={this.state.fetchingOrders}
                   showMessage={this.showMessage}
