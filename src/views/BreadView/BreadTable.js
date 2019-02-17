@@ -1,13 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
+import Chip from '@material-ui/core/Chip';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
+import PropTypes from 'prop-types';
+import React from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import withStyles from '@material-ui/core/styles/withStyles';
 
 import AddIcon from '@material-ui/icons/Add';
 import ClearIcon from '@material-ui/icons/Clear';
@@ -121,7 +122,10 @@ class BreadTable extends React.Component {
                        {utils.formatDate(row.date)}
                      </TableCell>
                      <TableCell className={classes.ordersCell}>
-                         {row.items.map(item => item.name).join(", ")}
+                         {row.items.map(item => (
+                             <Chip label={item.name}
+                                className={classes.chip}
+                                variant="outlined" />))}
                          {/*  {row.items.map(item => item.price/100).reduce((a,b) => a + b, 0)} */}
                      </TableCell>
                      <TableCell className={classes.buttonsCell}>
