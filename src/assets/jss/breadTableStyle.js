@@ -1,6 +1,6 @@
 const breadTableStyle = theme => ({
-  buttonCell: {
-    width: '150px',
+  buttonsCell: {
+    width: '120px',
     paddingLeft: '0px',
     paddingRight: '0px'
   },

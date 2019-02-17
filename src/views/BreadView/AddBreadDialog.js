@@ -22,9 +22,8 @@ class AddBreadDialog extends React.Component {
     const {classes, onClose, selectedValue, items, ...other } = this.props;
 
     return (
-      <Dialog onClose={onClose} aria-labelledby="dialog-title" {...other}>
-        <DialogTitle id="dialog-title">Kies een brood</DialogTitle>
-        <div style={{minWidth: '250px'}}>
+      <Dialog onClose={onClose} aria-labelledby="dialog-title" maxWidth="xs" fullWidth {...other}>
+        <DialogTitle id="dialog-title">Bestel een brood</DialogTitle>
           <List>
             {items.map(item => (
               <ListItem button onClick={this.handleListItemClick(item)}>
@@ -37,7 +36,6 @@ class AddBreadDialog extends React.Component {
               </ListItem>
             ))}
           </List>
-        </div>
         <DialogActions>
           <Button onClick={onClose} color="default">
             Cancel

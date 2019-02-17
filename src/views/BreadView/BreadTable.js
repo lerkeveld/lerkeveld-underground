@@ -23,8 +23,7 @@ import * as utils from '../../utils';
 const emptyRow = (classes, message) => {
     return (
         <TableRow>
-          <TableCell className={classes.dateCell}>{message}</TableCell>
-          <TableCell className={classes.descriptionCell}></TableCell>
+          <TableCell className={classes.descriptionCell} colSpan={2}>{message}</TableCell>
           <TableCell className={classes.buttonsCell}>
             <IconButton title="Lock" disabled>
               <LockIcon fontSize="small" />
