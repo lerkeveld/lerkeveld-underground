@@ -14,7 +14,7 @@ import React from 'react';
 
 
 class AddBreadDialog extends React.Component {
-  handleListItemClick = value => {
+  handleListItemClick = value => () => {
     this.props.onSelect(value.name);
   };
 
@@ -27,7 +27,7 @@ class AddBreadDialog extends React.Component {
         <div style={{minWidth: '250px'}}>
           <List>
             {items.map(item => (
-              <ListItem button onClick={() => this.handleListItemClick(item)} key={item}>
+              <ListItem button onClick={this.handleListItemClick(item)}>
                 <ListItemAvatar>
                   <Avatar>
                     <FastfoodIcon />

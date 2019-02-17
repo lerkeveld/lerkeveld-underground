@@ -24,7 +24,7 @@ const emptyRow = (classes, message) => {
         <TableRow>
           <TableCell className={classes.dateCell}>{message}</TableCell>
           <TableCell className={classes.descriptionCell}></TableCell>
-          <TableCell className={classes.buttonCell}>
+          <TableCell className={classes.buttonsCell}>
             <IconButton title="Lock" disabled>
               <LockIcon fontSize="small" />
             </IconButton>
@@ -39,33 +39,32 @@ class BreadTable extends React.Component {
   state = {
     dialogOpen: false,
     submitting: false,
-    order: {},
+    selectedOrder: {},
     items: {},
-    selectedItem: "buh"
   }
 
   handleAddClick = (order) => () => {
-    this.setState({dialogOpen: true, order: order});
+    this.setState({dialogOpen: true, selectedOrder: order});
   }
 
   handleClearOrder = (order) => () => {
       this.setState(
-          {dialogOpen: false, order: order},
+          {dialogOpen: false, selectedOrder: order},
           () => this.doClear()
       );
   }
 
   doClear = () => {
     api.del({
-        path: '/bread/' + this.state.order.id,
+        path: '/bread/' + this.state.selectedOrder.id,
     }).then(data => {
         this.setState(
-          {submitting: false, order: {}},
+          {submitting: false, selectedOrder: {}},
           () => this.props.showMessage('Bestelling verwijderd', this.props.refresh)
         );
     }).catch(error => {
         this.setState(
-          {submitting: false, order: {}},
+          {submitting: false, selectedOrder: {}},
           () => this.props.showMessage(error.message)
         );
     })
@@ -80,16 +79,16 @@ class BreadTable extends React.Component {
 
   doAddItem = value => {
     api.patch({
-        path: '/bread/' + this.state.order.id,
+        path: '/bread/' + this.state.selectedOrder.id,
         data: { items: [value] },
     }).then(data => {
         this.setState(
-          {submitting: false, order: {}},
+          {submitting: false, selectedOrder: {}},
           () => this.props.showMessage('Brood toegevoegd', this.props.refresh)
         );
     }).catch(error => {
         this.setState(
-          {submitting: false, order: {}},
+          {submitting: false, selectedOrder: {}},
           () => this.props.showMessage(error.message)
         );
     })
@@ -109,7 +108,7 @@ class BreadTable extends React.Component {
               <TableRow>
                 <TableCell className={classes.dateCell}>Week</TableCell>
                 <TableCell className={classes.ordersCell}>Bestelling</TableCell>
-                <TableCell className={classes.buttonCell}></TableCell>
+                <TableCell className={classes.buttonsCell}></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -125,13 +124,13 @@ class BreadTable extends React.Component {
                          {row.items.map(item => item.name).join(", ")}
                          {/*  {row.items.map(item => item.price/100).reduce((a,b) => a + b, 0)} */}
                      </TableCell>
-                     <TableCell className={classes.buttonCell}>
+                     <TableCell className={classes.buttonsCell}>
                         <IconButton
                            title="Voeg brood toe"
                            disabled={this.state.submitting}
                            onClick={this.handleAddClick(row)}
                         >
-                           { this.state.submitting && row.id === this.state.order.id
+                           { this.state.submitting && row.id === this.state.selectedOrder.id
                                ? <CircularProgress size={20} />
                                : <AddIcon fontSize="small" />
                            }
@@ -141,7 +140,7 @@ class BreadTable extends React.Component {
                            disabled={this.state.submitting}
                            onClick={this.handleClearOrder(row)}
                         >
-                           { this.state.submitting && row.id === this.state.order.id
+                           { this.state.submitting && row.id === this.state.selectedOrder.id
                                ? <CircularProgress size={20} />
                                : <ClearIcon fontSize="small" />
                            }
@@ -156,7 +155,7 @@ class BreadTable extends React.Component {
             open={this.state.dialogOpen}
             onSelect={this.handleAddToOrder}
             onClose={this.handleDialogChange(false)}
-            order={this.state.order}
+            order={this.state.selectedOrder}
             items={items}
             selectedValue={this.state.selectedValue}
           />

@@ -8,7 +8,6 @@ import CloseableSnackbar from '../../components/CloseableSnackbar';
 import LoadingSnackbar from '../../components/LoadingSnackbar';
 
 import viewStyle from '../../assets/jss/viewStyle';
-import BreadOrderCard from './BreadOrderCard';
 import BreadTable from './BreadTable';
 
 import * as api from '../../api';
