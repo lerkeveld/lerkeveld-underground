@@ -127,7 +127,7 @@ class BreadTable extends React.Component {
                      <TableCell className={classes.buttonsCell}>
                         <IconButton
                            title="Voeg brood toe"
-                           disabled={this.state.submitting}
+                           disabled={this.state.submitting || !row.is_editable}
                            onClick={this.handleAddClick(row)}
                         >
                            { this.state.submitting && row.id === this.state.selectedOrder.id
@@ -137,7 +137,7 @@ class BreadTable extends React.Component {
                         </IconButton>
                         <IconButton
                            title="Verwijder bestelling"
-                           disabled={this.state.submitting}
+                           disabled={this.state.submitting || !row.is_editable}
                            onClick={this.handleClearOrder(row)}
                         >
                            { this.state.submitting && row.id === this.state.selectedOrder.id
