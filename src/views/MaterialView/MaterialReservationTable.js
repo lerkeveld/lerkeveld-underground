@@ -17,7 +17,7 @@ import materialTableStyle from '../../assets/jss/materialTableStyle';
 import * as api from '../../api';
 import * as utils from '../../utils';
 
-const emptyRow = (classes, message) => {
+const emptyRow = (classes, prefix, message) => {
     return (
         <TableRow>
           <TableCell className={classes.removeCell}>
@@ -25,8 +25,8 @@ const emptyRow = (classes, message) => {
               <DeleteIcon fontSize="small" />
             </IconButton>
           </TableCell>
-          <TableCell className={classes.dateCell}>{message}</TableCell>
-          <TableCell className={classes.nameCell}></TableCell>
+          <TableCell className={classes.dateCell}>{prefix}</TableCell>
+          <TableCell className={classes.nameCell}>{message}</TableCell>
           <TableCell className={classes.descriptionCell}></TableCell>
         </TableRow>
     )
@@ -88,7 +88,10 @@ class MaterialReservationTable extends React.Component {
             </TableHead>
             <TableBody>
               {loading ? emptyRow(classes) : null}
-              {!loading && reservations.length === 0 ? emptyRow(classes, 'Geen reservaties') : null}
+              {!loading && reservations.length === 0
+                 ? emptyRow(classes, '/', 'Geen reservaties')
+                 : null
+              }
               {reservations.map(row => {
                  return (
                    <TableRow key={row.id}>

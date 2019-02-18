@@ -22,10 +22,10 @@ import breadTableStyle from '../../assets/jss/breadTableStyle';
 import * as api from '../../api';
 import * as utils from '../../utils';
 
-const emptyRow = (classes, message) => {
+const emptyRow = (classes, prefix, message) => {
     return (
         <TableRow>
-          <TableCell className={classes.dateCell}>/</TableCell>
+          <TableCell className={classes.dateCell}>{prefix}</TableCell>
           <TableCell className={classes.ordersCell}>{message}</TableCell>
           <TableCell className={classes.priceCell}></TableCell>
           <TableCell className={classes.buttonCell}></TableCell>
@@ -133,6 +133,8 @@ class BreadTable extends React.Component {
                   <IconButton
                     title="Bestel voor alle weken"
                     disabled={
+                        loading ||
+                        orderDates.length === 0 ||
                         this.state.submittingAdd || 
                         this.state.submittingClear
                     }
@@ -148,6 +150,8 @@ class BreadTable extends React.Component {
                   <IconButton
                     title="Maak alle bestellingen leeg"
                     disabled={
+                        loading ||
+                        orderDates.length === 0 ||
                         this.state.submittingAdd || 
                         this.state.submittingClear
                     }
@@ -162,9 +166,9 @@ class BreadTable extends React.Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {loading ? emptyRow(classes) : null}
+              {loading && orderDates.length === 0 ? emptyRow(classes) : null}
               {!loading && orderDates.length === 0
-                 ? emptyRow(classes, 'Geen bestellingen mogelijk')
+                 ? emptyRow(classes, '/', 'Geen bestellingen mogelijk')
                  : null
               }
               {orderDates.map(row => {
@@ -193,6 +197,7 @@ class BreadTable extends React.Component {
                        <IconButton
                          title="Bestel een brood"
                          disabled={
+                             loading ||
                              this.state.submittingAdd || 
                              this.state.submittingClear || 
                              !row.is_editable
@@ -210,6 +215,7 @@ class BreadTable extends React.Component {
                        <IconButton
                          title="Maak bestelling leeg"
                          disabled={
+                             loading ||
                              this.state.submittingAdd || 
                              this.state.submittingClear || 
                              !row.is_editable || 

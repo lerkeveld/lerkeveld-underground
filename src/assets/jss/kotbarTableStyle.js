@@ -1,15 +1,18 @@
 const kotbarTableStyle = theme => ({
   removeCell: {
     width: '44px',
+    minWidth: '44px',
     paddingLeft: '0px',
     paddingRight: '8px'
   },
   dateCell: {
-    minWidth: '70px',
+    width: '100px',
+    minWidth: '100px',
     paddingLeft: '0px',
     paddingRight: '24px'
   },
   nameCell: {
+    width: '140px',
     minWidth: '140px',
     paddingLeft: '0px',
     paddingRight: '24px'
