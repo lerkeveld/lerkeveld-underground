@@ -11,6 +11,8 @@ import TableRow from '@material-ui/core/TableRow';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import AddIcon from '@material-ui/icons/Add';
+import AddIconOutlined from '@material-ui/icons/AddCircleOutline';
+import DeleteIcon from '@material-ui/icons/Delete';
 import ClearIcon from '@material-ui/icons/Clear';
 import LockIcon from '@material-ui/icons/Lock';
 
@@ -43,34 +45,20 @@ class BreadTable extends React.Component {
     dialogOpen: false,
     submittingAdd: false,
     submittingClear: false,
-    selectedOrderDate: {}
+    selectedOrderDate: {},
+    selectedGlobal: false
   }
 
-  handleAddButton = (orderDate) => () => {
-    this.setState({dialogOpen: true, selectedOrderDate: orderDate});
+  handleDialogChange = (dialogOpen) => () => {
+    this.setState({dialogOpen: dialogOpen});
   }
 
-  handleClearButton = (orderDate) => () => {
-      this.setState(
-          {dialogOpen: false, selectedOrderDate: orderDate, submittingClear: true},
-          () => this.doClear()
-      );
-  }
-
-  doClear = () => {
-    api.del({
-        path: '/bread/' + this.state.selectedOrderDate.id,
-    }).then(data => {
-        this.setState(
-          {submittingClear: false, selectedOrderDate: {}},
-          () => this.props.showMessage('Bestelling verwijderd', this.props.refresh)
-        );
-    }).catch(error => {
-        this.setState(
-          {submittingClear: false, selectedOrderDate: {}},
-          () => this.props.showMessage(error.message)
-        );
-    })
+  handleAddButton = (orderDate, global) => () => {
+    this.setState({
+        dialogOpen: true,
+        selectedOrderDate: orderDate,
+        selectedGlobal: global
+    });
   }
 
   handleAddToOrder = value => {
@@ -80,25 +68,54 @@ class BreadTable extends React.Component {
     );
   }
 
-  doAddItem = value => {
-    api.patch({
-        path: '/bread/' + this.state.selectedOrderDate.id,
-        data: { items: [value] },
+  handleClearButton = (orderDate, global) => () => {
+    this.setState(
+        {
+            selectedOrderDate: orderDate,
+            selectedGlobal: global,
+            submittingClear: true
+        },
+        () => this.doClear()
+    );
+  }
+
+  doClear = () => {
+    const path = this.state.selectedGlobal
+      ? 'all'
+      : this.state.selectedOrderDate.id;
+    api.del({
+        path: '/bread/' + path
     }).then(data => {
         this.setState(
-          {submittingAdd: false, selectedOrderDate: {}},
-          () => this.props.showMessage('Brood toegevoegd', this.props.refresh)
+          {submittingClear: false, selectedOrderDate: {}, selectedGlobal: false},
+          () => this.props.showMessage('Bestelling verwijderd', this.props.refresh)
         );
     }).catch(error => {
         this.setState(
-          {submittingAdd: false, selectedOrderDate: {}},
+          {submittingClear: false, selectedOrderDate: {}, selectedGlobal: false},
           () => this.props.showMessage(error.message)
         );
     })
   }
 
-  handleDialogChange = (dialogOpen) => () => {
-    this.setState({dialogOpen: dialogOpen});
+  doAddItem = value => {
+    const path = this.state.selectedGlobal
+      ? 'all'
+      : this.state.selectedOrderDate.id;
+    api.patch({
+        path: '/bread/' + path,
+        data: { items: [value] }
+    }).then(data => {
+        this.setState(
+          {submittingAdd: false, selectedOrderDate: {}, selectedGlobal: false},
+          () => this.props.showMessage('Brood toegevoegd', this.props.refresh)
+        );
+    }).catch(error => {
+        this.setState(
+          {submittingAdd: false, selectedOrderDate: {}, selectedGlobal: false},
+          () => this.props.showMessage(error.message)
+        );
+    })
   }
 
   render () {
@@ -112,8 +129,36 @@ class BreadTable extends React.Component {
                 <TableCell className={classes.dateCell}>Week</TableCell>
                 <TableCell className={classes.ordersCell}>Bestelling</TableCell>
                 <TableCell className={classes.priceCell}>Prijs</TableCell>
-                <TableCell className={classes.buttonCell}></TableCell>
-                <TableCell className={classes.buttonCell}></TableCell>
+                <TableCell className={classes.buttonCell}>
+                  <IconButton
+                    title="Bestel voor alle weken"
+                    disabled={
+                        this.state.submittingAdd || 
+                        this.state.submittingClear
+                    }
+                    onClick={this.handleAddButton({}, true)}
+                  >
+                    { this.state.submittingAdd && this.state.selectedGlobal
+                        ? <CircularProgress size={20} />
+                        : <AddIconOutlined fontSize="small" />
+                    }
+                  </IconButton>
+                </TableCell>
+                <TableCell className={classes.buttonCell}>
+                  <IconButton
+                    title="Maak alle bestellingen leeg"
+                    disabled={
+                        this.state.submittingAdd || 
+                        this.state.submittingClear
+                    }
+                    onClick={this.handleClearButton({}, true)}
+                  >
+                    { this.state.submittingClear && this.state.selectedGlobal
+                        ? <CircularProgress size={20} />
+                        : <DeleteIcon fontSize="small" />
+                    }
+                  </IconButton>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -152,7 +197,7 @@ class BreadTable extends React.Component {
                              this.state.submittingClear || 
                              !row.is_editable
                          }
-                         onClick={this.handleAddButton(row)}
+                         onClick={this.handleAddButton(row, false)}
                        >
                           { this.state.submittingAdd
                             && row.id === this.state.selectedOrderDate.id
@@ -170,7 +215,7 @@ class BreadTable extends React.Component {
                              !row.is_editable || 
                              row.orders.length === 0
                          }
-                         onClick={this.handleClearButton(row)}
+                         onClick={this.handleClearButton(row, false)}
                        >
                           { this.state.submittingClear
                             && row.id === this.state.selectedOrderDate.id
@@ -189,6 +234,8 @@ class BreadTable extends React.Component {
             onSelect={this.handleAddToOrder}
             onClose={this.handleDialogChange(false)}
             items={items}
+            selectedOrderDate={this.state.selectedOrderDate}
+            selectedGlobal={this.state.selectedGlobal}
           />
         </React.Fragment>
     );

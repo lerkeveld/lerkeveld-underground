@@ -21,7 +21,21 @@ class AddBreadDialog extends React.Component {
   };
 
   render() {
-    const {open, onSelect, onClose, items = [], ...other} = this.props;
+    const {
+        open,
+        onSelect,
+        onClose,
+        items = [],
+        selectedOrderDate = {},
+        selectedGlobal,
+        ...other
+    } = this.props;
+      console.log(selectedOrderDate);
+
+    const { date = new Date() } = selectedOrderDate;
+    let formatDate = utils.formatDate(date);
+    if (selectedGlobal)
+      formatDate = 'alle weken';
 
     return (
       <Dialog
@@ -33,7 +47,7 @@ class AddBreadDialog extends React.Component {
         fullWidth
         {...other}
       >
-        <DialogTitle id="dialog-title">Bestel een brood</DialogTitle>
+        <DialogTitle id="dialog-title">Bestel voor {formatDate}</DialogTitle>
           <List>
             {items.map(item => (
               <ListItem
