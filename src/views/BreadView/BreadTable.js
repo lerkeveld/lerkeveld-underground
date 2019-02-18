@@ -23,8 +23,11 @@ import * as utils from '../../utils';
 const emptyRow = (classes, message) => {
     return (
         <TableRow>
-          <TableCell className={classes.descriptionCell} colSpan={2}>{message}</TableCell>
-          <TableCell className={classes.buttonsCell}>
+          <TableCell className={classes.dateCell}>/</TableCell>
+          <TableCell className={classes.ordersCell}>{message}</TableCell>
+          <TableCell className={classes.priceCell}></TableCell>
+          <TableCell className={classes.buttonCell}></TableCell>
+          <TableCell className={classes.buttonCell}>
             <IconButton title="Lock" disabled>
               <LockIcon fontSize="small" />
             </IconButton>
@@ -38,33 +41,33 @@ class BreadTable extends React.Component {
 
   state = {
     dialogOpen: false,
-    submitting: false,
-    selectedOrder: {},
-    items: {},
+    submittingAdd: false,
+    submittingClear: false,
+    selectedOrderDate: {}
   }
 
-  handleAddClick = (order) => () => {
-    this.setState({dialogOpen: true, selectedOrder: order});
+  handleAddButton = (orderDate) => () => {
+    this.setState({dialogOpen: true, selectedOrderDate: orderDate});
   }
 
-  handleClearOrder = (order) => () => {
+  handleClearButton = (orderDate) => () => {
       this.setState(
-          {dialogOpen: false, selectedOrder: order},
+          {dialogOpen: false, selectedOrderDate: orderDate, submittingClear: true},
           () => this.doClear()
       );
   }
 
   doClear = () => {
     api.del({
-        path: '/bread/' + this.state.selectedOrder.id,
+        path: '/bread/' + this.state.selectedOrderDate.id,
     }).then(data => {
         this.setState(
-          {submitting: false, selectedOrder: {}},
+          {submittingClear: false, selectedOrderDate: {}},
           () => this.props.showMessage('Bestelling verwijderd', this.props.refresh)
         );
     }).catch(error => {
         this.setState(
-          {submitting: false, selectedOrder: {}},
+          {submittingClear: false, selectedOrderDate: {}},
           () => this.props.showMessage(error.message)
         );
     })
@@ -72,23 +75,23 @@ class BreadTable extends React.Component {
 
   handleAddToOrder = value => {
     this.setState(
-        {dialogOpen: false, submitting: true},
+        {dialogOpen: false, submittingAdd: true},
         () => this.doAddItem(value)
     );
   }
 
   doAddItem = value => {
     api.patch({
-        path: '/bread/' + this.state.selectedOrder.id,
+        path: '/bread/' + this.state.selectedOrderDate.id,
         data: { items: [value] },
     }).then(data => {
         this.setState(
-          {submitting: false, selectedOrder: {}},
+          {submittingAdd: false, selectedOrderDate: {}},
           () => this.props.showMessage('Brood toegevoegd', this.props.refresh)
         );
     }).catch(error => {
         this.setState(
-          {submitting: false, selectedOrder: {}},
+          {submittingAdd: false, selectedOrderDate: {}},
           () => this.props.showMessage(error.message)
         );
     })
@@ -99,7 +102,7 @@ class BreadTable extends React.Component {
   }
 
   render () {
-    const { classes, orders, loading, items } = this.props;
+    const { classes, orderDates = [], items = [], loading } = this.props;
 
     return (
         <React.Fragment>
@@ -108,46 +111,73 @@ class BreadTable extends React.Component {
               <TableRow>
                 <TableCell className={classes.dateCell}>Week</TableCell>
                 <TableCell className={classes.ordersCell}>Bestelling</TableCell>
-                <TableCell className={classes.buttonsCell}></TableCell>
+                <TableCell className={classes.priceCell}>Prijs</TableCell>
+                <TableCell className={classes.buttonCell}></TableCell>
+                <TableCell className={classes.buttonCell}></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {loading ? emptyRow(classes) : null}
-              {!loading && orders.length === 0 ? emptyRow(classes, 'Geen bestellingen mogelijk') : null}
-              {orders.map(row => {
+              {!loading && orderDates.length === 0
+                 ? emptyRow(classes, 'Geen bestellingen mogelijk')
+                 : null
+              }
+              {orderDates.map(row => {
                  return (
                    <TableRow key={row.id}>
                      <TableCell className={classes.dateCell}>
                        {utils.formatDate(row.date)}
                      </TableCell>
                      <TableCell className={classes.ordersCell}>
-                         {row.items.map(item => (
-                             <Chip label={item.name}
-                                className={classes.chip}
-                                variant="outlined" />))}
-                         {/*  {row.items.map(item => item.price/100).reduce((a,b) => a + b, 0)} */}
+                       { row.is_active
+                           ? row.orders.map(order => (
+                               <Chip
+                                 key={order.id}
+                                 label={order.type}
+                                 className={classes.chip}
+                                 variant="outlined"
+                               />
+                             ))
+                           : "Geen bestelling mogelijk"
+                       }
                      </TableCell>
-                     <TableCell className={classes.buttonsCell}>
-                        <IconButton
-                           title="Voeg brood toe"
-                           disabled={this.state.submitting || !row.is_editable}
-                           onClick={this.handleAddClick(row)}
-                        >
-                           { this.state.submitting && row.id === this.state.selectedOrder.id
-                               ? <CircularProgress size={20} />
-                               : <AddIcon fontSize="small" />
-                           }
-                        </IconButton>
-                        <IconButton
-                           title="Verwijder bestelling"
-                           disabled={this.state.submitting || !row.is_editable}
-                           onClick={this.handleClearOrder(row)}
-                        >
-                           { this.state.submitting && row.id === this.state.selectedOrder.id
-                               ? <CircularProgress size={20} />
-                               : <ClearIcon fontSize="small" />
-                           }
-                        </IconButton>
+                     <TableCell className={classes.priceCell}>
+                       {utils.formatMoney(row.total_price)}
+                     </TableCell>
+                     <TableCell className={classes.buttonCell}>
+                       <IconButton
+                         title="Bestel een brood"
+                         disabled={
+                             this.state.submittingAdd || 
+                             this.state.submittingClear || 
+                             !row.is_editable
+                         }
+                         onClick={this.handleAddButton(row)}
+                       >
+                          { this.state.submittingAdd
+                            && row.id === this.state.selectedOrderDate.id
+                              ? <CircularProgress size={20} />
+                              : <AddIcon fontSize="small" />
+                          }
+                       </IconButton>
+                     </TableCell>
+                     <TableCell className={classes.buttonCell}>
+                       <IconButton
+                         title="Maak bestelling leeg"
+                         disabled={
+                             this.state.submittingAdd || 
+                             this.state.submittingClear || 
+                             !row.is_editable || 
+                             row.orders.length === 0
+                         }
+                         onClick={this.handleClearButton(row)}
+                       >
+                          { this.state.submittingClear
+                            && row.id === this.state.selectedOrderDate.id
+                              ? <CircularProgress size={20} />
+                              : <ClearIcon fontSize="small" />
+                          }
+                       </IconButton>
                      </TableCell>
                    </TableRow>
                  );
@@ -158,9 +188,7 @@ class BreadTable extends React.Component {
             open={this.state.dialogOpen}
             onSelect={this.handleAddToOrder}
             onClose={this.handleDialogChange(false)}
-            order={this.state.selectedOrder}
             items={items}
-            selectedValue={this.state.selectedValue}
           />
         </React.Fragment>
     );
@@ -168,13 +196,7 @@ class BreadTable extends React.Component {
 }
 
 BreadTable.propTypes = {
-  classes: PropTypes.object.isRequired,
-  orders: PropTypes.array.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
-BreadTable.defaultProps = {
-  orders: []
-}
-
 export default withStyles(breadTableStyle)(BreadTable);
-

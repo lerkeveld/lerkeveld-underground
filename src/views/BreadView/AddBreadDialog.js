@@ -1,38 +1,55 @@
+import React from 'react';
+import amber from '@material-ui/core/colors/amber';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import FastfoodIcon from '@material-ui/icons/Fastfood';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
-import PropTypes from 'prop-types';
-import React from 'react';
 
+import AddIcon from '@material-ui/icons/Add';
+import * as utils from '../../utils';
 
 
 class AddBreadDialog extends React.Component {
+
   handleListItemClick = value => () => {
     this.props.onSelect(value.name);
   };
 
   render() {
-    const {classes, onClose, selectedValue, items, ...other } = this.props;
+    const {open, onSelect, onClose, items = [], ...other} = this.props;
 
     return (
-      <Dialog onClose={onClose} aria-labelledby="dialog-title" maxWidth="xs" fullWidth {...other}>
+      <Dialog
+        aria-labelledby="dialog-title"
+        open={open}
+        onSelect={onSelect}
+        onClose={onClose}
+        maxWidth="xs"
+        fullWidth
+        {...other}
+      >
         <DialogTitle id="dialog-title">Bestel een brood</DialogTitle>
           <List>
             {items.map(item => (
-              <ListItem button onClick={this.handleListItemClick(item)}>
+              <ListItem
+                button
+                key={item.id}
+                onClick={this.handleListItemClick(item)}
+              >
                 <ListItemAvatar>
-                  <Avatar>
-                    <FastfoodIcon />
+                  <Avatar style={{backgroundColor: amber[100], color: amber[600]}}>
+                    <AddIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={item.name} secondary={"€" + item.price/100} />
+                <ListItemText
+                  primary={item.name}
+                  secondary={utils.formatMoney(item.price)}
+                />
               </ListItem>
             ))}
           </List>
@@ -45,11 +62,5 @@ class AddBreadDialog extends React.Component {
     );
   }
 }
-
-AddBreadDialog.propTypes = {
-  onClose: PropTypes.func,
-  selectedValue: PropTypes.string,
-  items: PropTypes.array,
-};
 
 export default AddBreadDialog;

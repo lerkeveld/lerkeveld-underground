@@ -17,9 +17,9 @@ class BreadView extends React.Component {
 
   state = {
     items: [],
-    orders: [],
+    orderDates: [],
     fetchingItems: true,
-    fetchingOrders: true,
+    fetchingOrderDates: true,
     snackbarOpen: false,
     messageInfo: {}
   }
@@ -42,29 +42,29 @@ class BreadView extends React.Component {
       this.setState({snackbarOpen: false}, callback);
   }
 
-  fetchOrders = () => {
+  fetchOrderDates = () => {
     return api.get({
         path: '/bread/'
     }).then(data => {
-        const orders = data.orders.map(order => {
+        const orderDates = data['order_dates'].map(orderDate => {
             return Object.assign(
                 {},
-                order,
-                {date: new Date(order.date)}
+                orderDate,
+                {date: new Date(orderDate.date)}
             )
         });
-        const sorted = orders.sort((r1, r2) => {
+        const sorted = orderDates.sort((r1, r2) => {
             if (r1.date > r2.date) {return 1;}
             if (r1.date < r2.date) {return -1;}
             return 0;
         });
         this.setState({
-            orders: sorted,
-            fetchingOrders: false
+            orderDates: sorted,
+            fetchingOrderDates: false
         });
     }).catch(error => {
         this.setState(
-            {fetchingOrders: false},
+            {fetchingOrderDates: false},
             () => this.showMessage(error.message)
         );
     })
@@ -74,9 +74,8 @@ class BreadView extends React.Component {
     return api.get({
         path: '/bread/type'
     }).then(data => {
-        const items = data.items;
         this.setState({
-            items: items,
+            items: data.items,
             fetchingItems: false
         });
     }).catch(error => {
@@ -88,7 +87,7 @@ class BreadView extends React.Component {
   }
 
   refresh = () => {
-    this.fetchOrders();
+    this.fetchOrderDates();
     this.fetchItems();
   }
 
@@ -115,17 +114,17 @@ class BreadView extends React.Component {
               </Typography>
               <div style={{width: '100%', overflowX: 'auto'}}>
                 <BreadTable
-                  orders={this.state.orders}
+                  orderDates={this.state.orderDates}
                   items={this.state.items}
-                  refresh={this.fetchOrders}
-                  loading={this.state.fetchingOrders}
+                  refresh={this.fetchOrderDates}
+                  loading={this.state.fetchingOrderDates || this.state.fetchingItems}
                   showMessage={this.showMessage}
                   closeSnackbar={this.closeSnackbar}
                 />
               </div>
             </Grid>
           </Grid>
-          { this.state.fetchingOrders || this.state.fetchingItems
+          { this.state.fetchingOrderDates || this.state.fetchingItems
               ? <LoadingSnackbar open />
               : <CloseableSnackbar
                   key={this.state.messageInfo.key}
