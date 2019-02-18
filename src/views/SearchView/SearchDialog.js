@@ -18,13 +18,27 @@ import Smartphone from '@material-ui/icons/Smartphone';
 
 function SearchDialog(props) {
   const { user, open, onClose, fullScreen, ...rest } = props;
+  const {
+      first_name = null,
+      last_name = null,
+      corridor = null,
+      room = null,
+      email = null,
+      phone = null
+  } = user;
 
-  const { first_name = "", last_name = "", corridor = "", room = 0 } = user;
-  let { email = "", phone = "" } = user;
+  let fullname = "Status unknown";
+  if (first_name !== null && last_name !== null)
+    fullname = `${first_name} ${last_name}`
+  let loc = "Status unknown";
+  if (corridor !== null && room !== null)
+    loc = `${corridor}/${room.toString().padStart(4, '0')}`;
+  let email_p = email;
   if (email === null)
-    email = "Niet gedeeld"
+    email_p = "Niet gedeeld"
+  let phone_p = phone;
   if (phone === null)
-    phone = "Niet gedeeld"
+    phone_p = "Niet gedeeld"
 
   return (
     <Dialog
@@ -36,21 +50,21 @@ function SearchDialog(props) {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">{`${first_name} ${last_name}`}</DialogTitle>
+      <DialogTitle id="alert-dialog-title">{fullname}</DialogTitle>
       <DialogContent>
         <DialogContentText variant="body2">Contact details</DialogContentText>
         <List>
           <ListItem>
             <ListItemIcon><LocationOn /></ListItemIcon>
-            <ListItemText primary={`${corridor}/${room.toString().padStart(4, '0')}`} />
+            <ListItemText primary={loc} />
           </ListItem>
           <ListItem>
             <ListItemIcon><Email /></ListItemIcon>
-            <ListItemText primary={email} />
+            <ListItemText primary={email_p} />
           </ListItem>
           <ListItem>
             <ListItemIcon><Smartphone /></ListItemIcon>
-            <ListItemText primary={phone} />
+            <ListItemText primary={phone_p} />
           </ListItem>
         </List>
       </DialogContent>

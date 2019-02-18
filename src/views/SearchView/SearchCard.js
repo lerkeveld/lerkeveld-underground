@@ -11,8 +11,14 @@ import searchCardStyle from '../../assets/jss/searchCardStyle';
 
 function SearchCard(props) {
   const { classes, user = {}, ...rest } = props;
+  const { first_name = null, last_name = null, corridor = null, room = null } = user;
 
-  const { first_name = "", last_name = "", corridor = "", room = 0 } = user;
+  let fullname = "Status unknown";
+  if (first_name !== null && last_name !== null)
+    fullname = `${first_name} ${last_name}`
+  let loc = "Status unknown";
+  if (corridor !== null && room !== null)
+    loc = `${corridor}/${room.toString().padStart(4, '0')}`;
 
   return (
       <Card {...rest}>
@@ -27,8 +33,8 @@ function SearchCard(props) {
               <Avatar style={{backgroundColor: amber[100], color: amber[600]}}>
                 {first_name.length === 0 ? '' : first_name[0]}
               </Avatar>}
-          title={`${first_name} ${last_name}`}
-          subheader={`${corridor}/${room.toString().padStart(4, '0')}`}
+          title={fullname}
+          subheader={loc}
         />
       </Card>
   );
