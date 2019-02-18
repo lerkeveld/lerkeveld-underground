@@ -30,7 +30,6 @@ class AddBreadDialog extends React.Component {
         selectedGlobal,
         ...other
     } = this.props;
-      console.log(selectedOrderDate);
 
     const { date = new Date() } = selectedOrderDate;
     let formatDate = utils.formatDate(date);
