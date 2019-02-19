@@ -26,7 +26,7 @@ class MainLayout extends React.Component {
                <Sidebar
                  mobileOpen={this.state.mobileOpen}
                  routes={routes}
-                 setDrawerOpen={this.setDrawerOpen.bind(this)}
+                 setDrawerOpen={this.setDrawerOpen}
                />
                <Switch>
                  {

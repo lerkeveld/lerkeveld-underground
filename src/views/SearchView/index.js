@@ -66,6 +66,7 @@ class SearchView extends React.Component {
             fetching: false
         });
     }).catch(error => {
+        if (error === null) return;
         this.setState(
             {fetching: false},
             () => this.showMessage(error.message)
@@ -77,30 +78,30 @@ class SearchView extends React.Component {
     this.fetchUsers();
   }
 
-  onSelectUser(user) {
+  onSelectUser = (user) => () => {
     this.setState({
         selectedUser: user,
         dialogOpen: true
     })
   }
 
-  onDialogClose() {
+  onDialogClose = () => {
     this.setState({
         dialogOpen: false,
     });
   }
 
-  onLoadMore() {
+  onLoadMore = () => {
     this.setState({
         displayLimit: this.state.displayLimit + 30,
     });
   }
 
-  onCancelSearch() {
+  onCancelSearch = () => {
     this.setState({displayLimit: 30, filteredUsers: this.state.users});
   }
 
-  onSearchInput(query) {
+  onSearchInput = (query) => {
     const keywords = query.split(' ').map(keyword => keyword.toLowerCase());
     const fields = ['first_name', 'last_name'];
     const filteredUsers = this.state.users.filter(user => {
@@ -129,8 +130,8 @@ class SearchView extends React.Component {
           <Grid container spacing={16} style={{paddingBottom: '16px'}}>
             <Grid item xs={12} md={4}>
               <SearchBar
-                onChange={this.onSearchInput.bind(this)}
-                onCancelSearch={this.onCancelSearch.bind(this)}
+                onChange={this.onSearchInput}
+                onCancelSearch={this.onCancelSearch}
                 cancelOnEscape={true}
                 disabled={this.state.disabled}
               />
@@ -142,7 +143,7 @@ class SearchView extends React.Component {
                 return <Grid key={user.id} item xs={12} sm={6} md={4}>
                          <SearchCard
                            user={user}
-                           onClick={this.onSelectUser.bind(this, user)}
+                           onClick={this.onSelectUser(user)}
                          />
                        </Grid>;
               })
@@ -150,7 +151,7 @@ class SearchView extends React.Component {
           </Grid>
           { this.state.displayLimit < this.state.filteredUsers.length
               ? <div style={{textAlign: "center", marginTop: "16px"}}>
-                  <IconButton onClick={this.onLoadMore.bind(this)} title="Load More">
+                  <IconButton onClick={this.onLoadMore} title="Load More">
                     <ExpandMore />
                   </IconButton>
                 </div>
@@ -159,7 +160,7 @@ class SearchView extends React.Component {
           <SearchDialog
             open={this.state.dialogOpen}
             user={this.state.selectedUser}
-            onClose={this.onDialogClose.bind(this)}
+            onClose={this.onDialogClose}
           />
           { this.state.fetching
               ? <LoadingSnackbar open={this.state.fetching} />

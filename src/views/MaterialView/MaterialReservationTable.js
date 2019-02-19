@@ -46,6 +46,8 @@ class MaterialReservationTable extends React.Component {
   }
 
   doDelete = () => {
+    if (this.state.reservation.id === undefined)
+      return;
     api.del({
         path: '/materiaal/' + this.state.reservation.id,
     }).then(data => {
@@ -54,6 +56,7 @@ class MaterialReservationTable extends React.Component {
           () => this.props.showMessage('Reservatie geannuleerd', this.props.refresh)
         );
     }).catch(error => {
+        if (error === null) return;
         this.setState(
           {submitting: false, reservation: {}},
           () => this.props.showMessage(error.message)
@@ -73,7 +76,7 @@ class MaterialReservationTable extends React.Component {
   }
 
   render () {
-    const { classes, reservations, loading } = this.props;
+    const { classes, reservations = [], loading } = this.props;
 
     return (
         <React.Fragment>
@@ -134,11 +137,6 @@ class MaterialReservationTable extends React.Component {
 
 MaterialReservationTable.propTypes = {
   classes: PropTypes.object.isRequired,
-  reservations: PropTypes.array.isRequired,
 };
-
-MaterialReservationTable.defaultProps = {
-  reservations: []
-}
 
 export default withStyles(materialTableStyle)(MaterialReservationTable);

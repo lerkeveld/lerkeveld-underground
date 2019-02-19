@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 
 import LoadingButton from '../../components/LoadingButton';
@@ -85,6 +84,8 @@ class MaterialReservationForm extends React.Component {
   }
 
   doReserve = () => {
+    if (this.state.date === null)
+      return;
     api.post({
         path: '/materiaal/',
         data: {
@@ -108,6 +109,7 @@ class MaterialReservationForm extends React.Component {
             this.props.showMessage('Materiaal gereserveerd', this.props.refresh)
         );
     }).catch(error => {
+        if (error === null) return;
         this.setState(
             {submitting: false},
             () => this.props.showMessage(error.message)
@@ -129,8 +131,8 @@ class MaterialReservationForm extends React.Component {
   render() {
     const {
         disabled,
-        reservations,
-        items,
+        reservations = [],
+        items = [],
         refresh,
         showMessage,
         closeSnackbar,
@@ -142,7 +144,7 @@ class MaterialReservationForm extends React.Component {
           <form noValidate onSubmit={this.handleSubmit} {...rest}>
             <MaterialDatePicker
               disabled={disabled || this.state.dateChosen}
-              onChange={this.handleDateChange.bind(this)}
+              onChange={this.handleDateChange}
               value={this.state.date}
               error={this.state.errors.date}
             />
@@ -153,7 +155,7 @@ class MaterialReservationForm extends React.Component {
                      select={items}
                      items={this.state.items}
                      date={this.state.date}
-                     onChange={this.handleRequiredChange('items').bind(this)}
+                     onChange={this.handleRequiredChange('items')}
                      error={this.state.errors.items}
                   />
                 : null
@@ -191,22 +193,12 @@ class MaterialReservationForm extends React.Component {
           </form>
           <MaterialRulesDialog
             open={this.state.dialogOpen}
-            onAccept={this.handleDialogAccept.bind(this)}
-            onClose={this.handleDialogChange(false).bind(this)}
+            onAccept={this.handleDialogAccept}
+            onClose={this.handleDialogChange(false)}
           />
         </React.Fragment>
     );
   }
-}
-
-MaterialReservationForm.propTypes = {
-  reservations: PropTypes.array.isRequired,
-  items: PropTypes.array.isRequired
-};
-
-MaterialReservationForm.defaultProps = {
-  reservations: [],
-  items: []
 }
 
 export default MaterialReservationForm;

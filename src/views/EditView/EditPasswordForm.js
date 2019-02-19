@@ -83,6 +83,7 @@ class EditPasswordForm extends React.Component {
     }).then(data => {
         this.props.history.push('/profiel');
     }).catch(error => {
+        if (error === null) return;
         this.setState(
             {submitting: false},
             () => this.showMessage(error.message)

@@ -94,6 +94,7 @@ class ActivateForm extends React.Component {
     }).then(data => {
         this.setState({submitted: true, submitting: false});
     }).catch(error => {
+        if (error === null) return;
         this.setState(
             {submitting: false},
             () => this.showMessage(error.message)

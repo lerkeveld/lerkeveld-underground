@@ -66,6 +66,7 @@ class LoginForm extends React.Component {
             () => this.props.history.push(referrer)
         );
     }).catch(error => {
+        if (error === null) return;
         this.setState(
             {submitting: false},
             () => this.showMessage(error.message)

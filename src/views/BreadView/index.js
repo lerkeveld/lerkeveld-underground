@@ -63,6 +63,7 @@ class BreadView extends React.Component {
             fetchingOrderDates: false
         });
     }).catch(error => {
+        if (error === null) return;
         this.setState(
             {fetchingOrderDates: false},
             () => this.showMessage(error.message)
@@ -79,6 +80,7 @@ class BreadView extends React.Component {
             fetchingItems: false
         });
     }).catch(error => {
+        if (error === null) return;
         this.setState(
             {fetchingItems: false},
             () => this.showMessage(error.message)

@@ -64,6 +64,7 @@ class KotbarView extends React.Component {
             fetching: false
         });
     }).catch(error => {
+        if (error === null) return;
         this.setState(
             {fetching: false},
             () => this.showMessage(error.message)

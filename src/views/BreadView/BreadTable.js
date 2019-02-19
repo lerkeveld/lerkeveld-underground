@@ -83,16 +83,19 @@ class BreadTable extends React.Component {
     const path = this.state.selectedGlobal
       ? 'all'
       : this.state.selectedOrderDate.id;
+    if (path === undefined)
+      return;
     api.del({
         path: '/bread/' + path
     }).then(data => {
         this.setState(
-          {submittingClear: false, selectedOrderDate: {}, selectedGlobal: false},
+          {submittingClear: false},
           () => this.props.showMessage('Bestelling verwijderd', this.props.refresh)
         );
     }).catch(error => {
+        if (error === null) return;
         this.setState(
-          {submittingClear: false, selectedOrderDate: {}, selectedGlobal: false},
+          {submittingClear: false},
           () => this.props.showMessage(error.message)
         );
     })
@@ -102,17 +105,20 @@ class BreadTable extends React.Component {
     const path = this.state.selectedGlobal
       ? 'all'
       : this.state.selectedOrderDate.id;
+    if (path === undefined)
+      return;
     api.patch({
         path: '/bread/' + path,
         data: { items: [value] }
     }).then(data => {
         this.setState(
-          {submittingAdd: false, selectedOrderDate: {}, selectedGlobal: false},
+          {submittingAdd: false},
           () => this.props.showMessage('Brood toegevoegd', this.props.refresh)
         );
     }).catch(error => {
+        if (error === null) return;
         this.setState(
-          {submittingAdd: false, selectedOrderDate: {}, selectedGlobal: false},
+          {submittingAdd: false},
           () => this.props.showMessage(error.message)
         );
     })

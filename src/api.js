@@ -9,6 +9,9 @@ const INVALID_CREDENTIALS_STATUS = new Set([
     401,
     422
 ]);
+const IGNORE_ERROR = new Set([
+    '400 Bad Request'
+]);
 
 function wrapper(path, init, retryCredentials = true) {
     return fetch(path, init)
@@ -27,6 +30,10 @@ function wrapper(path, init, retryCredentials = true) {
             data.success === true 
               ? Promise.resolve(data)
               : Promise.reject(new Error(data.msg))
+        )
+        .catch((error) => IGNORE_ERROR.has(error.message)
+                            ? Promise.resolve()
+                            : Promise.reject(new Error(error.message))
         )
 }
 

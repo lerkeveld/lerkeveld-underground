@@ -1,15 +1,20 @@
 export function serializeDate(date) {
-    let month = '' + (date.getMonth() + 1);
-    let day = '' + date.getDate();
-    let year = date.getFullYear();
+  if (date === null)
+    return null;
 
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
+  let month = '' + (date.getMonth() + 1);
+  let day = '' + date.getDate();
+  let year = date.getFullYear();
 
-    return [year, month, day].join('-');
+  if (month.length < 2) month = '0' + month;
+  if (day.length < 2) day = '0' + day;
+
+  return [year, month, day].join('-');
 };
 
 export function formatDate(date) {
+  if (date === null)
+    return null;
   return date.toLocaleDateString(
     'nl-be',
     {'day': '2-digit', 'month': '2-digit', 'year': 'numeric'}

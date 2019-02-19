@@ -66,6 +66,7 @@ class MaterialView extends React.Component {
             fetchingReservations: false
         });
     }).catch(error => {
+        if (error === null) return;
         this.setState(
             {fetchingReservations: false},
             () => this.showMessage(error.message)
@@ -84,6 +85,7 @@ class MaterialView extends React.Component {
             fetchingItems: false
         });
     }).catch(error => {
+        if (error === null) return;
         this.setState(
             {fetchingItems: false},
             () => this.showMessage(error.message)

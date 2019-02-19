@@ -47,6 +47,8 @@ class KotbarReservationTable extends React.Component {
   }
 
   doDelete = () => {
+    if (this.state.reservation.id === undefined)
+      return;
     api.del({
         path: '/kotbar/' + this.state.reservation.id,
     }).then(data => {
@@ -55,6 +57,7 @@ class KotbarReservationTable extends React.Component {
           () => this.props.showMessage('Reservatie geannuleerd', this.props.refresh)
         );
     }).catch(error => {
+        if (error === null) return;
         this.setState(
           {submitting: false, reservation: {}},
           () => this.props.showMessage(error.message)

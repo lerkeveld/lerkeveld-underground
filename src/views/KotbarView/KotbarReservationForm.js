@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 
 import LoadingButton from '../../components/LoadingButton';
@@ -58,6 +57,8 @@ class KotbarReservationForm extends React.Component {
   }
 
   doReserve = () => {
+    if (this.state.date === null)
+      return;
     api.post({
         path: '/kotbar/',
         data: {
@@ -80,6 +81,7 @@ class KotbarReservationForm extends React.Component {
             () => this.props.showMessage('Kotbar gereserveerd', this.props.refresh)
         );
     }).catch(error => {
+        if (error === null) return;
         this.setState(
             {submitting: false},
             () => this.props.showMessage(error.message)
@@ -101,7 +103,7 @@ class KotbarReservationForm extends React.Component {
   render() {
     const {
         disabled,
-        reservations,
+        reservations = [],
         refresh,
         showMessage,
         closeSnackbar,
@@ -113,7 +115,7 @@ class KotbarReservationForm extends React.Component {
           <form noValidate onSubmit={this.handleSubmit} {...rest}>
             <KotbarDatePicker
               reservations={reservations}
-              onChange={this.handleDateChange.bind(this)}
+              onChange={this.handleDateChange}
               value={this.state.date}
               error={this.state.errors.date}
               disabled={disabled}
@@ -146,20 +148,12 @@ class KotbarReservationForm extends React.Component {
           </form>
           <KotbarRulesDialog
             open={this.state.dialogOpen}
-            onAccept={this.handleDialogAccept.bind(this)}
-            onClose={this.handleDialogChange(false).bind(this)}
+            onAccept={this.handleDialogAccept}
+            onClose={this.handleDialogChange(false)}
           />
         </React.Fragment>
     );
   }
 }
-
-KotbarReservationForm.propTypes = {
-  reservations: PropTypes.array.isRequired,
-};
-
-KotbarReservationForm.defaultProps = {
-  reservations: []
-};
 
 export default KotbarReservationForm;
