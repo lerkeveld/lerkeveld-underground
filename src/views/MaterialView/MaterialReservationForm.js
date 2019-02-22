@@ -90,7 +90,7 @@ class MaterialReservationForm extends React.Component {
         path: '/materiaal/',
         data: {
             date: utils.serializeDate(this.state.date),
-            items: this.state.items
+            items: this.state.items.map(item => item.id)
         }
     }).then(data => {
         const resetState = {

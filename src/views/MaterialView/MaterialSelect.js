@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
@@ -12,14 +11,14 @@ import * as utils from '../../utils';
 
 
 function MaterialSelect(props) {
-  const { reservations, select, items, date, error, ...rest } = props;
+  const { reservations = [], items = [], select, date, error, ...rest } = props;
 
   const reserved = new Set();
 
   reservations.forEach(reservation => {
     if (utils.serializeDate(date) === utils.serializeDate(reservation["date"])) {
       reservation.items.forEach(item => {
-          reserved.add(item);
+          reserved.add(item.id);
       });
     }
   });
@@ -38,40 +37,30 @@ function MaterialSelect(props) {
           value={items}
           error={error}
           input={<Input id="select-multiple" />}
-          renderValue={selected => selected.join(', ')}
+          renderValue={selected => selected.map(item => item.name).join(', ')}
           {...rest}
         >
           <MenuItem disabled value="">
             Kies Materialen:
           </MenuItem>
-          { select.map(name => (
+          { select.map(item => (
               <MenuItem
-                key={name}
-                value={name}
+                key={item.id}
+                value={item}
                 style={{paddingLeft: 0}}
-                disabled={reserved.has(name)}
+                disabled={reserved.has(item.id)}
               >
                 <Checkbox
                   color="primary"
-                  checked={items.includes(name)}
-                  indeterminate={reserved.has(name)}
+                  checked={items.map(item => item.id).includes(item.id)}
+                  indeterminate={reserved.has(item.id)}
                 />
-                <ListItemText primary={name} style={{paddingLeft: 0}}/>
+                <ListItemText primary={item.name} style={{paddingLeft: 0}}/>
               </MenuItem>
           ))}
         </Select>
       </FormControl>
   );
-}
-
-MaterialSelect.propTypes = {
-  reservations: PropTypes.array.isRequired,
-  material: PropTypes.array.isRequired
-};
-
-MaterialSelect.defaultProps = {
-  reservations: [],
-  material: []
 }
 
 export default MaterialSelect;

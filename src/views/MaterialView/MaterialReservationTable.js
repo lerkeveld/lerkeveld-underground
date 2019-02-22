@@ -117,7 +117,7 @@ class MaterialReservationTable extends React.Component {
                        {row.username}
                      </TableCell>
                      <TableCell className={classes.materialCell}>
-                       {row.items.join(", ")}
+                       {row.items.map(item => item.name).join(", ")}
                      </TableCell>
                    </TableRow>
                  );

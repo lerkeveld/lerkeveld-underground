@@ -78,9 +78,13 @@ class MaterialView extends React.Component {
     return api.get({
         path: '/materiaal/type'
     }).then(data => {
-        const items = data.items.map(item => item.name).sort();
+        const sortedItems = data.items.sort((i1, i2) => {
+            if (i1.name > i2.name) {return 1;}
+            if (i1.name < i2.name) {return -1;}
+            return 0;
+        });
         this.setState({
-            items: items,
+            items: sortedItems,
             disableFormItems: false,
             fetchingItems: false
         });
