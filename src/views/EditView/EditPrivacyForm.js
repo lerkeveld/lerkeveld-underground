@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 
 import CloseableSnackbar from '../../components/CloseableSnackbar';
 import LoadingButton from '../../components/LoadingButton';
+import LoadingSnackbar from '../../components/LoadingSnackbar';
 
 import * as api from '../../api';
 
@@ -16,6 +17,7 @@ import * as api from '../../api';
 class EditPrivacyForm extends React.Component {
 
   state = {
+    fetching: true,
     checked: false,
     snackbarOpen: false,
     messageInfo: {},
@@ -40,6 +42,21 @@ class EditPrivacyForm extends React.Component {
     this.setState({checked: event.target.checked});
   }
 
+  fetchProfile = () => {
+    return api.get({
+        path: '/user/profile'
+    }).then(data => {
+        const { user = {} } = data;
+        const { is_sharing = false } = user;
+        this.setState({checked: is_sharing, fetching: false});
+    }).catch(error => {
+        this.setState(
+            {fetching: false},
+            () => this.showMessage(error.message)
+        );
+    })
+  }
+
   doEdit = () => {
     api.post({
         path: '/user/edit',
@@ -60,6 +77,10 @@ class EditPrivacyForm extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
     this.setState({snackbarOpen: false, submitting: true}, this.doEdit);
+  }
+
+  componentDidMount() {
+    this.fetchProfile();
   }
 
   render() {
@@ -84,6 +105,8 @@ class EditPrivacyForm extends React.Component {
                 control={<Checkbox
                     checked={this.state.checked}
                     onChange={this.handleCheckedState}
+                    indeterminate={this.state.fetching}
+                    disabled={this.state.fetching}
                 />}
                 label="Ik deel mijn contactgegevens met alle Lerkies"
               />
@@ -96,6 +119,7 @@ class EditPrivacyForm extends React.Component {
                 type="submit"
                 style={{marginRight: "8px"}}
                 loading={this.state.submitting}
+                disabled={this.state.fetching}
               >
                 Submit
               </LoadingButton>
@@ -108,12 +132,15 @@ class EditPrivacyForm extends React.Component {
               </Button>
             </div>
           </form>
-          <CloseableSnackbar
-            key={this.state.messageInfo.key}
-            message={this.state.messageInfo.message}
-            open={this.state.snackbarOpen}
-            onClose={this.handleSnackbarClose}
-          />
+          { this.state.fetching
+              ? <LoadingSnackbar open={this.state.fetching} />
+              : <CloseableSnackbar
+                  key={this.state.messageInfo.key}
+                  message={this.state.messageInfo.message}
+                  open={this.state.snackbarOpen}
+                  onClose={this.handleSnackbarClose}
+                />
+          }
         </React.Fragment>
     );
   }

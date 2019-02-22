@@ -13,14 +13,14 @@ const progressSizes = {
 }
 
 function LoadingButton(props) {
-  const { classes, children, loading, size, ...rest } = props;
+  const { classes, children, disabled, loading, size, ...rest } = props;
   const progressSize = progressSizes[size] || 24;
 
   return (
         <div className={classes.wrapper}>
           <Button
             size={size}
-            disabled={loading}
+            disabled={disabled || loading}
             disableRipple
             {...rest}
           >
