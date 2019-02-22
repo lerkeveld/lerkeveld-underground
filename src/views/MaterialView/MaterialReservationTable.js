@@ -27,7 +27,7 @@ const emptyRow = (classes, prefix, message) => {
           </TableCell>
           <TableCell className={classes.dateCell}>{prefix}</TableCell>
           <TableCell className={classes.nameCell}>{message}</TableCell>
-          <TableCell className={classes.descriptionCell}></TableCell>
+          <TableCell className={classes.materialCell}></TableCell>
         </TableRow>
     )
 };

@@ -12,8 +12,8 @@ const kotbarTableStyle = theme => ({
     paddingRight: '24px'
   },
   nameCell: {
-    width: '140px',
-    minWidth: '140px',
+    width: '160px',
+    minWidth: '160px',
     paddingLeft: '0px',
     paddingRight: '24px'
   },
