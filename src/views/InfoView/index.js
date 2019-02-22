@@ -7,12 +7,17 @@ import viewStyle from '../../assets/jss/viewStyle';
 
 import CalendarPanel from './panels/CalendarPanel';
 import CantusPanel from './panels/CantusPanel';
-import ContactPanel from './panels/ContactPanel';
 import DefectsPanel from './panels/DefectsPanel';
 import DrivePanel from './panels/DrivePanel';
 import LostKeyPanel from './panels/LostKeyPanel';
 import ReceptionHoursPanel from './panels/ReceptionHoursPanel';
 import SubrentPanel from './panels/SubrentPanel';
+
+import ContactAllLerkiesPanel from './panels/ContactAllLerkiesPanel';
+import ContactAllPraesidiumPanel from './panels/ContactAllPraesidiumPanel';
+import ContactExLerkiesPanel from './panels/ContactExLerkiesPanel';
+import ContactLerkeveldPanel from './panels/ContactLerkeveldPanel';
+
 
 function InfoView(props) {
   const { classes } = props;
@@ -26,8 +31,7 @@ function InfoView(props) {
         <Typography variant="body2" paragraph className={classes.mainSubHeader}>
           Stuur jouw vaak gestelde vraag naar Lerkeveld IT!
         </Typography>
-        <div>
-          <ContactPanel />
+        <div style={{paddingBottom: "24px"}}>
           <ReceptionHoursPanel />
           <LostKeyPanel />
           <DefectsPanel />
@@ -35,6 +39,18 @@ function InfoView(props) {
           <SubrentPanel />
           <CalendarPanel />
           <DrivePanel />
+        </div>
+        <Typography variant="h5" className={classes.mainTitle}>
+          Contact
+        </Typography>
+        <Typography variant="body2" paragraph className={classes.mainSubHeader}>
+          Hoe kan ik ... bereiken?
+        </Typography>
+        <div>
+          <ContactLerkeveldPanel />
+          <ContactAllLerkiesPanel />
+          <ContactAllPraesidiumPanel />
+          <ContactExLerkiesPanel />
         </div>
       </main>
   );
