@@ -13,7 +13,7 @@ const materialTableStyle = theme => ({
   },
   nameCell: {
     width: '160px',
-    minWidth: '140px',
+    minWidth: '160px',
     paddingLeft: '0px',
     paddingRight: '24px'
   },
