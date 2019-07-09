@@ -109,7 +109,7 @@ class BreadView extends React.Component {
           <Typography variant="body2" paragraph className={classes.mainSubHeader}>
             Bestel hier wekelijks je brood tot en met vrijdag!
           </Typography>
-          <Grid container spacing={16}>
+          <Grid container spacing={2}>
             <Grid item xs={12}>
               <Typography variant="subtitle2">
                 Reservaties

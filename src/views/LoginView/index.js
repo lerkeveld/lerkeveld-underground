@@ -1,6 +1,5 @@
 import React from 'react';
-import Link from 'react-router-dom/Link'
-import withRouter from 'react-router-dom/withRouter'
+import { withRouter, Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Button from '@material-ui/core/Button';
@@ -95,8 +94,8 @@ class LoginForm extends React.Component {
   render() {
     const { classes } = this.props;
 
-    const ActivateLink = props => <Link to="/auth/activate" {...props} />;
-    const ResetLink = props => <Link to="/auth/reset" {...props} />;
+    const ActivateLink = React.forwardRef((props, ref) => <Link to="/auth/activate" {...props} ref={ref} />);
+    const ResetLink = React.forwardRef((props, ref) => <Link to="/auth/reset" {...props} ref={ref} />);
 
     return <React.Fragment>
              <form noValidate onSubmit={this.handleSubmit}>

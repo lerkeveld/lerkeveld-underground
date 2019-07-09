@@ -6,14 +6,14 @@ const materialTableStyle = theme => ({
     paddingRight: '8px'
   },
   dateCell: {
-    width: '100px',
-    minWidth: '100px',
+    width: '110px',
+    minWidth: '110px',
     paddingLeft: '0px',
     paddingRight: '24px'
   },
   nameCell: {
-    width: '160px',
-    minWidth: '160px',
+    width: '170px',
+    minWidth: '170px',
     paddingLeft: '0px',
     paddingRight: '24px'
   },

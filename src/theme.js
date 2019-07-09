@@ -3,7 +3,6 @@ import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 const theme = createMuiTheme({
   // https://github.com/mui-org/material-ui/issues/12741
   typography: {
-    useNextVariants: true,
     allVariants: {
       letterSpacing: 0
     }
@@ -21,7 +20,7 @@ const theme = createMuiTheme({
       dark: '#c7a500',
       contrastText: '#000000',
     },
-  }
+  },
 });
 
 export default theme;

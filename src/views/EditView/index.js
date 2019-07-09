@@ -1,8 +1,10 @@
 import React from 'react';
-import Link from 'react-router-dom/Link';
-import Redirect from 'react-router-dom/Redirect';
-import Route from 'react-router-dom/Route';
-import Switch from 'react-router-dom/Switch';
+import {
+    Link,
+    Redirect,
+    Route,
+    Switch
+} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Grid from '@material-ui/core/Grid';
@@ -23,7 +25,7 @@ class EditView extends React.Component {
   render () {
     const { classes } = this.props;
 
-    const ProfileLink = props => <Link to="/profiel" {...props} />;
+    const ProfileLink = React.forwardRef((props, ref) => <Link to="/profiel" {...props} ref={ref} />);
 
     return (
         <main className={classes.mainContent}>
@@ -34,7 +36,7 @@ class EditView extends React.Component {
             </IconButton>
             Update Profiel
           </Typography>
-          <Grid container spacing={16}>
+          <Grid container spacing={2}>
             <Grid item xs={12} sm={6} md={4}>
               <Switch>
                 <Route exact path="/edit/email" component={EditEmailForm} />

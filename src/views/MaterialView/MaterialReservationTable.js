@@ -80,13 +80,13 @@ class MaterialReservationTable extends React.Component {
 
     return (
         <React.Fragment>
-          <Table>
+          <Table size="small">
             <TableHead>
               <TableRow>
-                <TableCell className={classes.removeCell}></TableCell>
-                <TableCell className={classes.dateCell}>Datum</TableCell>
-                <TableCell className={classes.nameCell}>Verantwoordelijke</TableCell>
-                <TableCell className={classes.materialCell}>Materiaal</TableCell>
+                <TableCell size="medium" className={classes.removeCell}></TableCell>
+                <TableCell size="medium" className={classes.dateCell}>Datum</TableCell>
+                <TableCell size="medium" className={classes.nameCell}>Verantwoordelijke</TableCell>
+                <TableCell size="medium" className={classes.materialCell}>Materiaal</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

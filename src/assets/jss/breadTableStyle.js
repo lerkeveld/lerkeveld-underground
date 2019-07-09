@@ -1,7 +1,7 @@
 const breadTableStyle = theme => ({
   dateCell: {
-    width: '100px',
-    minWidth: '100px',
+    width: '110px',
+    minWidth: '110px',
     paddingLeft: '0px',
     paddingRight: '24px'
   },
@@ -11,8 +11,8 @@ const breadTableStyle = theme => ({
     paddingRight: '0px'
   },
   priceCell: {
-    width: '80px',
-    minWidth: '80px',
+    width: '60px',
+    minWidth: '60px',
     paddingLeft: '0px',
     paddingRight: '24px'
   },

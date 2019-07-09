@@ -1,7 +1,9 @@
 import React from 'react';
-import Redirect from 'react-router-dom/Redirect';
-import Route from 'react-router-dom/Route';
-import Switch from 'react-router-dom/Switch';
+import {
+    Redirect,
+    Route,
+    Switch
+} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Paper from '@material-ui/core/Paper';
