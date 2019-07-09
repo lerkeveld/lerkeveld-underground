@@ -72,7 +72,7 @@ class ProfileView extends React.Component {
           <Typography variant="body2" paragraph className={classes.mainSubHeader}>
             Contacteer Lerkeveld IT voor niet-aanpasbare velden.
           </Typography>
-          <Grid container spacing={16}>
+          <Grid container spacing={2}>
             <Grid item xs={12} md={4}>
               <NameCard
                 loading={this.state.fetching}

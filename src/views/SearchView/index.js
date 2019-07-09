@@ -127,7 +127,7 @@ class SearchView extends React.Component {
           <Typography variant="body2" paragraph className={classes.mainSubHeader}>
             Privacy settings zijn aanpasbaar in je profiel.
           </Typography>
-          <Grid container spacing={16} style={{paddingBottom: '16px'}}>
+          <Grid container spacing={2} style={{paddingBottom: '16px'}}>
             <Grid item xs={12} md={4}>
               <SearchBar
                 onChange={this.onSearchInput}
@@ -137,7 +137,7 @@ class SearchView extends React.Component {
               />
             </Grid>
           </Grid>
-          <Grid container spacing={16}>
+          <Grid container spacing={2}>
             {
               this.state.filteredUsers.slice(0, this.state.displayLimit).map(user => {
                 return <Grid key={user.id} item xs={12} sm={6} md={4}>

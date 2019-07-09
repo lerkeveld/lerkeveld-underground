@@ -129,7 +129,7 @@ class BreadTable extends React.Component {
 
     return (
         <React.Fragment>
-          <Table>
+          <Table size="small">
             <TableHead>
               <TableRow>
                 <TableCell className={classes.dateCell}>Week</TableCell>

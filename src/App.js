@@ -1,7 +1,5 @@
 import React from 'react';
-import withRouter from 'react-router-dom/withRouter';
-import Route from 'react-router-dom/Route';
-import Switch from 'react-router-dom/Switch';
+import { withRouter, Route, Switch } from 'react-router-dom';
 
 import AuthLayout from './layouts/AuthLayout';
 import MainLayout from './layouts/MainLayout';

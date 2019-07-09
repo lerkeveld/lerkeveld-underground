@@ -1,6 +1,5 @@
 import React from 'react';
-import Link from 'react-router-dom/Link';
-import withRouter from 'react-router-dom/withRouter'
+import { withRouter, Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
@@ -104,7 +103,7 @@ class EditEmailForm extends React.Component {
   }
 
   render() {
-    const ProfileLink = props => <Link to="/profiel" {...props} />;
+    const ProfileLink = React.forwardRef((props, ref) => <Link to="/profiel" {...props} ref={ref} />);
 
     return (
         <React.Fragment>

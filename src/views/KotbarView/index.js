@@ -88,7 +88,7 @@ class KotbarView extends React.Component {
           <Typography variant="body2" paragraph className={classes.mainSubHeader}>
             Reserveer hier de kotbar!
           </Typography>
-          <Grid container spacing={16}>
+          <Grid container spacing={2}>
             <Grid item xs={12} sm={6} md={4}>
               <Typography variant="subtitle2">
                 Nieuwe reservatie

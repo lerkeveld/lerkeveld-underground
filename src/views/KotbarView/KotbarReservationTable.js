@@ -81,13 +81,13 @@ class KotbarReservationTable extends React.Component {
 
     return (
         <React.Fragment>
-          <Table>
+          <Table size="small">
             <TableHead>
               <TableRow>
-                <TableCell className={classes.removeCell}></TableCell>
-                <TableCell className={classes.dateCell}>Datum</TableCell>
-                <TableCell className={classes.nameCell}>Verantwoordelijke</TableCell>
-                <TableCell className={classes.descriptionCell}>Beschrijving</TableCell>
+                <TableCell size="medium" className={classes.removeCell}></TableCell>
+                <TableCell size="medium" className={classes.dateCell}>Datum</TableCell>
+                <TableCell size="medium" className={classes.nameCell}>Verantwoordelijke</TableCell>
+                <TableCell size="medium" className={classes.descriptionCell}>Beschrijving</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

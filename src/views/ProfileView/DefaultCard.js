@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from 'react-router-dom/Link';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Avatar from '@material-ui/core/Avatar';
@@ -17,7 +17,7 @@ function DefaultCard(props) {
 
   let MyLink = undefined;
   if (link)
-    MyLink = props => <Link to={link} {...props} />;
+    MyLink = React.forwardRef((props, ref) => <Link to={link} {...props} ref={ref} />);
 
   const editIcon = <IconButton title="Edit" component={MyLink}><Edit /></IconButton>;
   const blockIcon = <IconButton title="Contacteer IT"><Block /></IconButton>;

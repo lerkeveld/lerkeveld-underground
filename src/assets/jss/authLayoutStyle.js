@@ -14,8 +14,8 @@ const authLayoutStyle = theme => ({
   },
   paper: {
     ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2,
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
     flex: 1,
     width: '100%',
     maxWidth: '350px',

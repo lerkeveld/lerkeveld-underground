@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from 'react-router-dom/Link'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Button from '@material-ui/core/Button';
@@ -85,7 +85,7 @@ class ResetForm extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const LoginLink = props => <Link to="/auth/login" {...props} />
+    const LoginLink = React.forwardRef((props, ref) => <Link to="/auth/login" {...props} ref={ref} />);
 
     return <React.Fragment>
              { !this.state.submitted
