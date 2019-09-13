@@ -200,12 +200,12 @@ class ActivateForm extends React.Component {
                              variant="body2"
                              color={this.state.errors.checkedPrivacy ? 'error' : 'default'}
                          >
-                           Ik heb de <a
+                           Ik heb de <Link
+                               to="/privacy_policy.pdf"
                                target="_blank"
                                rel="noopener noreferrer"
                                style={{color: this.state.errors.checkedPrivacy ? "inherit" : null}}
-                               href="/privacy_policy.pdf"
-                           >privacy policy</a> gelezen.<sup>*</sup>
+                           >privacy policy</Link> gelezen.<sup>*</sup>
                          </Typography>
                      }
                    />
