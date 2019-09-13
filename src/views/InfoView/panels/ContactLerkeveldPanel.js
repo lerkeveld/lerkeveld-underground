@@ -5,6 +5,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 
 import BuildIcon from '@material-ui/icons/Build';
@@ -35,41 +36,51 @@ function ContactPanel(props) {
             <List disablePadding className={classes.root}>
               <Divider />
               <ListItem>
-                <Avatar style={{backgroundColor: green[500]}}>
-                  <BusinessCenterIcon />
-                </Avatar>
+                <ListItemAvatar>
+                  <Avatar style={{backgroundColor: green[500]}}>
+                    <BusinessCenterIcon />
+                  </Avatar>
+                </ListItemAvatar>
                 <ListItemText primary="Dirk van Tricht" secondary="direkteur.ftc@gmail.com" />
                 <StarIcon className={classes.star} />
               </ListItem>
               <Divider />
               <ListItem>
-                <Avatar style={{backgroundColor: amber[500]}}>
-                  <SchoolIcon />
-                </Avatar>
+                <ListItemAvatar>
+                  <Avatar style={{backgroundColor: amber[500]}}>
+                    <SchoolIcon />
+                  </Avatar>
+                </ListItemAvatar>
                 <ListItemText primary="Walter Ceyssens" secondary="walter.ceyssens@jesuits.net" />
                 <StarIcon className={classes.star} />
               </ListItem>
               <Divider />
               <ListItem>
-                <Avatar style={{backgroundColor: red[500]}}>
-                  <RoomServiceIcon />
-                </Avatar>
+                <ListItemAvatar>
+                  <Avatar style={{backgroundColor: red[500]}}>
+                    <RoomServiceIcon />
+                  </Avatar>
+                </ListItemAvatar>
                 <ListItemText primary="Gerda Vandoren" secondary="gerda.vandoren.ftc@gmail.com" />
                 <StarIcon className={classes.star} />
               </ListItem>
               <Divider />
               <ListItem>
-                <Avatar style={{backgroundColor: purple[500]}}>
-                  <InboxIcon />
-                </Avatar>
+                <ListItemAvatar>
+                  <Avatar style={{backgroundColor: purple[500]}}>
+                    <InboxIcon />
+                  </Avatar>
+                </ListItemAvatar>
                 <ListItemText primary="Onthaal" secondary="onthaal.ftc@gmail.com" />
                 <StarIcon className={classes.star} />
               </ListItem>
               <Divider />
               <ListItem>
-                <Avatar style={{backgroundColor: cyan[500]}}>
-                  <BuildIcon />
-                </Avatar>
+                <ListItemAvatar>
+                  <Avatar style={{backgroundColor: cyan[500]}}>
+                    <BuildIcon />
+                  </Avatar>
+                </ListItemAvatar>
                 <ListItemText primary="Technische dienst" secondary="tent.ftc@gmail.com" />
                 <StarIcon className={classes.star} />
               </ListItem>
