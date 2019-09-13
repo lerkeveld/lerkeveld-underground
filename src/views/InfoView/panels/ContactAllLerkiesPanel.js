@@ -5,6 +5,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 
 import HomeIcon from '@material-ui/icons/Home';
@@ -25,9 +26,11 @@ function ContactAllLerkiesPanel(props) {
             <List disablePadding className={classes.root}>
               <Divider />
               <ListItem>
-                <Avatar style={{backgroundColor: blue[500]}}>
-                  <HomeIcon />
-                </Avatar>
+                <ListItemAvatar>
+                  <Avatar style={{backgroundColor: blue[500]}}>
+                    <HomeIcon />
+                  </Avatar>
+                </ListItemAvatar>
                 <ListItemText primary="Alle Lerkies" secondary="LERKIES@ls.kuleuven.be" />
                 <StarIcon className={classes.star} />
               </ListItem>
