@@ -23,10 +23,12 @@ class ActivateForm extends React.Component {
     password: '',
     confirm: '',
     checked: false,
+    checkedPrivacy: false,
     errors: {
         email: false,
         password: false,
-        confirm: false
+        confirm: false,
+        checkedPrivacy: false
     },
     submitting: false,
     submitted: false,
@@ -83,6 +85,16 @@ class ActivateForm extends React.Component {
     this.setState({checked: event.target.checked});
   }
 
+  handleCheckedPrivacyState = event => {
+    const checkedPrivacy = event.target.checked;
+    const stateUpdate = {
+        checkedPrivacy: checkedPrivacy,
+        errors: this.state.errors
+    };
+    stateUpdate.errors.checkedPrivacy = checkedPrivacy !== true;
+    this.setState(stateUpdate);
+  }
+
   doActivate = () => {
     api.post({
         path: '/auth/activate',
@@ -113,6 +125,8 @@ class ActivateForm extends React.Component {
         errors.password = true;
     if (this.state.confirm !== this.state.password)
         errors.confirm = true;
+    if (this.state.checkedPrivacy !== true)
+        errors.checkedPrivacy = true;
 
     if (Object.keys(errors).length !== 0) {
         this.setState({errors: errors});
@@ -172,8 +186,27 @@ class ActivateForm extends React.Component {
                          checked={this.state.checked}
                      />}
                      label={<Typography variant="body2">
-                              Ik deel mijn contactgegevens met alle Lerkies
+                         Ik deel mijn contactgegevens met alle Lerkies.
                             </Typography>
+                     }
+                   />
+                   <FormControlLabel
+                     control={<Checkbox
+                         onChange={this.handleCheckedPrivacyState}
+                         checked={this.state.checkedPrivacy}
+                     />}
+                     label={
+                         <Typography
+                             variant="body2"
+                             color={this.state.errors.checkedPrivacy ? 'error' : 'default'}
+                         >
+                           Ik heb de <a
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               style={{color: this.state.errors.checkedPrivacy ? "inherit" : null}}
+                               href="/privacy_policy.pdf"
+                           >privacy policy</a> gelezen.<sup>*</sup>
+                         </Typography>
                      }
                    />
                    <LoadingButton

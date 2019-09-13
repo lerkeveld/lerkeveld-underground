@@ -10,6 +10,7 @@ import CantusPanel from './panels/CantusPanel';
 import DefectsPanel from './panels/DefectsPanel';
 import DrivePanel from './panels/DrivePanel';
 import LostKeyPanel from './panels/LostKeyPanel';
+import PrivacyPanel from './panels/PrivacyPanel';
 import ReceptionHoursPanel from './panels/ReceptionHoursPanel';
 import SubrentPanel from './panels/SubrentPanel';
 
@@ -39,6 +40,7 @@ function InfoView(props) {
           <SubrentPanel />
           <CalendarPanel />
           <DrivePanel />
+          <PrivacyPanel />
         </div>
         <Typography variant="h5" className={classes.mainTitle}>
           Contact
