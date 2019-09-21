@@ -10,7 +10,7 @@ function LocationCard(props) {
 
   let textValue = null;
   if (corridor !== null && room !== null)
-    textValue = `${corridor}/${room.toString().padStart(4,'0')}`;
+    textValue = `${corridor}/${room}`;
 
   return (
       <DefaultCard

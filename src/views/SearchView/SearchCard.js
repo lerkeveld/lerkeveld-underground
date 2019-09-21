@@ -18,7 +18,7 @@ function SearchCard(props) {
     fullname = `${first_name} ${last_name}`
   let loc = "Status unknown";
   if (corridor !== null && room !== null)
-    loc = `${corridor}/${room.toString().padStart(4, '0')}`;
+    loc = `${corridor}/${room}`;
 
   return (
       <Card {...rest}>
