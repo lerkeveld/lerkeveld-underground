@@ -1,113 +1,51 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
+import React, {useState, useCallback} from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-import CloseableSnackbar from '../../components/CloseableSnackbar';
-import LoadingSnackbar from '../../components/LoadingSnackbar';
+import MaterialForm from './MaterialForm';
+import MaterialTable from './MaterialTable';
 
-import viewStyle from '../../assets/jss/viewStyle';
-import MaterialReservationForm from './MaterialReservationForm';
-import MaterialReservationTable from './MaterialReservationTable';
+import useViewStyles from '../../assets/jss/useViewStyles';
+import useLoadingSnackbar from '../../hooks/useLoadingSnackbar';
+import useEnqueueSnackbar from '../../hooks/useEnqueueSnackbar';
+import useFetch from '../../hooks/useFetch';
+import useCombineFetch from '../../hooks/useCombineFetch';
+import * as utils from '../../utils';
 
-import * as api from '../../api';
 
-class MaterialView extends React.Component {
+function MaterialView(props) {
+    const classes = useViewStyles();
 
-  state = {
-    items: [],
-    reservations: [],
-    fetchingItems: true,
-    fetchingReservations: true,
-    disableFormItems: true,
-    disableFormReservations: true,
-    snackbarOpen: false,
-    messageInfo: {}
-  }
+    const [reservations, setReservations] = useState([]);
+    const [items, setItems] = useState([]);
 
-  showMessage = (message, callback) => {
-      this.setState({
-          snackbarOpen: true,
-          messageInfo: {
-              key: new Date().getTime(),
-              message: message
-          }
-      }, callback);
-  }
+    // FETCHING
+    const fetchReservationsRequest = useFetch(
+        {method: 'GET', path: '/materiaal/'},
+        useCallback((data) => {
+            const reservations = data.reservations.map(reservation => {
+                return Object.assign(
+                    {},
+                    reservation,
+                    {date: new Date(reservation.date)}
+                )
+            });
+            setReservations(utils.sorted(reservations, (r) => r.date));
+        }, []),
+    );
+    const fetchItemsRequest = useFetch(
+        {method: 'GET', path: '/materiaal/type'},
+        useCallback((data) => {
+            setItems(utils.sorted(data.items, (i) => i.name));
+        }, []),
+    );
+    const combinedFetchRequest = useCombineFetch([
+        fetchReservationsRequest,
+        fetchItemsRequest,
+    ]);
 
-  handleSnackbarClose = () => {
-      this.closeSnackbar();
-  }
-
-  closeSnackbar = (callback) => {
-      this.setState({snackbarOpen: false}, callback);
-  }
-
-  fetchReservations = () => {
-    return api.get({
-        path: '/materiaal/'
-    }).then(data => {
-        const reservations = data.reservations.map(reservation => {
-            return Object.assign(
-                {},
-                reservation,
-                {date: new Date(reservation.date)}
-            )
-        });
-        const sorted = reservations.sort((r1, r2) => {
-            if (r1.date > r2.date) {return 1;}
-            if (r1.date < r2.date) {return -1;}
-            return 0;
-        });
-        this.setState({
-            reservations: sorted,
-            disableFormReservations: false,
-            fetchingReservations: false
-        });
-    }).catch(error => {
-        if (error === null) return;
-        this.setState(
-            {fetchingReservations: false},
-            () => this.showMessage(error.message)
-        );
-    })
-  }
-
-  fetchItems = () => {
-    return api.get({
-        path: '/materiaal/type'
-    }).then(data => {
-        const sortedItems = data.items.sort((i1, i2) => {
-            if (i1.name > i2.name) {return 1;}
-            if (i1.name < i2.name) {return -1;}
-            return 0;
-        });
-        this.setState({
-            items: sortedItems,
-            disableFormItems: false,
-            fetchingItems: false
-        });
-    }).catch(error => {
-        if (error === null) return;
-        this.setState(
-            {fetchingItems: false},
-            () => this.showMessage(error.message)
-        );
-    })
-  }
-
-  refresh = () => {
-    this.fetchReservations();
-    this.fetchItems();
-  }
-
-  componentDidMount() {
-    this.refresh();
-  }
-
-  render() {
-    const { classes } = this.props;
+    useLoadingSnackbar(combinedFetchRequest.isInitialFetch);
+    useEnqueueSnackbar(combinedFetchRequest.errorMessage);
 
     return (
         <main className={classes.mainContent}>
@@ -123,13 +61,11 @@ class MaterialView extends React.Component {
               <Typography variant="subtitle2">
                 Nieuwe reservatie
               </Typography>
-              <MaterialReservationForm
-                reservations={this.state.reservations}
-                items={this.state.items}
-                refresh={this.fetchReservations}
-                disabled={this.state.disableFormReservations || this.state.disableFormItems}
-                showMessage={this.showMessage}
-                closeSnackbar={this.closeSnackbar}
+              <MaterialForm
+                reservations={reservations}
+                items={items}
+                refresh={fetchReservationsRequest.refresh}
+                disabled={combinedFetchRequest.isFetching}
               />
             </Grid>
             <Grid item xs={12}>
@@ -137,32 +73,16 @@ class MaterialView extends React.Component {
                 Reservaties
               </Typography>
               <div style={{width: '100%', overflowX: 'auto'}}>
-                <MaterialReservationTable
-                  reservations={this.state.reservations}
-                  refresh={this.fetchReservations}
-                  loading={this.state.fetchingReservations}
-                  showMessage={this.showMessage}
-                  closeSnackbar={this.closeSnackbar}
+                <MaterialTable
+                  reservations={reservations}
+                  refresh={fetchReservationsRequest.refresh}
+                  isFetching={combinedFetchRequest.isFetching}
                 />
               </div>
             </Grid>
           </Grid>
-          { this.state.fetchingReservations || this.state.fetchingItems
-              ? <LoadingSnackbar open />
-              : <CloseableSnackbar
-                  key={this.state.messageInfo.key}
-                  message={this.state.messageInfo.message}
-                  open={this.state.snackbarOpen}
-                  onClose={this.handleSnackbarClose}
-                />
-          }
         </main>
     );
-  }
 }
 
-MaterialView.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(viewStyle)(MaterialView);
+export default MaterialView;

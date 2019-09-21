@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
+import { SnackbarProvider } from 'notistack';
 
 import DateFnsUtils from '@date-io/date-fns';
 import MuiPickersUtilsProvider from '@material-ui/pickers/MuiPickersUtilsProvider';
@@ -17,7 +18,9 @@ ReactDOM.render(
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter basename={process.env.PUBLIC_URL}>
-        <App />
+        <SnackbarProvider maxSnack={1}>
+          <App />
+        </SnackbarProvider>
       </BrowserRouter>
     </MuiThemeProvider>
   </MuiPickersUtilsProvider>,

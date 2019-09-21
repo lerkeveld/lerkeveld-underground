@@ -5,8 +5,6 @@ import {
     Route,
     Switch
 } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
@@ -17,14 +15,11 @@ import EditEmailForm from './EditEmailForm';
 import EditPasswordForm from './EditPasswordForm';
 import EditPrivacyForm from './EditPrivacyForm';
 
-import viewStyle from '../../assets/jss/viewStyle';
+import useViewStyles from '../../assets/jss/useViewStyles';
 
 
-class EditView extends React.Component {
-
-  render () {
-    const { classes } = this.props;
-
+function EditView(props) {
+    const classes = useViewStyles();
     const ProfileLink = React.forwardRef((props, ref) => <Link to="/profiel" {...props} ref={ref} />);
 
     return (
@@ -48,11 +43,6 @@ class EditView extends React.Component {
           </Grid>
         </main>
     );
-  }
 }
 
-EditView.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(viewStyle)(EditView);
+export default EditView;

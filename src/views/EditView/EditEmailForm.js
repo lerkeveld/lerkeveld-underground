@@ -1,174 +1,107 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { withRouter, Link } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 
-import CloseableSnackbar from '../../components/CloseableSnackbar';
+import Button from '@material-ui/core/Button';
 import LoadingButton from '../../components/LoadingButton';
 import PasswordField from '../../components/PasswordField';
+import TextField from '../../wrappers/TextField';
+import Typography from '@material-ui/core/Typography';
 
-import * as api from '../../api';
+import useFormikSubmit from '../../hooks/useFormikSubmit';
+import useEnqueueSnackbar from '../../hooks/useEnqueueSnackbar';
 
-// https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
-// eslint-disable-next-line
-const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-function validateEmail(email) {
-  return re.test(String(email).toLowerCase());
-}
+// FORM SCHEMA
+const SCHEMA = Yup.object().shape({
+    email:    Yup.string().email().required(),
+    password: Yup.string().required(),
+});
+const INITIAL = {email: '', password: ''};
 
+const ProfileLink = React.forwardRef((props, ref) => <Link to="/profiel" {...props} ref={ref} />);
 
-class EditEmailForm extends React.Component {
+function EditEmailForm(props) {
 
-  state = {
-    email: '',
-    password: '',
-    errors: {
-      email: false,
-      password: false
-    },
-    snackbarOpen: false,
-    messageInfo: {},
-    submitting: false
-  }
-
-  showMessage = (message) => {
-      this.setState({
-          snackbarOpen: true,
-          messageInfo: {
-              key: new Date().getTime(),
-              message: message
-          }
-      });
-  }
-
-  handleSnackbarClose = () => {
-    this.setState({snackbarOpen: false});
-  }
-
-  handleRequiredChange = prop => event => {
-    const value = event.target.value;
-    const stateUpdate = {
-        [prop]: value,
-        errors: this.state.errors
-    };
-    stateUpdate.errors[prop] = value.length === 0;
-    this.setState(stateUpdate);
-  }
-
-  handleEmailChange = event => {
-    const email = event.target.value;
-    const stateUpdate = {
-        email: email,
-        errors: this.state.errors
-    };
-    stateUpdate.errors.email = !validateEmail(email);
-    this.setState(stateUpdate);
-  }
-
-  doEdit = () => {
-    api.post({
-        path: '/user/edit/secure',
-        data: {
-            check: this.state.password,
-            email: this.state.email
-        }
-    }).then(data => {
-        this.props.history.push('/profiel');
-    }).catch(error => {
-        if (error === null) return;
-        this.setState(
-            {submitting: false},
-            () => this.showMessage(error.message)
-        );
-    })
-  }
-
-  handleSubmit = event => {
-    event.preventDefault();
-
-    // check errors
-    const errors = {};
-    if (!validateEmail(this.state.email))
-        errors.email = true;
-    if (this.state.password.length === 0)
-        errors.password = true;
-
-    if (Object.keys(errors).length !== 0) {
-        this.setState({errors: errors});
-        return false;
-    }
-
-    this.setState({snackbarOpen: false, submitting: true}, this.doEdit);
-  }
-
-  render() {
-    const ProfileLink = React.forwardRef((props, ref) => <Link to="/profiel" {...props} ref={ref} />);
+    const [errorMessage, setErrorMessage] = useState(null);
+    const onSubmit = useFormikSubmit(
+        useCallback((values, actions) => {
+            setErrorMessage(null);
+            return {
+                method: 'POST',
+                path: '/user/edit/secure',
+                data: {
+                    check: values.password,
+                    email: values.email,
+                },
+            }
+        }, []),
+        useCallback((data, actions) => {
+            props.history.push('/profiel');
+        }, [props.history]),
+        useCallback((reason, actions) => {setErrorMessage(reason);}, [])
+    );
+    useEnqueueSnackbar(errorMessage);
 
     return (
-        <React.Fragment>
+        <>
           <Typography variant="subtitle2">
             Wijzig e-mailadres
           </Typography>
-          <form noValidate onSubmit={this.handleSubmit}>
-            <TextField
-              margin="normal"
-              label="E-mailadres"
-              helperText={this.state.errors.email
-                  ? "Vul hier een geldig e-mailadres in."
-                  : null
-              }
-              fullWidth
-              InputLabelProps={{
-                shrink: true
-              }}
-              required
-              value={this.state.email}
-              onChange={this.handleEmailChange}
-              error={this.state.errors.email}
-            />
-            <PasswordField
-              margin="normal"
-              label="Huidig wachtwoord"
-              fullWidth
-              showEndAdornment
-              InputLabelProps={{
-                shrink: true
-              }}
-              required
-              value={this.state.password}
-              onChange={this.handleRequiredChange('password')}
-              error={this.state.errors.password}
-            />
-            <div style={{marginTop: '8px', display: 'flex'}}>
-              <LoadingButton
-                variant="contained"
-                color="primary"
-                size="small"
-                type="submit"
-                style={{marginRight: "8px"}}
-                loading={this.state.submitting}
-              >
-                Submit
-              </LoadingButton>
-              <Button
-                color="primary"
-                size="small"
-                component={ProfileLink}
-              >
-                Back
-              </Button>
-            </div>
-          </form>
-          <CloseableSnackbar
-            key={this.state.messageInfo.key}
-            message={this.state.messageInfo.message}
-            open={this.state.snackbarOpen}
-            onClose={this.handleSnackbarClose}
-          />
-        </React.Fragment>
+          <Formik
+              initialValues={INITIAL}
+              onSubmit={onSubmit}
+              validationSchema={SCHEMA}
+          >
+              {({ isSubmitting, errors, touched }) => (
+                <Form noValidate>
+                  <Field
+                    name="email"
+                    component={TextField}
+                    margin="normal"
+                    label="E-mailadres"
+                    fullWidth
+                    InputLabelProps={{
+                      shrink: true
+                    }}
+                    required
+                  />
+                  <Field
+                    name="password"
+                    component={PasswordField}
+                    margin="normal"
+                    label="Huidig wachtwoord"
+                    fullWidth
+                    showEndAdornment
+                    InputLabelProps={{
+                      shrink: true
+                    }}
+                    required
+                  />
+                  <div style={{marginTop: '8px', display: 'flex'}}>
+                    <LoadingButton
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      type="submit"
+                      style={{marginRight: "8px"}}
+                      loading={isSubmitting}
+                    >
+                      Submit
+                    </LoadingButton>
+                    <Button
+                      color="primary"
+                      size="small"
+                      component={ProfileLink}
+                    >
+                      Back
+                    </Button>
+                  </div>
+                </Form>
+              )}
+          </Formik>
+        </>
     );
-  }
 }
 
 export default withRouter(EditEmailForm);

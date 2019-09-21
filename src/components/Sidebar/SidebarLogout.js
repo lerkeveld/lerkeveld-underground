@@ -8,25 +8,28 @@ import ExitToApp from '@material-ui/icons/ExitToApp';
 import * as api from '../../api';
 
 
-class SidebarLogout extends React.Component {
+function SidebarLogout({
+    setDrawerOpen,
+    history,
+    ...props
+}) {
 
-  handleLogoutClick = () => {
-    api.removeCredentials().then(() => {
-      this.props.setDrawerOpen(false);
-      this.props.history.push('/auth/login');
-    });
-  }
+    const handleLogoutClick = async () => {
+        setDrawerOpen(false);
+        history.push('/auth/login');
+        try {
+            await api.removeCredentials();
+        } catch {}
+    }
 
-  render() {
     return (
-        <ListItem button onClick={this.handleLogoutClick}>
+        <ListItem button onClick={handleLogoutClick}>
           <ListItemIcon>
             <ExitToApp />
           </ListItemIcon>
           <ListItemText primary="Logout" primaryTypographyProps={{variant: "body1"}}/>
         </ListItem>
     );
-  }
 }
 
 export default withRouter(SidebarLogout);

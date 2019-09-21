@@ -1,6 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
 import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
@@ -23,75 +21,72 @@ import red from '@material-ui/core/colors/red';
 
 import DefaultPanel from '../DefaultPanel';
 
-import contactPanelStyle from '../../../assets/jss/contactPanelStyle';
+import useContactPanelStyles from '../../../assets/jss/useContactPanelStyles';
 
 
 function ContactPanel(props) {
-  const { classes } = props;
-  return (
-      <DefaultPanel
-        disablePadding
-        title="Hoe kan ik ... van Lerkeveld bereiken?"
-        details={
-            <List disablePadding className={classes.root}>
-              <Divider />
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar style={{backgroundColor: green[500]}}>
-                    <BusinessCenterIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary="Dirk van Tricht" secondary="direkteur.ftc@gmail.com" />
-                <StarIcon className={classes.star} />
-              </ListItem>
-              <Divider />
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar style={{backgroundColor: amber[500]}}>
-                    <SchoolIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary="Walter Ceyssens" secondary="walter.ceyssens@jesuits.net" />
-                <StarIcon className={classes.star} />
-              </ListItem>
-              <Divider />
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar style={{backgroundColor: red[500]}}>
-                    <RoomServiceIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary="Gerda Vandoren" secondary="gerda.vandoren.ftc@gmail.com" />
-                <StarIcon className={classes.star} />
-              </ListItem>
-              <Divider />
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar style={{backgroundColor: purple[500]}}>
-                    <InboxIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary="Onthaal" secondary="onthaal.ftc@gmail.com" />
-                <StarIcon className={classes.star} />
-              </ListItem>
-              <Divider />
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar style={{backgroundColor: cyan[500]}}>
-                    <BuildIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary="Technische dienst" secondary="tent.ftc@gmail.com" />
-                <StarIcon className={classes.star} />
-              </ListItem>
-            </List>
-        }
-      />
-  );
+    const classes = useContactPanelStyles();
+
+    return (
+        <DefaultPanel
+          disablePadding
+          title="Hoe kan ik ... van Lerkeveld bereiken?"
+          details={
+              <List disablePadding className={classes.root}>
+                <Divider />
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar style={{backgroundColor: green[500]}}>
+                      <BusinessCenterIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary="Dirk van Tricht" secondary="direkteur.ftc@gmail.com" />
+                  <StarIcon className={classes.star} />
+                </ListItem>
+                <Divider />
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar style={{backgroundColor: amber[500]}}>
+                      <SchoolIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary="Walter Ceyssens" secondary="walter.ceyssens@jesuits.net" />
+                  <StarIcon className={classes.star} />
+                </ListItem>
+                <Divider />
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar style={{backgroundColor: red[500]}}>
+                      <RoomServiceIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary="Gerda Vandoren" secondary="gerda.vandoren.ftc@gmail.com" />
+                  <StarIcon className={classes.star} />
+                </ListItem>
+                <Divider />
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar style={{backgroundColor: purple[500]}}>
+                      <InboxIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary="Onthaal" secondary="onthaal.ftc@gmail.com" />
+                  <StarIcon className={classes.star} />
+                </ListItem>
+                <Divider />
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar style={{backgroundColor: cyan[500]}}>
+                      <BuildIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary="Technische dienst" secondary="tent.ftc@gmail.com" />
+                  <StarIcon className={classes.star} />
+                </ListItem>
+              </List>
+          }
+        />
+    );
 }
 
-ContactPanel.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(contactPanelStyle)(ContactPanel);
+export default ContactPanel;
