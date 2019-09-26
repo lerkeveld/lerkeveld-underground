@@ -22,5 +22,5 @@ export function formatDate(date) {
 };
 
 export function formatMoney(cents) {
-    return "€" + parseFloat(Math.round(cents / 100)).toFixed(2);
+    return "€" + parseFloat(cents / 100).toFixed(2);
 };
