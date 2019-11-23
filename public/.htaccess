@@ -1,9 +1,13 @@
-# https://gist.github.com/joellongie/e6f4a3b5fa98c521782619e487aca15a 
 <IfModule mod_rewrite.c>
     RewriteEngine On
+
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^(.*)$ https://lerkies.studentenweb.org/underground/$1 [R,L]
+
+    # https://gist.github.com/joellongie/e6f4a3b5fa98c521782619e487aca15a 
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule . /underground/index.html [L]
+    RewriteRule . https://lerkies.studentenweb.org/underground/ [L]
 </IfModule>
 
 # https://github.com/w3c/ServiceWorker/issues/893
