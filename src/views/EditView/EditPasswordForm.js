@@ -40,7 +40,7 @@ function EditPasswordForm(props) {
         useCallback((data, actions) => {
             props.history.push('/profiel');
         }, [props.history]),
-        useCallback((reason, actions) => {setErrorMessage(reason);}, [])
+        useCallback((reason, actions) => setErrorMessage(reason), [])
     );
     useEnqueueSnackbar(errorMessage);
 

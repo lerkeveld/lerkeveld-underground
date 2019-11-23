@@ -15,7 +15,7 @@ import useContactPanelStyles from '../../../assets/jss/useContactPanelStyles';
 
 
 function ContactExLerkiesPanel(props) {
-    const classes = useContactPanelStyles;
+    const classes = useContactPanelStyles();
     return (
         <DefaultPanel
           disablePadding

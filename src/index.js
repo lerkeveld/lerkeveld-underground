@@ -5,7 +5,7 @@ import { SnackbarProvider } from 'notistack';
 
 import DateFnsUtils from '@date-io/date-fns';
 import MuiPickersUtilsProvider from '@material-ui/pickers/MuiPickersUtilsProvider';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import App from './App';

@@ -21,6 +21,7 @@ function SearchView(props) {
     const classes = useViewStyles();
 
     const [users, setUsers] = useState([]);
+    const [query, setQuery] = useState("");
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState({});
     const [displayLimit, setDisplayLimit] = useState(30);
@@ -44,19 +45,20 @@ function SearchView(props) {
 
     // HELPER FUNCTIONS
     const onSearchInput = (query) => {
-      const keywords = query.split(' ').map(keyword => keyword.toLowerCase());
-      const fields = ['first_name', 'last_name'];
-      const filteredUsers = users.filter(user => {
-          return keywords.every(keyword => {
-              return fields.some(field => {
-                  return user[field].split(' ').some(part => {
-                      return part.toLowerCase().indexOf(keyword) === 0;
-                  });
-              });
-          });
-      });
-      setDisplayLimit(30);
-      setFilteredUsers(filteredUsers);
+        setQuery(query);
+        const keywords = query.split(' ').map(keyword => keyword.toLowerCase());
+        const fields = ['first_name', 'last_name'];
+        const filteredUsers = users.filter(user => {
+            return keywords.every(keyword => {
+                return fields.some(field => {
+                    return user[field].split(' ').some(part => {
+                        return part.toLowerCase().indexOf(keyword) === 0;
+                    });
+                });
+            });
+        });
+        setDisplayLimit(30);
+        setFilteredUsers(filteredUsers);
     }
 
     const onSelectUser = (user) => () => {
@@ -73,6 +75,7 @@ function SearchView(props) {
     }
 
     const onCancelSearch = () => {
+        setQuery("");
         setDisplayLimit(30);
         setFilteredUsers(users);
     }
@@ -89,6 +92,7 @@ function SearchView(props) {
           <Grid container spacing={2} style={{paddingBottom: '16px'}}>
             <Grid item xs={12} md={4}>
               <SearchBar
+                value={query}
                 onChange={onSearchInput}
                 onCancelSearch={onCancelSearch}
                 cancelOnEscape={true}
