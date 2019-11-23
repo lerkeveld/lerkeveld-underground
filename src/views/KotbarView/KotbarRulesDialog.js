@@ -48,6 +48,11 @@ function KotbarRulesDialog(props) {
           </li>
           <li>
             <Typography variant="body2">
+              Bij privéfeestjes mogen <span className={classes.bold}>maximum 30 externen</span> aanwezig zijn.
+            </Typography>
+          </li>
+          <li>
+            <Typography variant="body2">
               <span className={classes.bold}>Plaats meubilair terug</span> na een activiteit.
             </Typography>
           </li>
