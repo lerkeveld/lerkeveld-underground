@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { DatePicker } from '@material-ui/pickers/DatePicker';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -9,9 +8,13 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 
 
-function KotbarDatePicker(props) {
-    const { reservations, ...rest } = props;
-
+function KotbarDatePicker({
+    field = {},
+    form = {},
+    disabled = true,
+    reservations = [],
+    ...props
+}) {
     let minDate = new Date();
     minDate.setDate(minDate.getDate() - 1);
     let maxDate = new Date();
@@ -48,18 +51,12 @@ function KotbarDatePicker(props) {
           }}
           leftArrowIcon={<KeyboardArrowLeft />}
           rightArrowIcon={<KeyboardArrowRight />}
-          {...rest}
+          disabled={disabled}
+          value={field.value}
+          onChange={(value) => form.setFieldValue(field.name, value)}
+          error={form.errors.hasOwnProperty(field.name) && form.touched.hasOwnProperty(field.name)}
         />
     );
 }
-
-KotbarDatePicker.propTypes = {
-  reservations: PropTypes.array.isRequired,
-};
-
-KotbarDatePicker.defaultProps = {
-  reservations: []
-};
-
 
 export default KotbarDatePicker;

@@ -1,15 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
 
 import DefaultPanel from '../DefaultPanel';
 
-import boldStyle from '../../../assets/jss/boldStyle';
+import useBoldStyles from '../../../assets/jss/useBoldStyles';
 
 
 function DefectsPanel(props) {
-  const { classes } = props;
+  const classes = useBoldStyles();
   return (
       <DefaultPanel
         title="Wat moet ik doen als iets in mijn kamer defect is?"
@@ -22,8 +20,4 @@ function DefectsPanel(props) {
   );
 }
 
-DefectsPanel.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(boldStyle)(DefectsPanel);
+export default DefectsPanel;

@@ -1,104 +1,48 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
+import React, { useState, useCallback } from 'react';
+
+import BreadTable from './BreadTable';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-import CloseableSnackbar from '../../components/CloseableSnackbar';
-import LoadingSnackbar from '../../components/LoadingSnackbar';
+import useViewStyles from '../../assets/jss/useViewStyles';
+import useLoadingSnackbar from '../../hooks/useLoadingSnackbar';
+import useEnqueueSnackbar from '../../hooks/useEnqueueSnackbar';
+import useFetch from '../../hooks/useFetch';
+import useCombineFetch from '../../hooks/useCombineFetch';
+import * as utils from '../../utils';
 
-import viewStyle from '../../assets/jss/viewStyle';
-import BreadTable from './BreadTable';
 
-import * as api from '../../api';
+function BreadView(props) {
+    const classes = useViewStyles();
 
+    const [items, setItems] = useState([]);
+    const [orderDates, setOrderDates] = useState([]);
 
-class BreadView extends React.Component {
+    // FETCHING
+    const fetchOrderDatesRequest = useFetch(
+        {method: 'GET', path: '/bread/'},
+        useCallback((data) => {
+            const orderDates = data['order_dates'].map(orderDate => {
+                return Object.assign(
+                    {},
+                    orderDate,
+                    {date: new Date(orderDate.date)}
+                )
+            });
+            setOrderDates(utils.sorted(orderDates, (o) => o.date));
+        }, []),
+    )
+    const fetchItemsRequest = useFetch(
+        {method: 'GET', path: '/bread/type'},
+        useCallback((data) => {setItems(data.items);}, []),
+    )
+    const combinedFetchRequest = useCombineFetch([
+        fetchOrderDatesRequest,
+        fetchItemsRequest,
+    ]);
 
-  state = {
-    items: [],
-    orderDates: [],
-    fetchingItems: true,
-    fetchingOrderDates: true,
-    snackbarOpen: false,
-    messageInfo: {}
-  }
-
-  showMessage = (message, callback) => {
-      this.setState({
-          snackbarOpen: true,
-          messageInfo: {
-              key: new Date().getTime(),
-              message: message
-          }
-      }, callback);
-  }
-
-  handleSnackbarClose = () => {
-      this.closeSnackbar();
-  }
-
-  closeSnackbar = (callback) => {
-      this.setState({snackbarOpen: false}, callback);
-  }
-
-  fetchOrderDates = () => {
-    return api.get({
-        path: '/bread/'
-    }).then(data => {
-        const orderDates = data['order_dates'].map(orderDate => {
-            return Object.assign(
-                {},
-                orderDate,
-                {date: new Date(orderDate.date)}
-            )
-        });
-        const sorted = orderDates.sort((r1, r2) => {
-            if (r1.date > r2.date) {return 1;}
-            if (r1.date < r2.date) {return -1;}
-            return 0;
-        });
-        this.setState({
-            orderDates: sorted,
-            fetchingOrderDates: false
-        });
-    }).catch(error => {
-        if (error === null) return;
-        this.setState(
-            {fetchingOrderDates: false},
-            () => this.showMessage(error.message)
-        );
-    })
-  }
-
-  fetchItems = () => {
-    return api.get({
-        path: '/bread/type'
-    }).then(data => {
-        this.setState({
-            items: data.items,
-            fetchingItems: false
-        });
-    }).catch(error => {
-        if (error === null) return;
-        this.setState(
-            {fetchingItems: false},
-            () => this.showMessage(error.message)
-        );
-    })
-  }
-
-  refresh = () => {
-    this.fetchOrderDates();
-    this.fetchItems();
-  }
-
-  componentDidMount() {
-    this.refresh();
-  }
-
-  render() {
-    const { classes } = this.props;
+    useLoadingSnackbar(combinedFetchRequest.isInitialFetch);
+    useEnqueueSnackbar(combinedFetchRequest.errorMessage);
 
     return (
         <main className={classes.mainContent}>
@@ -116,33 +60,16 @@ class BreadView extends React.Component {
               </Typography>
               <div style={{width: '100%', overflowX: 'auto'}}>
                 <BreadTable
-                  orderDates={this.state.orderDates}
-                  items={this.state.items}
-                  refresh={this.fetchOrderDates}
-                  loading={this.state.fetchingOrderDates || this.state.fetchingItems}
-                  showMessage={this.showMessage}
-                  closeSnackbar={this.closeSnackbar}
+                  orderDates={orderDates}
+                  items={items}
+                  refresh={fetchOrderDatesRequest.refresh}
+                  isFetching={combinedFetchRequest.isFetching}
                 />
               </div>
             </Grid>
           </Grid>
-          { this.state.fetchingOrderDates || this.state.fetchingItems
-              ? <LoadingSnackbar open />
-              : <CloseableSnackbar
-                  key={this.state.messageInfo.key}
-                  message={this.state.messageInfo.message}
-                  open={this.state.snackbarOpen}
-                  onClose={this.handleSnackbarClose}
-                />
-          }
         </main>
     );
-  }
 }
 
-
-BreadView.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(viewStyle)(BreadView);
+export default BreadView;

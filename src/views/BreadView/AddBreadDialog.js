@@ -14,66 +14,58 @@ import AddIcon from '@material-ui/icons/Add';
 import * as utils from '../../utils';
 
 
-class AddBreadDialog extends React.Component {
-
-  handleListItemClick = value => () => {
-    this.props.onSelect(value.name);
-  };
-
-  render() {
-    const {
-        open,
-        onSelect,
-        onClose,
-        items = [],
-        selectedOrderDate = {},
-        selectedGlobal,
-        ...other
-    } = this.props;
-
-    const { date = new Date() } = selectedOrderDate;
-    let formatDate = utils.formatDate(date);
-    if (selectedGlobal)
-      formatDate = 'alle weken';
+function AddBreadDialog({
+    open,
+    onSelect,
+    onClose,
+    items = [],
+    selectedOrderDate = {},
+    selectedGlobal,
+    ...props
+}) {
+    let formatDate = 'alle weken';
+    if (selectedGlobal === false) {
+        const { date = new Date() } = selectedOrderDate;
+        formatDate = utils.formatDate(date);
+    }
 
     return (
-      <Dialog
-        aria-labelledby="dialog-title"
-        open={open}
-        onSelect={onSelect}
-        onClose={onClose}
-        maxWidth="xs"
-        fullWidth
-        {...other}
-      >
-        <DialogTitle id="dialog-title">Bestel voor {formatDate}</DialogTitle>
-          <List>
-            {items.map(item => (
-              <ListItem
-                button
-                key={item.id}
-                onClick={this.handleListItemClick(item)}
-              >
-                <ListItemAvatar>
-                  <Avatar style={{backgroundColor: amber[100], color: amber[600]}}>
-                    <AddIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary={item.name}
-                  secondary={utils.formatMoney(item.price)}
-                />
-              </ListItem>
-            ))}
-          </List>
-        <DialogActions>
-          <Button onClick={onClose} color="default">
-            Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <Dialog
+          aria-labelledby="dialog-title"
+          open={open}
+          onSelect={onSelect}
+          onClose={onClose}
+          maxWidth="xs"
+          fullWidth
+          {...props}
+        >
+          <DialogTitle id="dialog-title">Bestel voor {formatDate}</DialogTitle>
+            <List>
+              {items.map(item => (
+                <ListItem
+                  button
+                  key={item.id}
+                  onClick={() => onSelect(item.name)}
+                >
+                  <ListItemAvatar>
+                    <Avatar style={{backgroundColor: amber[100], color: amber[600]}}>
+                      <AddIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={item.name}
+                    secondary={utils.formatMoney(item.price)}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          <DialogActions>
+            <Button onClick={onClose} color="default">
+              Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
     );
-  }
 }
 
 export default AddBreadDialog;

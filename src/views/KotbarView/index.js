@@ -1,83 +1,39 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
+import React, {useState, useCallback} from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-import CloseableSnackbar from '../../components/CloseableSnackbar';
-import LoadingSnackbar from '../../components/LoadingSnackbar';
+import KotbarForm from './KotbarForm';
+import KotbarTable from './KotbarTable';
 
-import KotbarReservationForm from './KotbarReservationForm';
-import KotbarReservationTable from './KotbarReservationTable';
+import useViewStyles from '../../assets/jss/useViewStyles';
+import useLoadingSnackbar from '../../hooks/useLoadingSnackbar';
+import useEnqueueSnackbar from '../../hooks/useEnqueueSnackbar';
+import useFetch from '../../hooks/useFetch';
+import * as utils from '../../utils';
 
-import viewStyle from '../../assets/jss/viewStyle';
-import * as api from '../../api';
 
+function KotbarView(props) {
+    const classes = useViewStyles();
 
-class KotbarView extends React.Component {
+    const [reservations, setReservations] = useState([]);
 
-  state = {
-    reservations: [],
-    fetching: true,
-    disableForm: true,
-    snackbarOpen: false,
-    messageInfo: {}
-  }
+    // FETCHING
+    const fetchRequest = useFetch(
+        {method: 'GET', path: '/kotbar/'},
+        useCallback((data) => {
+            const reservations = data.reservations.map(reservation => {
+                return Object.assign(
+                    {},
+                    reservation,
+                    {date: new Date(reservation.date)}
+                )
+            });
+            setReservations(utils.sorted(reservations, (r) => r.date));
+        }, []),
+    );
 
-  showMessage = (message, callback) => {
-      this.setState({
-          snackbarOpen: true,
-          messageInfo: {
-              key: new Date().getTime(),
-              message: message
-          }
-      }, callback);
-  }
-
-  handleSnackbarClose = () => {
-      this.closeSnackbar();
-  }
-
-  closeSnackbar = (callback) => {
-      this.setState({snackbarOpen: false}, callback);
-  }
-
-  fetchReservations = () => {
-    return api.get({
-        path: '/kotbar/'
-    }).then(data => {
-        const reservations = data.reservations.map(reservation => {
-            return Object.assign(
-                {},
-                reservation,
-                {date: new Date(reservation.date)}
-            )
-        });
-        const sorted = reservations.sort((r1, r2) => {
-            if (r1.date > r2.date) {return 1;}
-            if (r1.date < r2.date) {return -1;}
-            return 0;
-        });
-        this.setState({
-            reservations: sorted,
-            disableForm: false,
-            fetching: false
-        });
-    }).catch(error => {
-        if (error === null) return;
-        this.setState(
-            {fetching: false},
-            () => this.showMessage(error.message)
-        );
-    })
-  }
-
-  componentDidMount() {
-    this.fetchReservations();
-  }
-
-  render () {
-    const { classes } = this.props;
+    useLoadingSnackbar(fetchRequest.isInitialFetch);
+    useEnqueueSnackbar(fetchRequest.errorMessage);
 
     return (
         <main className={classes.mainContent}>
@@ -93,12 +49,10 @@ class KotbarView extends React.Component {
               <Typography variant="subtitle2">
                 Nieuwe reservatie
               </Typography>
-              <KotbarReservationForm
-                reservations={this.state.reservations}
-                refresh={this.fetchReservations}
-                disabled={this.state.disableForm}
-                showMessage={this.showMessage}
-                closeSnackbar={this.closeSnackbar}
+              <KotbarForm
+                reservations={reservations}
+                refresh={fetchRequest.refresh}
+                disabled={fetchRequest.isFetching}
               />
             </Grid>
             <Grid item xs={12}>
@@ -106,32 +60,16 @@ class KotbarView extends React.Component {
                 Reservaties
               </Typography>
               <div style={{width: '100%', overflowX: 'auto'}}>
-                <KotbarReservationTable
-                  reservations={this.state.reservations}
-                  refresh={this.fetchReservations}
-                  loading={this.state.fetching}
-                  showMessage={this.showMessage}
-                  closeSnackbar={this.closeSnackbar}
+                <KotbarTable
+                  reservations={reservations}
+                  refresh={fetchRequest.refresh}
+                  isFetching={fetchRequest.isFetching}
                 />
               </div>
             </Grid>
           </Grid>
-          { this.state.fetching
-              ? <LoadingSnackbar open={this.state.fetching} />
-              : <CloseableSnackbar
-                  key={this.state.messageInfo.key}
-                  message={this.state.messageInfo.message}
-                  open={this.state.snackbarOpen}
-                  onClose={this.handleSnackbarClose}
-                />
-          }
         </main>
     );
-  }
 }
 
-KotbarView.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(viewStyle)(KotbarView);
+export default KotbarView;

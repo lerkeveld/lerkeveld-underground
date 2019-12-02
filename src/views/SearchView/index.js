@@ -1,123 +1,85 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {useState, useCallback} from 'react';
 import SearchBar from 'material-ui-search-bar';
-import withStyles from '@material-ui/core/styles/withStyles';
+
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
-import CloseableSnackbar from '../../components/CloseableSnackbar';
-import LoadingSnackbar from '../../components/LoadingSnackbar';
-
 import SearchCard from './SearchCard';
 import SearchDialog from './SearchDialog';
 
-import viewStyle from '../../assets/jss/viewStyle';
-import * as api from '../../api';
+import useViewStyles from '../../assets/jss/useViewStyles';
+import useLoadingSnackbar from '../../hooks/useLoadingSnackbar';
+import useEnqueueSnackbar from '../../hooks/useEnqueueSnackbar';
+import useFetch from '../../hooks/useFetch';
+import * as utils from '../../utils';
 
 
-class SearchView extends React.Component {
+function SearchView(props) {
+    const classes = useViewStyles();
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      users: [],
-      displayLimit: 30,
-      dialogOpen: false,
-      selectedUser: {},
-      fetching: true,
-      disabled: true,
-      snackbarOpen: false,
-      messageInfo: {}
-    }
-    this.state.filteredUsers = this.state.users;
-  }
+    const [users, setUsers] = useState([]);
+    const [query, setQuery] = useState("");
+    const [filteredUsers, setFilteredUsers] = useState([]);
+    const [selectedUser, setSelectedUser] = useState({});
+    const [displayLimit, setDisplayLimit] = useState(30);
+    const [disabled, setDisabled] = useState(true);
+    const [dialogOpen, setDialogOpen] = useState(false);
 
-  showMessage = (message) => {
-      this.setState({
-          snackbarOpen: true,
-          messageInfo: {
-              key: new Date().getTime(),
-              message: message
-          }
-      });
-  }
+    // FETCHING
+    const fetchRequest = useFetch(
+        {method: 'GET', path: '/user/all'},
+        useCallback((data) => {
+            const fullName = u => u['first_name'] + u['last_name'];
+            const sortedUsers = utils.sorted(data.users, fullName);
+            setUsers(sortedUsers);
+            setFilteredUsers(sortedUsers);
+            setDisabled(false);
+        }, []),
+    )
 
-  handleSnackbarClose = () => {
-      this.setState({snackbarOpen: false});
-  }
+    useLoadingSnackbar(fetchRequest.isFetching);
+    useEnqueueSnackbar(fetchRequest.errorMessage);
 
-  fetchUsers = () => {
-    return api.get({
-        path: '/user/all'
-    }).then(data => {
-        const fullName = u => u['first_name'] + u['last_name'];
-        const sortedUsers = data.users.sort((u1, u2) => {
-            if (fullName(u1) > fullName(u2)) {return 1;}
-            if (fullName(u1) < fullName(u2)) {return -1;}
-            return 0;
-        });
-        this.setState({
-            users: sortedUsers,
-            filteredUsers: sortedUsers,
-            disabled: false,
-            fetching: false
-        });
-    }).catch(error => {
-        if (error === null) return;
-        this.setState(
-            {fetching: false},
-            () => this.showMessage(error.message)
-        );
-    })
-  }
-
-  componentDidMount() {
-    this.fetchUsers();
-  }
-
-  onSelectUser = (user) => () => {
-    this.setState({
-        selectedUser: user,
-        dialogOpen: true
-    })
-  }
-
-  onDialogClose = () => {
-    this.setState({
-        dialogOpen: false,
-    });
-  }
-
-  onLoadMore = () => {
-    this.setState({
-        displayLimit: this.state.displayLimit + 30,
-    });
-  }
-
-  onCancelSearch = () => {
-    this.setState({displayLimit: 30, filteredUsers: this.state.users});
-  }
-
-  onSearchInput = (query) => {
-    const keywords = query.split(' ').map(keyword => keyword.toLowerCase());
-    const fields = ['first_name', 'last_name'];
-    const filteredUsers = this.state.users.filter(user => {
-        return keywords.every(keyword => {
-            return fields.some(field => {
-                return user[field].split(' ').some(part => {
-                    return part.toLowerCase().indexOf(keyword) === 0;
+    // HELPER FUNCTIONS
+    const onSearchInput = (query) => {
+        setQuery(query);
+        const keywords = query.split(' ').map(keyword => keyword.toLowerCase());
+        const fields = ['first_name', 'last_name'];
+        const filteredUsers = users.filter(user => {
+            return keywords.every(keyword => {
+                return fields.some(field => {
+                    return user[field].split(' ').some(part => {
+                        return part.toLowerCase().indexOf(keyword) === 0;
+                    });
                 });
             });
         });
-    });
-    this.setState({displayLimit: 30, filteredUsers: filteredUsers});
-  }
+        setDisplayLimit(30);
+        setFilteredUsers(filteredUsers);
+    }
 
-  render() {
-    const { classes } = this.props;
+    const onSelectUser = (user) => () => {
+        setSelectedUser(user);
+        setDialogOpen(true);
+    }
+
+    const onDialogClose = () => {
+        setDialogOpen(false);
+    }
+
+    const onLoadMore = () => {
+        setDisplayLimit(displayLimit + 30);
+    }
+
+    const onCancelSearch = () => {
+        setQuery("");
+        setDisplayLimit(30);
+        setFilteredUsers(users);
+    }
+
     return (
         <main className={classes.mainContent}>
           <div className={classes.toolbar} />
@@ -130,54 +92,41 @@ class SearchView extends React.Component {
           <Grid container spacing={2} style={{paddingBottom: '16px'}}>
             <Grid item xs={12} md={4}>
               <SearchBar
-                onChange={this.onSearchInput}
-                onCancelSearch={this.onCancelSearch}
+                value={query}
+                onChange={onSearchInput}
+                onCancelSearch={onCancelSearch}
                 cancelOnEscape={true}
-                disabled={this.state.disabled}
+                disabled={disabled}
               />
             </Grid>
           </Grid>
           <Grid container spacing={2}>
             {
-              this.state.filteredUsers.slice(0, this.state.displayLimit).map(user => {
+              filteredUsers.slice(0, displayLimit).map(user => {
                 return <Grid key={user.id} item xs={12} sm={6} md={4}>
                          <SearchCard
                            user={user}
-                           onClick={this.onSelectUser(user)}
+                           onClick={onSelectUser(user)}
                          />
                        </Grid>;
               })
             }
           </Grid>
-          { this.state.displayLimit < this.state.filteredUsers.length
+          { displayLimit < filteredUsers.length
               ? <div style={{textAlign: "center", marginTop: "16px"}}>
-                  <IconButton onClick={this.onLoadMore} title="Load More">
+                  <IconButton onClick={onLoadMore} title="Load More">
                     <ExpandMore />
                   </IconButton>
                 </div>
               : null
           }
           <SearchDialog
-            open={this.state.dialogOpen}
-            user={this.state.selectedUser}
-            onClose={this.onDialogClose}
+            open={dialogOpen}
+            user={selectedUser}
+            onClose={onDialogClose}
           />
-          { this.state.fetching
-              ? <LoadingSnackbar open={this.state.fetching} />
-              : <CloseableSnackbar
-                  key={this.state.messageInfo.key}
-                  message={this.state.messageInfo.message}
-                  open={this.state.snackbarOpen}
-                  onClose={this.handleSnackbarClose}
-                />
-          }
         </main>
     );
-  }
 }
 
-SearchView.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(viewStyle)(SearchView);
+export default SearchView;

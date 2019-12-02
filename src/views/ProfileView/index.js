@@ -1,11 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
+import React, {useState, useCallback } from 'react';
+
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-
-import CloseableSnackbar from '../../components/CloseableSnackbar';
-import LoadingSnackbar from '../../components/LoadingSnackbar';
 
 import EmailCard from './cards/EmailCard';
 import LocationCard from './cards/LocationCard';
@@ -15,53 +11,24 @@ import PasswordCard from './cards/PasswordCard';
 import PhoneCard from './cards/PhoneCard';
 import PrivacyCard from './cards/PrivacyCard';
 
-import viewStyle from '../../assets/jss/viewStyle';
-import * as api from '../../api';
+import useViewStyles from '../../assets/jss/useViewStyles';
+import useLoadingSnackbar from '../../hooks/useLoadingSnackbar';
+import useEnqueueSnackbar from '../../hooks/useEnqueueSnackbar';
+import useFetch from '../../hooks/useFetch';
 
 
-class ProfileView extends React.Component {
+function ProfileView(props) {
+    const classes = useViewStyles();
+    const [user, setUser] = useState({});
 
-  state = {
-    user: {},
-    fetching: true,
-    snackbarOpen: false,
-    messageInfo: {}
-  }
+    // FETCHING
+    const fetchRequest = useFetch(
+        {method: 'GET', path: '/user/profile'},
+        useCallback((data) => {setUser(data.user);}, []),
+    );
 
-  showMessage = (message) => {
-      this.setState({
-          snackbarOpen: true,
-          messageInfo: {
-              key: new Date().getTime(),
-              message: message
-          }
-      });
-  }
-
-  handleSnackbarClose = () => {
-      this.setState({snackbarOpen: false});
-  }
-
-  fetchProfile = () => {
-    return api.get({
-        path: '/user/profile'
-    }).then(data => {
-        this.setState({user: data.user, fetching: false});
-    }).catch(error => {
-        this.setState(
-            {fetching: false},
-            () => this.showMessage(error.message)
-        );
-    })
-  }
-
-  componentDidMount() {
-    this.fetchProfile();
-  }
-
-  render () {
-    const { classes } = this.props;
-    const { user } = this.state;
+    useLoadingSnackbar(fetchRequest.isInitialFetch);
+    useEnqueueSnackbar(fetchRequest.errorMessage);
 
     return (
         <main className={classes.mainContent}>
@@ -75,62 +42,48 @@ class ProfileView extends React.Component {
           <Grid container spacing={2}>
             <Grid item xs={12} md={4}>
               <NameCard
-                loading={this.state.fetching}
+                loading={fetchRequest.isFetching}
                 firstName={user.first_name}
                 lastName={user.last_name}
               />
             </Grid>
             <Grid item xs={12} md={4}>
               <EmailCard
-                loading={this.state.fetching}
+                loading={fetchRequest.isFetching}
                 email={user.email}
               />
             </Grid>
             <Grid item xs={12} md={4}>
-              <PasswordCard loading={this.state.fetching}/>
+              <PasswordCard loading={fetchRequest.isFetching}/>
             </Grid>
             <Grid item xs={12} md={4}>
               <LocationCard
-                loading={this.state.fetching}
+                loading={fetchRequest.isFetching}
                 corridor={user.corridor}
                 room={user.room}
               />
             </Grid>
             <Grid item xs={12} md={4}>
               <PhoneCard
-                loading={this.state.fetching}
+                loading={fetchRequest.isFetching}
                 phone={user.phone}
               />
             </Grid>
             <Grid item xs={12} md={4}>
               <MembershipCard
-                loading={this.state.fetching}
+                loading={fetchRequest.isFetching}
                 isMember={user.is_member}
               />
             </Grid>
             <Grid item xs={12} md={4}>
               <PrivacyCard
-                loading={this.state.fetching}
+                loading={fetchRequest.isFetching}
                 isSharing={user.is_sharing}
               />
             </Grid>
           </Grid>
-        { this.state.fetching
-            ? <LoadingSnackbar open />
-            : <CloseableSnackbar
-                key={this.state.messageInfo.key}
-                message={this.state.messageInfo.message}
-                open={this.state.snackbarOpen}
-                onClose={this.handleSnackbarClose}
-              />
-        }
         </main>
     );
-  }
 }
 
-ProfileView.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(viewStyle)(ProfileView);
+export default ProfileView;

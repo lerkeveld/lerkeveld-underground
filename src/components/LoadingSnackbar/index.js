@@ -1,46 +1,40 @@
 import React from 'react';
-import withStyles from '@material-ui/core/styles/withStyles';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { makeStyles } from '@material-ui/core/styles';
 import Fade from '@material-ui/core/Fade';
-import Snackbar from '@material-ui/core/Snackbar';
-
-import loadingSnackbarStyle from '../../assets/jss/loadingSnackbarStyle';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
-function LoadingSnackbar(props) {
-  const { classes, open, ...rest } = props;
+const useStyles = makeStyles(theme => ({
+    wrapper: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    progress: {
+        marginRight: '16px',
+    },
+}));
 
-  return (
-       <Snackbar
-         anchorOrigin={{
-           vertical: 'bottom',
-           horizontal: 'left',
-         }}
-         open={open}
-         TransitionComponent={Fade}
-         TransitionProps={{
-             in: open,
-             style: {
-                 transitionDelay: open ? '800ms' : '0ms'
-             },
-             unmountOnExit: true
-         }}
-         ContentProps={{
-           'aria-describedby': 'snackbar-message',
-         }}
-         message={
-             <span id="snackbar-message" className={classes.wrapper}>
-               <CircularProgress
-                 className={classes.progress}
-                 color="inherit"
-                 size={25}
-               />
-               Loading ...
-             </span>
-         }
-         {...rest}
-       />
-  );
+
+export function LoadingSnackbarMessage(props) {
+    const classes = useStyles();
+    return (
+        <span className={classes.wrapper}>
+            <CircularProgress
+              className={classes.progress}
+              color="inherit"
+              size={25}
+            />
+            Loading ...
+        </span>
+    )
 }
 
-export default withStyles(loadingSnackbarStyle)(LoadingSnackbar);
+export const LoadingSnackbarOptions = { 
+    persist: true,
+    TransitionComponent: Fade,
+    TransitionProps: {
+        style: {
+            transitionDelay: '800ms'
+        }
+    },
+}

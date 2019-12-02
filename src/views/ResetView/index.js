@@ -1,150 +1,43 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Link } from 'react-router-dom'
-import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-import CloseableSnackbar from '../../components/CloseableSnackbar';
-import LoadingButton from '../../components/LoadingButton';
+import ResetForm from './ResetForm';
+import useAuthStyles from '../../assets/jss/useAuthStyles';
 
-import authStyle from '../../assets/jss/authStyle';
-import * as api from '../../api';
+const LoginLink = React.forwardRef((props, ref) => <Link to="/auth/login" {...props} ref={ref} />);
 
 
-class ResetForm extends React.Component {
+function ResetView(props) {
+    const classes = useAuthStyles();
+    const [submitted, setSubmitted] = useState(false);
 
-  state = {
-    email: '',
-    errors: {
-      email: false
-    },
-    submitting: false,
-    submitted: false,
-    snackbarOpen: false,
-    messageInfo: {}
-  }
-
-  showMessage = (message) => {
-      this.setState({
-          snackbarOpen: true,
-          messageInfo: {
-              key: new Date().getTime(),
-              message: message
+    return (
+        <>
+          { !submitted
+            ? <ResetForm setSubmitted={setSubmitted} />
+            : <>
+                <Typography variant="body2" paragraph>
+                  <span className={classes.bold}>Check je inbox</span> (en je spam folder) voor een e-mail met een link om je wachtwoord te resetten.
+                </Typography>
+                <Typography variant="body2">
+                  E-mails worden <span className={classes.bold}>om het kwartier</span> verzonden.
+                  (Dit is een voorzorgsmaatregel van KU Leuven tegen spam.)
+                </Typography>
+              </>
           }
-      });
-  }
-
-  handleSnackbarClose = () => {
-      this.setState({snackbarOpen: false});
-  }
-
-  handleRequiredChange = prop => event => {
-    const value = event.target.value;
-    const stateUpdate = {
-        [prop]: value,
-        errors: this.state.errors
-    };
-    stateUpdate.errors[prop] = value.length === 0;
-    this.setState(stateUpdate);
-  }
-
-  doReset = () => {
-    api.post({
-        path: '/auth/reset',
-        data: {
-            email: this.state.email,
-        }
-    }).then(data => {
-        this.setState({submitted: true, submitting: false});
-    }).catch(error => {
-        if (error === null) return;
-        this.setState(
-            {submitting: false},
-            () => this.showMessage(error.message)
-        );
-    })
-  }
-
-  handleSubmit = event => {
-    event.preventDefault();
-
-    // check errors
-    const errors = {};
-    if (this.state.email.length === 0)
-        errors.email = true;
-
-    if (Object.keys(errors).length !== 0) {
-        this.setState({errors: errors});
-        return false;
-    }
-
-    this.setState({snackbarOpen: false, submitting: true}, this.doReset);
-  }
-
-  render() {
-    const { classes } = this.props;
-    const LoginLink = React.forwardRef((props, ref) => <Link to="/auth/login" {...props} ref={ref} />);
-
-    return <React.Fragment>
-             { !this.state.submitted
-               ? <form noValidate onSubmit={this.handleSubmit}>
-                   <TextField
-                     label="E-mail"
-                     fullWidth
-                     margin="normal"
-                     InputLabelProps={{
-                       shrink: true,
-                     }}
-                     required
-                     onChange={this.handleRequiredChange('email')}
-                     value={this.state.email}
-                     error={this.state.errors.email}
-                   />
-                   <LoadingButton
-                     className={classes.submit}
-                     variant="contained"
-                     color="secondary"
-                     size="small"
-                     type="submit"
-                     loading={this.state.submitting}
-                   >
-                     Verstuur reset e-mail
-                   </LoadingButton>
-                 </form>
-               : <React.Fragment>
-                   <Typography variant="body2" paragraph>
-                     <span className={classes.bold}>Check je inbox</span> (en je spam folder) voor een e-mail met een link om je wachtwoord te resetten.
-                   </Typography>
-                   <Typography variant="body2">
-                     E-mails worden <span className={classes.bold}>om het kwartier</span> verzonden.
-                     (Dit is een voorzorgsmaatregel van KU Leuven tegen spam.)
-                   </Typography>
-                 </React.Fragment>
-             }
-             <div className={classes.action}>
-               <Button
-                 color="primary"
-                 size="small"
-                 component={LoginLink}
-               >
-                 Naar Login
-               </Button>
-             </div>
-             <CloseableSnackbar
-               anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
-               key={this.state.messageInfo.key}
-               message={this.state.messageInfo.message}
-               open={this.state.snackbarOpen}
-               onClose={this.handleSnackbarClose}
-             />
-           </React.Fragment>
-  }
+          <div className={classes.action}>
+            <Button
+              color="primary"
+              size="small"
+              component={LoginLink}
+            >
+              Naar Login
+            </Button>
+          </div>
+        </>
+    )
 }
 
-ResetForm.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(authStyle)(ResetForm);
+export default ResetView;

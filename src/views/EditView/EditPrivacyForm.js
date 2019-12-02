@@ -1,148 +1,131 @@
-import React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { withRouter, Link } from 'react-router-dom';
+import { Formik, Form, Field } from 'formik';
+import { CheckboxWithLabel } from 'formik-material-ui';
+import * as Yup from 'yup';
+
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
+import LoadingButton from '../../components/LoadingButton';
 import Typography from '@material-ui/core/Typography';
 
-import CloseableSnackbar from '../../components/CloseableSnackbar';
-import LoadingButton from '../../components/LoadingButton';
-import LoadingSnackbar from '../../components/LoadingSnackbar';
+import useFetch from '../../hooks/useFetch';
+import useFormikSubmit from '../../hooks/useFormikSubmit';
+import useEnqueueSnackbar from '../../hooks/useEnqueueSnackbar';
+import useLoadingSnackbar from '../../hooks/useLoadingSnackbar';
 
-import * as api from '../../api';
+// FORM SCHEMA
+const SCHEMA = Yup.object().shape({isSharing: Yup.bool()});
 
+const ProfileLink = React.forwardRef((props, ref) => <Link to="/profiel" {...props} ref={ref} />);
 
-class EditPrivacyForm extends React.Component {
+function EditPrivacyForm(props) {
 
-  state = {
-    fetching: true,
-    checked: false,
-    snackbarOpen: false,
-    messageInfo: {},
-    submitting: false
-  }
+    const [isSharing, setIsSharing] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(null);
 
-  showMessage = (message) => {
-      this.setState({
-          snackbarOpen: true,
-          messageInfo: {
-              key: new Date().getTime(),
-              message: message
-          }
-      });
-  }
+    // FETCHING
+    const fetchRequest = useFetch(
+        {method: 'GET', path: '/user/profile'},
+        useCallback((data) => {
+            const { user = {} } = data;
+            const { is_sharing = false } = user;
+            setIsSharing(is_sharing);
+        }, []),
+    );
+    useEffect(() => {
+        setErrorMessage(fetchRequest.errorMessage);
+    }, [fetchRequest.errorMessage])
 
-  handleSnackbarClose = () => {
-      this.setState({snackbarOpen: false});
-  }
+    const onSubmit = useFormikSubmit(
+        useCallback((values, actions) => {
+            setErrorMessage(null);
+            return {
+                method: 'POST',
+                path: '/user/edit',
+                data: {
+                    is_sharing: values.isSharing,
+                },
+            }
+        }, []),
+        useCallback((data, actions) => {
+            props.history.push('/profiel');
+        }, [props.history]),
+        useCallback((reason, actions) => {setErrorMessage(reason);}, [])
+    );
 
-  handleCheckedState = event => {
-    this.setState({checked: event.target.checked});
-  }
-
-  fetchProfile = () => {
-    return api.get({
-        path: '/user/profile'
-    }).then(data => {
-        const { user = {} } = data;
-        const { is_sharing = false } = user;
-        this.setState({checked: is_sharing, fetching: false});
-    }).catch(error => {
-        this.setState(
-            {fetching: false},
-            () => this.showMessage(error.message)
-        );
-    })
-  }
-
-  doEdit = () => {
-    api.post({
-        path: '/user/edit',
-        data: {
-            is_sharing: this.state.checked
-        }
-    }).then(data => {
-        this.props.history.push('/profiel');
-    }).catch(error => {
-        if (error === null) return;
-        this.setState(
-            {submitting: false},
-            () => this.showMessage(error.message)
-        );
-    })
-  }
-
-  handleSubmit = event => {
-    event.preventDefault();
-    this.setState({snackbarOpen: false, submitting: true}, this.doEdit);
-  }
-
-  componentDidMount() {
-    this.fetchProfile();
-  }
-
-  render() {
-    const ProfileLink = React.forwardRef((props, ref) => <Link to="/profiel" {...props} ref={ref} />);
+    useEnqueueSnackbar(errorMessage);
+    useLoadingSnackbar(fetchRequest.isFetching);
 
     return (
-        <React.Fragment>
+        <>
           <Typography variant="subtitle2">
             Wijzig privacy settings
           </Typography>
-          <form noValidate onSubmit={this.handleSubmit}>
-            <FormGroup>
-              <FormControlLabel
-                control={<Checkbox checked disabled />}
-                label="Ik deel mijn voor- en achternaam met alle Lerkies"
-              />
-              <FormControlLabel
-                control={<Checkbox checked disabled />}
-                label="Ik deel mijn kamernummer en gang met alle Lerkies"
-              />
-              <FormControlLabel
-                control={<Checkbox
-                    checked={this.state.checked}
-                    onChange={this.handleCheckedState}
-                    indeterminate={this.state.fetching}
-                    disabled={this.state.fetching}
-                />}
-                label="Ik deel mijn contactgegevens met alle Lerkies"
-              />
-            </FormGroup>
-            <div style={{marginTop: '8px', display: 'flex'}}>
-              <LoadingButton
-                variant="contained"
-                color="primary"
-                size="small"
-                type="submit"
-                style={{marginRight: "8px"}}
-                loading={this.state.submitting}
-                disabled={this.state.fetching}
-              >
-                Submit
-              </LoadingButton>
-              <Button
-                color="primary"
-                size="small"
-                component={ProfileLink}
-              >
-                Back
-              </Button>
-            </div>
-          </form>
-          { this.state.fetching
-              ? <LoadingSnackbar open={this.state.fetching} />
-              : <CloseableSnackbar
-                  key={this.state.messageInfo.key}
-                  message={this.state.messageInfo.message}
-                  open={this.state.snackbarOpen}
-                  onClose={this.handleSnackbarClose}
-                />
-          }
-        </React.Fragment>
+          <Formik
+              initialValues={{isSharing: isSharing}}
+              enableReinitialize={true}
+              onSubmit={onSubmit}
+              validationSchema={SCHEMA}
+          >
+              {({ isSubmitting, errors, touched }) => (
+                <Form noValidate>
+                  <FormGroup>
+                    <FormControlLabel
+                      control={<Checkbox checked disabled />}
+                      label={
+                        <Typography variant="body2">
+                          Ik deel mijn voor- en achternaam met alle Lerkies
+                        </Typography>
+                      }
+                    />
+                    <FormControlLabel
+                      control={<Checkbox checked disabled />}
+                      label={
+                        <Typography variant="body2">
+                          Ik deel mijn kamernummer en gang met alle Lerkies
+                        </Typography>
+                      }
+                    />
+                    <Field
+                      name="isSharing"
+                      component={CheckboxWithLabel}
+                      Label={{label:
+                        <Typography variant="body2">
+                          Ik deel mijn contactgegevens met alle Lerkies
+                        </Typography>
+                      }}
+                      disabled={fetchRequest.isFetching}
+                      indeterminate={fetchRequest.isFetching}
+                    />
+                  </FormGroup>
+                  <div style={{marginTop: '8px', display: 'flex'}}>
+                    <LoadingButton
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      type="submit"
+                      style={{marginRight: "8px"}}
+                      loading={isSubmitting}
+                      disabled={fetchRequest.isFetching}
+                    >
+                      Submit
+                    </LoadingButton>
+                    <Button
+                      color="primary"
+                      size="small"
+                      component={ProfileLink}
+                    >
+                      Back
+                    </Button>
+                  </div>
+                </Form>
+              )}
+          </Formik>
+        </>
     );
-  }
 }
 
 export default withRouter(EditPrivacyForm);

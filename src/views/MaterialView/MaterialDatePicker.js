@@ -8,32 +8,40 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 
 
-function MaterialDatePicker(props) {
-  let maxDate = new Date();
-  maxDate.setMonth(maxDate.getMonth() + 4);
+function MaterialDatePicker({
+    field = {},
+    form = {},
+    disabled = true,
+    ...props
+}) {
+    let maxDate = new Date();
+    maxDate.setMonth(maxDate.getMonth() + 4);
 
-  return (
-      <DatePicker
-        label="Datum"
-        fullWidth
-        required
-        margin="dense"
-        InputLabelProps={{
-          shrink: true,
-        }}
-        disablePast
-        maxDate={maxDate}
-        format='dd/MM/yyyy'
-        InputProps={{
-          endAdornment: <InputAdornment position="end">
-                          <IconButton><Event /></IconButton>
-                        </InputAdornment>
-        }}
-        leftArrowIcon={<KeyboardArrowLeft />}
-        rightArrowIcon={<KeyboardArrowRight />}
-        {...props}
-      />
-  );
+    return (
+        <DatePicker
+          label="Datum"
+          fullWidth
+          required
+          margin="dense"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          disablePast
+          maxDate={maxDate}
+          format='dd/MM/yyyy'
+          InputProps={{
+            endAdornment: <InputAdornment position="end">
+                            <IconButton><Event /></IconButton>
+                          </InputAdornment>
+          }}
+          leftArrowIcon={<KeyboardArrowLeft />}
+          rightArrowIcon={<KeyboardArrowRight />}
+          disabled={disabled}
+          value={field.value}
+          onChange={(value) => form.setFieldValue(field.name, value)}
+          error={form.errors.hasOwnProperty(field.name) && form.touched.hasOwnProperty(field.name)}
+        />
+    );
 }
 
 export default MaterialDatePicker;

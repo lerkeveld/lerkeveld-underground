@@ -9,8 +9,12 @@ import Typography from '@material-ui/core/Typography';
 import * as utils from '../../utils';
 
 
-function DeleteDialog(props) {
-  const { open, onAccept, onClose, reservation } = props;
+function DeleteDialog({
+    open = false,
+    reservation = {},
+    onAccept,
+    onClose
+}) {
   const { date=new Date() } = reservation;
    
   return (

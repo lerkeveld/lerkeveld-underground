@@ -13,7 +13,7 @@ export function serializeDate(date) {
 };
 
 export function formatDate(date) {
-  if (date === null)
+  if (date === null || date === undefined)
     return null;
   return date.toLocaleDateString(
     'nl-be',
@@ -23,4 +23,19 @@ export function formatDate(date) {
 
 export function formatMoney(cents) {
     return "€" + parseFloat(cents / 100).toFixed(2);
+};
+
+export function sorted(array, func) {
+    if (array === null || array === undefined)
+        return null;
+    return array.sort((i1, i2) => {
+        if (func(i1) > func(i2)) {return 1;}
+        if (func(i1) < func(i2)) {return -1;}
+        return 0;
+    });
+};
+
+export function findFirstNotNull(array) {
+    const index = array.findIndex((e) => e !== null);
+    return index === -1 ? null : array[index];
 };

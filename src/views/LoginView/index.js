@@ -1,173 +1,42 @@
 import React from 'react';
-import { withRouter, Link } from 'react-router-dom'
-import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
+import { Link } from 'react-router-dom'
+
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import LoginForm from './LoginForm';
 
-import CloseableSnackbar from '../../components/CloseableSnackbar';
-import LoadingButton from '../../components/LoadingButton';
-import PasswordField from '../../components/PasswordField';
+import useAuthStyles from '../../assets/jss/useAuthStyles';
 
-import authStyle from '../../assets/jss/authStyle';
-import * as api from '../../api';
+const ActivateLink = React.forwardRef((props, ref) => <Link to="/auth/activate" {...props} ref={ref} />);
+const ResetLink = React.forwardRef((props, ref) => <Link to="/auth/reset" {...props} ref={ref} />);
 
 
-class LoginForm extends React.Component {
+function LoginView(props) {
+    const classes = useAuthStyles();
 
-  state = {
-    email: '',
-    password: '',
-    errors: {
-      email: false,
-      password: false
-    },
-    snackbarOpen: false,
-    messageInfo: {},
-    submitting: false
-  }
-
-  showMessage = (message) => {
-      this.setState({
-          snackbarOpen: true,
-          messageInfo: {
-              key: new Date().getTime(),
-              message: message
-          }
-      });
-  }
-
-  handleSnackbarClose = () => {
-    this.setState({snackbarOpen: false});
-  }
-
-  handleRequiredChange = prop => event => {
-    const value = event.target.value;
-    const stateUpdate = {
-        [prop]: value,
-        errors: this.state.errors
-    };
-    stateUpdate.errors[prop] = value.length === 0;
-    this.setState(stateUpdate);
-  }
-
-  doLogin = () => {
-    const { referrer } = this.props.location.state || { referrer: { pathname: '/' } };
-    api.post({
-        path: '/auth/login',
-        data: {
-            email: this.state.email,
-            password: this.state.password
-        },
-        retryCredentials: false
-    }).then(data => {
-        api.setCredentials(data).then(
-            () => this.props.history.push(referrer)
-        );
-    }).catch(error => {
-        if (error === null) return;
-        this.setState(
-            {submitting: false},
-            () => this.showMessage(error.message)
-        );
-    })
-  }
-
-  handleSubmit = event => {
-    event.preventDefault();
-
-    // check errors
-    const errors = {};
-    if (this.state.email.length === 0)
-        errors.email = true;
-    if (this.state.password.length === 0)
-        errors.password = true;
-
-    if (Object.keys(errors).length !== 0) {
-        this.setState({errors: errors});
-        return false;
-    }
-
-    this.setState({snackbarOpen: false, submitting: true}, this.doLogin);
-  }
-
-  render() {
-    const { classes } = this.props;
-
-    const ActivateLink = React.forwardRef((props, ref) => <Link to="/auth/activate" {...props} ref={ref} />);
-    const ResetLink = React.forwardRef((props, ref) => <Link to="/auth/reset" {...props} ref={ref} />);
-
-    return <React.Fragment>
-             <form noValidate onSubmit={this.handleSubmit}>
-               <TextField
-                 label="E-mail"
-                 fullWidth
-                 margin="normal"
-                 InputLabelProps={{
-                   shrink: true,
-                 }}
-                 required
-                 onChange={this.handleRequiredChange('email')}
-                 value={this.state.email}
-                 error={this.state.errors.email}
-               />
-               <PasswordField
-                 label="Wachtwoord"
-                 fullWidth
-                 margin="normal"
-                 showEndAdornment
-                 InputLabelProps={{
-                   shrink: true,
-                 }}
-                 required
-                 onChange={this.handleRequiredChange('password')}
-                 value={this.state.password}
-                 error={this.state.errors.password}
-               />
-               <LoadingButton
-                 className={classes.submit}
-                 variant="contained"
-                 color="secondary"
-                 size="medium"
-                 type="submit"
-                 loading={this.state.submitting}
-               >
-                 Login
-               </LoadingButton>
-             </form>
-             <div className={classes.actions}>
-                <div className={classes.actionLeft}>
-                  <Button
-                    color="primary"
-                    size="small"
-                    component={ActivateLink}
-                  >
-                    Activeer nu!
-                  </Button>
-                </div>
-                <div className={classes.actionRight}>
-                  <Button
-                    color="primary"
-                    size="small"
-                    component={ResetLink}
-                  >
-                    Wachtwoord vergeten?
-                  </Button>
-                </div>
-             </div>
-             <CloseableSnackbar
-               anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
-               key={this.state.messageInfo.key}
-               message={this.state.messageInfo.message}
-               open={this.state.snackbarOpen}
-               onClose={this.handleSnackbarClose}
-             />
-           </React.Fragment>
-  }
+    return <>
+      <LoginForm />
+      <div className={classes.actions}>
+         <div className={classes.actionLeft}>
+           <Button
+             color="primary"
+             size="small"
+             component={ActivateLink}
+           >
+             Activeer nu!
+           </Button>
+         </div>
+         <div className={classes.actionRight}>
+           <Button
+             color="primary"
+             size="small"
+             component={ResetLink}
+           >
+             Wachtwoord vergeten?
+           </Button>
+         </div>
+      </div>,
+    </>
 }
 
-LoginForm.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
-export default withRouter(withStyles(authStyle)(LoginForm));
+export default LoginView;

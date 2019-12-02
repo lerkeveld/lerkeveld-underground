@@ -1,5 +1,5 @@
-import React from 'react';
-import TextField from '@material-ui/core/TextField';
+import React, { useState } from 'react';
+import TextField from '../../wrappers/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 
@@ -8,18 +8,12 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import VpnKey from '@material-ui/icons/VpnKey';
 
 
-class PasswordField extends React.Component {
-
-  state = {
-    showPassword: false
-  }
-
-  handleClickShowPassword = () => {
-    this.setState({ showPassword: !this.state.showPassword });
-  }
-
-  render() {
-    const { showStartAdornment, showEndAdornment, ...rest } = this.props;
+function PasswordField({
+    showStartAdornment,
+    showEndAdornment,
+    ...rest
+}) {
+    const [isVisible, setVisible] = useState(false);
 
     const startAdornment = showStartAdornment 
           ? <InputAdornment position="start">
@@ -29,16 +23,15 @@ class PasswordField extends React.Component {
     const endAdornment = showEndAdornment
           ? <InputAdornment position="end">
               <IconButton
-                onClick={this.handleClickShowPassword}
-                onMouseDown={this.handleMouseDownPassword}
+                onClick={() => setVisible(!isVisible)}
               >
-                {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                {isVisible ? <VisibilityOff /> : <Visibility />}
               </IconButton>
             </InputAdornment>
           : null;
     return (
         <TextField
-          type={this.state.showPassword ? "text" : "password"}
+          type={isVisible ? "text" : "password"}
           InputProps={{
             startAdornment: startAdornment,
             endAdornment: endAdornment
@@ -46,7 +39,6 @@ class PasswordField extends React.Component {
           {...rest}
         />
     );
-  }
 }
 
 export default PasswordField;
