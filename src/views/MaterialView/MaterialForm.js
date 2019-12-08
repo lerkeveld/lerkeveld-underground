@@ -40,7 +40,6 @@ function MaterialForm({
     const [snackMessage, setSnackMessage] = useState(null);
     const onSubmit = useFormikSubmit(
         useCallback((values, actions) => {
-            console.log(values.items);
             setSnackMessage(null);
             return {
                 method: 'POST',
