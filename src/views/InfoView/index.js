@@ -15,7 +15,9 @@ import SubrentPanel from './panels/SubrentPanel';
 import ContactAllLerkiesPanel from './panels/ContactAllLerkiesPanel';
 import ContactAllPraesidiumPanel from './panels/ContactAllPraesidiumPanel';
 import ContactExLerkiesPanel from './panels/ContactExLerkiesPanel';
+import ContactGangVWPanel from './panels/ContactGangVWPanel';
 import ContactLerkeveldPanel from './panels/ContactLerkeveldPanel';
+import ContactPraesidiumPanel from './panels/ContactPraesidiumPanel';
 
 
 function InfoView(props) {
@@ -48,6 +50,8 @@ function InfoView(props) {
           </Typography>
           <div>
             <ContactLerkeveldPanel />
+            <ContactPraesidiumPanel />
+            <ContactGangVWPanel />
             <ContactAllLerkiesPanel />
             <ContactAllPraesidiumPanel />
             <ContactExLerkiesPanel />
