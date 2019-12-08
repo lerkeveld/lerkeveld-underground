@@ -12,11 +12,11 @@ function useFetch(initialRequest, onSuccess, onError) {
         setFetching: setFetching,
         onSuccess: onSuccess,
         onError: onError,
+        onFinish: useCallback(() => setCount((count) => count + 1), []),
     });
 
     const refresh = useCallback(() => {
         setRequest((request) => Object.assign({}, request));
-        setCount((count) => count + 1);
     }, []);
 
     return {

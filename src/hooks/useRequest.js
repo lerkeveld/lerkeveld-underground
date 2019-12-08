@@ -5,7 +5,8 @@ function useRequest(request, {
     setErrorMessage,
     setFetching,
     onSuccess,
-    onError
+    onError,
+    onFinish,
 }) {
     useEffect(() => {
         if (request === null) return;
@@ -26,11 +27,12 @@ function useRequest(request, {
                     if (setErrorMessage) setErrorMessage(err.message);
                     if (onError) await onError();
             }
+            if (onFinish) await onFinish();
             if (setFetching) setFetching(false);
         }
         doFetch();
         return () => {abortController.abort();}
-    }, [request, setErrorMessage, setFetching, onSuccess, onError])
+    }, [request, setErrorMessage, setFetching, onSuccess, onError, onFinish])
 }
 
 export default useRequest;
