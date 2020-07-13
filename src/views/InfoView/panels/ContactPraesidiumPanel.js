@@ -12,6 +12,7 @@ import GroupWorkIcon from '@material-ui/icons/GroupWork';
 import LocalBarIcon from '@material-ui/icons/LocalBar';
 import SportsSoccerIcon from '@material-ui/icons/SportsSoccer';
 import WifiIcon from '@material-ui/icons/Wifi';
+import AcUnitIcon from '@material-ui/icons/AcUnit';
 
 import amber from '@material-ui/core/colors/amber';
 import blue from '@material-ui/core/colors/blue';
@@ -23,6 +24,7 @@ import pink from '@material-ui/core/colors/pink';
 import purple from '@material-ui/core/colors/purple';
 import teal from '@material-ui/core/colors/teal';
 import yellow from '@material-ui/core/colors/yellow';
+import orange from '@material-ui/core/colors/orange';
 
 import ContactListItem from '../ContactListItem';
 import DefaultPanel from '../DefaultPanel';
@@ -107,6 +109,14 @@ function ContactPraesidiumPanel(props) {
                     email="it@lerkies.studentenweb.org"
                     color={amber[500]}
                     avatarIcon={<WifiIcon />}
+                />
+                <Divider />
+                <Divider />
+                <ContactListItem
+                    name="Skireis"
+                    email="skireis@lerkies.studentenweb.org"
+                    color={orange[500]}
+                    avatarIcon={<AcUnitIcon/>}
                 />
                 <Divider />
               </List>
