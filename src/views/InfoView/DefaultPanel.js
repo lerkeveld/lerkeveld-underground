@@ -1,12 +1,12 @@
 import React from 'react';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
 import Typography from '@material-ui/core/Typography';
 
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import useExpansionPanelStyles from '../../assets/jss/useExpansionPanelStyles';
+import useAccordionStyles from '../../assets/jss/useAccordionStyles';
 
 
 function DefaultPanel({
@@ -15,16 +15,16 @@ function DefaultPanel({
     disablePadding,
     ...props
 }) {
-    const classes = useExpansionPanelStyles();
+    const classes = useAccordionStyles();
     return (
-        <ExpansionPanel>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography variant="body2" className={classes.heading} >{title}</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails className={disablePadding ? classes.disablePadding : null}>
+          </AccordionSummary>
+          <AccordionDetails className={disablePadding ? classes.disablePadding : null}>
             {details}
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
+          </AccordionDetails>
+        </Accordion>
     );
 }
 

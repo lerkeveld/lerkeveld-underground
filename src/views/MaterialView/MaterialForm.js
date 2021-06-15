@@ -86,6 +86,7 @@ function MaterialForm({
                         />
                         <Field
                           name="acceptRules"
+                          type="checkbox"
                           component={CheckboxWithLabel}
                           disabled={disabled || isSubmitting}
                           Label={{label:

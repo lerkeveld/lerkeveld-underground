@@ -41,6 +41,13 @@ function MaterialSelect({
             Materiaal
           </InputLabel>
           <Select
+            MenuProps={{
+              getContentAnchorEl: null,
+              anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "left",
+              }
+            }}
             multiple
             disabled={disabled}
             value={field.value}
