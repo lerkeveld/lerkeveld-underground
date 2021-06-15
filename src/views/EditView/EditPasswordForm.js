@@ -15,7 +15,7 @@ import useEnqueueSnackbar from '../../hooks/useEnqueueSnackbar';
 const SCHEMA = Yup.object().shape({
     password: Yup.string().min(8).required(),
     confirm:  Yup.string().oneOf([Yup.ref('password')]).required(),
-    check: Yup.string().min(8).required(),
+    check: Yup.string().required(),
 });
 const INITIAL = {password: '', confirm: '', check: ''};
 
