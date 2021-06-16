@@ -14,11 +14,8 @@ import * as api from '../../api';
 
 // FORM SCHEMA
 const SCHEMA = Yup.object().shape({
-    email: Yup.string()
-      .email()
-      .required(),
-    password: Yup.string()
-      .required(),
+    email: Yup.string().email().required(),
+    password: Yup.string().required(),
 });
 
 // INITIAL VALUES

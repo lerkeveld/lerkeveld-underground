@@ -11,9 +11,7 @@ import useEnqueueSnackbar from '../../hooks/useEnqueueSnackbar';
 
 // FORM SCHEMA
 const SCHEMA = Yup.object().shape({
-    email: Yup.string()
-      .email()
-      .required(),
+    email: Yup.string().email().required(),
 });
 
 // INITIAL VALUES
