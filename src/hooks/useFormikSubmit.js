@@ -22,7 +22,6 @@ function useFormikSubmit(makeRequest, onSuccess, onError) {
             if (err !== null && err.hasOwnProperty('message'))
                 if (onError) await onError(err.message, actions);
         }
-        actions.setSubmitting(false);
     }
     return onSubmit;
 }
