@@ -21,7 +21,7 @@ const SCHEMA = Yup.object().shape({
     items: Yup.array().of(Yup.object().shape({
         id: Yup.number().required(),
         name: Yup.string().required(),
-    })).required(),
+    })).required().min(1),
     acceptRules: Yup.bool().oneOf([true]).required(),
 });
 
