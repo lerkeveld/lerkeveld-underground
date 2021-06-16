@@ -51,7 +51,7 @@ function MaterialForm({
             }
         }, []),
         useCallback((data, actions) => {
-            actions.resetForm(INITIAL);
+            actions.resetForm({values: INITIAL});
             setSnackMessage('Materiaal gereserveerd');
             setDateChosen(false);
             refresh();

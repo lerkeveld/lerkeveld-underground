@@ -45,7 +45,7 @@ function KotbarForm({
             }
         }, []),
         useCallback((data, actions) => {
-            actions.resetForm(INITIAL);
+            actions.resetForm({values: INITIAL});
             setSnackMessage('Kotbar gereserveerd');
             refresh();
         }, [refresh]),
